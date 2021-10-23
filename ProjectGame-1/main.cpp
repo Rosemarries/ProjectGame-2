@@ -18,6 +18,8 @@ struct player_status {
 	int lookside = 2;
 	float originX = 40;
 	float originY = 50.5;
+	float height = 75;
+	float width = 60;
 };
 
 struct player_bullet {
@@ -27,6 +29,8 @@ struct player_bullet {
 	int bulletState = 0;
 	int bulletDamage = 1;
 	float bulletAngle;
+	float bulletOriginX = 7.5;
+	float bulletOriginY = 7.5;
 };
 
 struct artifact {
@@ -41,26 +45,30 @@ struct artifact {
 };
 
 struct room {
-	float width = 720;
-	float height = 720;
-	float wall = 50;
+	float width = 500;
+	float height = 500;
+	float wall = 35;
 	int number = 0;
 	int type = 0;
+	float startPosX = 110;
+	float startPosY = 110;
 };
 
 int main()
 {
 	player_status player_status;
-	player_bullet player_bullet;
+	player_bullet player_bullet[5];
 	artifact artifact;
 	room room;
 
 	sf::RenderWindow window(sf::VideoMode(screen_x, screen_y), "GAME START!");
-	sf::RectangleShape player(sf::Vector2f(80.0f, 100.0f));
-	sf::RectangleShape roomMap(sf::Vector2f(720.0f, 720.0f));
-	sf::CircleShape playerBullet(15.0f);
+	sf::RectangleShape player(sf::Vector2f(player_status.width, player_status.height));
+	sf::RectangleShape roomMap(sf::Vector2f(room.width, room.height));
+	sf::CircleShape playerBullet[5];
+
 	player.setOrigin(player_status.originX, player_status.originY);
-	player.setPosition(100.0f, 100.0f);
+	player.setPosition(200.0f, 200.0f);
+	roomMap.setPosition(room.startPosX, room.startPosY);
 
 	sf::Texture playerTexture;
 	sf::Texture playerBulletTexture;
@@ -69,8 +77,12 @@ int main()
 	playerBulletTexture.loadFromFile("CharacterBullet-1.png");
 	roomMapTexture.loadFromFile("RoomLevel1-1.png");
 	player.setTexture(&playerTexture);
-	playerBullet.setTexture(&playerBulletTexture);
 	roomMap.setTexture(&roomMapTexture);
+	for (int i = 0; i < 5; i++) {
+		playerBullet[i].setRadius(15.0f);
+		playerBullet[i].setTexture(&playerBulletTexture);
+		playerBullet[i].setOrigin(player_bullet->bulletOriginX, player_bullet->bulletOriginY);
+	}
 
 	Animation animation(&playerTexture, sf::Vector2u(4, 10), 0.3f);
 
@@ -97,66 +109,69 @@ int main()
 			goto xx;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-			if (playerPos.x - player_status.originX > room.wall) {
+			if (playerPos.x - player_status.originX > room.wall + room.startPosX) {
 				player.move(-0.75f, 0.0f);
 			}
 			playerPicRow = 3;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-			if (playerPos.x + player_status.originX < room.width - room.wall) {
+			if (playerPos.x + player_status.originX < room.width + room.startPosX) {
 				player.move(0.75f, 0.0f);
 			}
 			playerPicRow = 1;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-			if (playerPos.y > room.wall) {
+			if (playerPos.y > room.wall + room.startPosY) {
 				player.move(0.0f, -0.75f);
 			}
 			playerPicRow = 2;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-			if (playerPos.y + player_status.originY < room.height - room.wall) {
+			if (playerPos.y + player_status.originY < room.height + room.startPosY) {
 				player.move(0.0f, 0.75f);
 			}
 			playerPicRow = 0;
 		}
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-			player_bullet.bulletAngle = (float)180 / PI * atan2(abs(mousePos.y - playerPos.y), abs(mousePos.x - playerPos.x));
-			if (player_bullet.bulletState == 0) {
-				player_bullet.bulletState = 1;
-				playerBullet.setPosition(playerPos);
-				if (playerPos.x <= mousePos.x) {
-					if (player_bullet.bulletAngle <= 45) {
-						player_bullet.bulletVectorX = player_bullet.bulletSpeed;
-						player_bullet.bulletVectorY = 0;
-					}
-					else {
-						if (playerPos.y < mousePos.y) {
-							player_bullet.bulletVectorX = 0;
-							player_bullet.bulletVectorY = player_bullet.bulletSpeed;
+			for (int i = 0; i < 5; i++) {
+				sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+				if (player_bullet[i].bulletState == 0) {
+					player_bullet[i].bulletState = 1;
+					player_bullet[i].bulletAngle = (float)180 / PI * atan2(abs(mousePos.y - playerPos.y), abs(mousePos.x - playerPos.x));
+					playerBullet[i].setPosition(playerPos);
+					if (playerPos.x <= mousePos.x) {
+						if (player_bullet[i].bulletAngle <= 45) {
+							player_bullet[i].bulletVectorX = player_bullet[i].bulletSpeed;
+							player_bullet[i].bulletVectorY = 0;
 						}
 						else {
-							player_bullet.bulletVectorX = 0;
-							player_bullet.bulletVectorY = (-1) * player_bullet.bulletSpeed;
+							if (playerPos.y < mousePos.y) {
+								player_bullet[i].bulletVectorX = 0;
+								player_bullet[i].bulletVectorY = player_bullet[i].bulletSpeed;
+							}
+							else {
+								player_bullet[i].bulletVectorX = 0;
+								player_bullet[i].bulletVectorY = (-1) * player_bullet[i].bulletSpeed;
+							}
 						}
-					}
-				}
-				else {
-					if (player_bullet.bulletAngle <= 45) {
-						player_bullet.bulletVectorX = (-1) * player_bullet.bulletSpeed;
-						player_bullet.bulletVectorY = 0;
 					}
 					else {
-						if (playerPos.y < mousePos.y) {
-							player_bullet.bulletVectorX = 0;
-							player_bullet.bulletVectorY = player_bullet.bulletSpeed;
+						if (player_bullet[i].bulletAngle <= 45) {
+							player_bullet[i].bulletVectorX = (-1) * player_bullet[i].bulletSpeed;
+							player_bullet[i].bulletVectorY = 0;
 						}
 						else {
-							player_bullet.bulletVectorX = 0;
-							player_bullet.bulletVectorY = (-1) * player_bullet.bulletSpeed;
+							if (playerPos.y < mousePos.y) {
+								player_bullet[i].bulletVectorX = 0;
+								player_bullet[i].bulletVectorY = player_bullet[i].bulletSpeed;
+							}
+							else {
+								player_bullet[i].bulletVectorX = 0;
+								player_bullet[i].bulletVectorY = (-1) * player_bullet[i].bulletSpeed;
+							}
 						}
 					}
+					break;
 				}
 			}
 		}
@@ -166,15 +181,16 @@ int main()
 		window.clear(sf::Color(0, 0, 0));
 		window.draw(roomMap);
 		window.draw(player);
-
-		if (player_bullet.bulletState == 1) {
-			playerBullet.move(player_bullet.bulletVectorX, player_bullet.bulletVectorY);
-			sf::Vector2f playerBulletPos = playerBullet.getPosition();
-			if (playerBulletPos.x <= room.wall || playerBulletPos.y <= room.wall || playerBulletPos.x >= room.width - room.wall || playerBulletPos.y >= room.height - room.wall) {
-				player_bullet.bulletState = 0;
-			}
-			else {
-				window.draw(playerBullet);
+		for (int i = 0; i < 5; i++) {
+			if (player_bullet[i].bulletState == 1) {
+				playerBullet[i].move(player_bullet[i].bulletVectorX, player_bullet[i].bulletVectorY);
+				sf::Vector2f playerBulletPos = playerBullet[i].getPosition();
+				if (playerBulletPos.x <= room.wall + room.startPosX || playerBulletPos.y <= room.wall + room.startPosY || playerBulletPos.x + player_bullet->bulletOriginX >= room.width - room.wall + room.startPosX || playerBulletPos.y + player_bullet->bulletOriginY >= room.height - room.wall + room.startPosY) {
+					player_bullet[i].bulletState = 0;
+				}
+				else {
+					window.draw(playerBullet[i]);
+				}
 			}
 		}
         window.display();
