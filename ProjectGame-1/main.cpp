@@ -38,26 +38,39 @@ struct artifact {
 	int boostMonsterDropMed = 1;
 };
 
+struct room {
+	float width = 720;
+	float height = 720;
+	float wall = 50;
+	int number = 0;
+	int type = 0;
+};
+
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(screen_x, screen_y), "GAME START!");
 	sf::RectangleShape player(sf::Vector2f(80.0f, 100.0f));
+	sf::RectangleShape roomMap(sf::Vector2f(720.0f, 720.0f));
 	sf::CircleShape playerBullet(15.0f);
 	player.setOrigin(40.0f, 50.5f);
 	player.setPosition(100.0f, 100.0f);
 
 	sf::Texture playerTexture;
 	sf::Texture playerBulletTexture;
+	sf::Texture roomMapTexture;
 	playerTexture.loadFromFile("TheLost-4.png");
 	playerBulletTexture.loadFromFile("CharacterBullet-1.png");
+	roomMapTexture.loadFromFile("RoomLevel1-1.png");
 	player.setTexture(&playerTexture);
 	playerBullet.setTexture(&playerBulletTexture);
+	roomMap.setTexture(&roomMapTexture);
 
 	Animation animation(&playerTexture, sf::Vector2u(4, 10), 0.3f);
 	
 	player_status player_status;
 	player_bullet player_bullet;
 	artifact artifact;
+	room room;
 
 	float deltaTime = 0.0f;
 	int playerPicRow = 0;
@@ -149,12 +162,13 @@ int main()
 		animation.Update(playerPicRow, deltaTime);
 		player.setTextureRect(animation.uvRect);
 		window.clear(sf::Color(0, 0, 0));
+		window.draw(roomMap);
 		window.draw(player);
 
 		if (player_bullet.bulletState == 1) {
 			playerBullet.move(player_bullet.bulletVectorX, player_bullet.bulletVectorY);
 			sf::Vector2f playerBulletPos = playerBullet.getPosition();
-			if (playerBulletPos.x <= 0 || playerBulletPos.y <= 0 || playerBulletPos.x >= screen_x || playerBulletPos.y >= screen_y) {
+			if (playerBulletPos.x <= room.wall || playerBulletPos.y <= room.wall || playerBulletPos.x >= room.width - room.wall || playerBulletPos.y >= room.height - room.wall) {
 				player_bullet.bulletState = 0;
 			}
 			else {
