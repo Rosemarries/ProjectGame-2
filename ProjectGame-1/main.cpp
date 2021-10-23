@@ -63,7 +63,6 @@ int main()
 	int playerPicRow = 0;
 	sf::Clock clock;
 	sf::Clock bulletTime;
-	float bulletShootTime = 0.0f;
 	
     while (window.isOpen())
     {
@@ -149,7 +148,7 @@ int main()
 
 		animation.Update(playerPicRow, deltaTime);
 		player.setTextureRect(animation.uvRect);
-		window.clear(sf::Color(150, 150, 150));
+		window.clear(sf::Color(0, 0, 0));
 		window.draw(player);
 
 		if (player_bullet.bulletState == 1) {
