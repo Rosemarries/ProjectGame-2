@@ -26,7 +26,7 @@ struct player_bullet {
 	float bulletVectorX;
 	float bulletVectorY;
 	float bulletSpeed = 2;
-	int bulletState = 0;
+	bool bulletState = 0;
 	int bulletDamage = 1;
 	float bulletAngle;
 	float bulletOriginX = 7.5;
@@ -137,7 +137,7 @@ int main()
 				sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 				if (player_bullet[i].bulletState == 0) {
 					player_bullet[i].bulletState = 1;
-					player_bullet[i].bulletAngle = (float)180 / PI * atan2(abs(mousePos.y - playerPos.y), abs(mousePos.x - playerPos.x));
+					player_bullet[i].bulletAngle = (float)(180 / PI * atan2(abs(mousePos.y - playerPos.y), abs(mousePos.x - playerPos.x)));
 					playerBullet[i].setPosition(playerPos);
 					if (playerPos.x <= mousePos.x) {
 						if (player_bullet[i].bulletAngle <= 45) {
@@ -185,6 +185,7 @@ int main()
 			if (player_bullet[i].bulletState == 1) {
 				playerBullet[i].move(player_bullet[i].bulletVectorX, player_bullet[i].bulletVectorY);
 				sf::Vector2f playerBulletPos = playerBullet[i].getPosition();
+				printf("%d : %f , %f\n", i, playerBulletPos.x, playerBulletPos.y); //check bullet's positions
 				if (playerBulletPos.x <= room.wall + room.startPosX || playerBulletPos.y <= room.wall + room.startPosY || playerBulletPos.x + player_bullet->bulletOriginX >= room.width - room.wall + room.startPosX || playerBulletPos.y + player_bullet->bulletOriginY >= room.height - room.wall + room.startPosY) {
 					player_bullet[i].bulletState = 0;
 				}
