@@ -16,6 +16,8 @@ struct player_status {
 	float vectorX = 0;
 	float vectorY = 0;
 	int lookside = 2;
+	float originX = 40;
+	float originY = 50.5;
 };
 
 struct player_bullet {
@@ -48,11 +50,16 @@ struct room {
 
 int main()
 {
+	player_status player_status;
+	player_bullet player_bullet;
+	artifact artifact;
+	room room;
+
 	sf::RenderWindow window(sf::VideoMode(screen_x, screen_y), "GAME START!");
 	sf::RectangleShape player(sf::Vector2f(80.0f, 100.0f));
 	sf::RectangleShape roomMap(sf::Vector2f(720.0f, 720.0f));
 	sf::CircleShape playerBullet(15.0f);
-	player.setOrigin(40.0f, 50.5f);
+	player.setOrigin(player_status.originX, player_status.originY);
 	player.setPosition(100.0f, 100.0f);
 
 	sf::Texture playerTexture;
@@ -66,11 +73,6 @@ int main()
 	roomMap.setTexture(&roomMapTexture);
 
 	Animation animation(&playerTexture, sf::Vector2u(4, 10), 0.3f);
-	
-	player_status player_status;
-	player_bullet player_bullet;
-	artifact artifact;
-	room room;
 
 	float deltaTime = 0.0f;
 	int playerPicRow = 0;
@@ -95,25 +97,25 @@ int main()
 			goto xx;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-			if (playerPos.x > 0) {
+			if (playerPos.x - player_status.originX > room.wall) {
 				player.move(-0.75f, 0.0f);
 			}
 			playerPicRow = 3;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-			if (playerPos.x < screen_x - 1) {
+			if (playerPos.x + player_status.originX < room.width - room.wall) {
 				player.move(0.75f, 0.0f);
 			}
 			playerPicRow = 1;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-			if (playerPos.y > 0) {
+			if (playerPos.y > room.wall) {
 				player.move(0.0f, -0.75f);
 			}
 			playerPicRow = 2;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-			if (playerPos.y < screen_y - 1) {
+			if (playerPos.y + player_status.originY < room.height - room.wall) {
 				player.move(0.0f, 0.75f);
 			}
 			playerPicRow = 0;
