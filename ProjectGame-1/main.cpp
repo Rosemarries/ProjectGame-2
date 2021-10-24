@@ -2,9 +2,11 @@
 #include<stdio.h>
 #include<math.h>
 #include<SFML/Graphics.hpp>
-#include<SFML/System.hpp>
-#include<SFML/Window.hpp>
+#include<vector>
 #include"Animation.h"
+#include"Bullet.h"
+#include"Enemy.h"
+#include"Player.h"
 
 #define screen_x 720
 #define screen_y 720
@@ -12,21 +14,18 @@
 
 struct player_status {
 	int hp = 5;
+	float speed = 1;
 	int myArtifact = 0;
-	float vectorX = 0;
-	float vectorY = 0;
-	int lookside = 2;
 	float originX = 40;
-	float originY = 50.5;
+	float originY = 40;
 	float height = 75;
 	float width = 60;
 };
 
 struct player_bullet {
-	float bulletVectorX;
-	float bulletVectorY;
+	int bulletVector = 0;
 	float bulletSpeed = 2;
-	bool bulletState = 0;
+	bool bulletState = false;
 	int bulletDamage = 1;
 	float bulletAngle;
 	float bulletOriginX = 7.5;
@@ -57,17 +56,21 @@ struct room {
 int main()
 {
 	player_status player_status;
-	player_bullet player_bullet[5];
+	player_bullet player_bullet;
 	artifact artifact;
 	room room;
 
 	sf::RenderWindow window(sf::VideoMode(screen_x, screen_y), "GAME START!");
-	sf::RectangleShape player(sf::Vector2f(player_status.width, player_status.height));
 	sf::RectangleShape roomMap(sf::Vector2f(room.width, room.height));
-	sf::CircleShape playerBullet[5];
+	sf::CircleShape playerBullet;
 
-	player.setOrigin(player_status.originX, player_status.originY);
-	player.setPosition(200.0f, 200.0f);
+	//Define Objects:
+	Player player(sf::Vector2f(player_status.width, player_status.height));
+	Enemy enemy(sf::Vector2f(player_status.width, player_status.height));
+	Bullet newBullet(sf::Vector2f(15, 15));
+	std::vector<Bullet> bulletVec;
+	enemy.setPos(sf::Vector2f(500, 50));
+	player.setOrigin();
 	roomMap.setPosition(room.startPosX, room.startPosY);
 
 	sf::Texture playerTexture;
@@ -78,18 +81,13 @@ int main()
 	roomMapTexture.loadFromFile("RoomLevel1-1.png");
 	player.setTexture(&playerTexture);
 	roomMap.setTexture(&roomMapTexture);
-	for (int i = 0; i < 5; i++) {
-		playerBullet[i].setRadius(15.0f);
-		playerBullet[i].setTexture(&playerBulletTexture);
-		playerBullet[i].setOrigin(player_bullet->bulletOriginX, player_bullet->bulletOriginY);
-	}
+	newBullet.setTexture(&playerBulletTexture);
 
 	Animation animation(&playerTexture, sf::Vector2u(4, 10), 0.3f);
 
 	float deltaTime = 0.0f;
 	int playerPicRow = 0;
 	sf::Clock clock;
-	sf::Clock bulletTime;
 	
     while (window.isOpen())
     {
@@ -104,96 +102,96 @@ int main()
 			}
         }
 
-		sf::Vector2f playerPos = player.getPosition();
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
 			goto xx;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-			if (playerPos.x - player_status.originX > room.wall + room.startPosX) {
-				player.move(-0.75f, 0.0f);
+			if (player.getX() - player_status.originX > room.wall + room.startPosX) {
+				player.move(sf::Vector2f(-player_status.speed, 0));
 			}
 			playerPicRow = 3;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-			if (playerPos.x + player_status.originX < room.width + room.startPosX) {
-				player.move(0.75f, 0.0f);
+			if (player.getX() + player_status.originX < room.width + room.startPosX) {
+				player.move(sf::Vector2f(player_status.speed, 0));
 			}
 			playerPicRow = 1;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-			if (playerPos.y > room.wall + room.startPosY) {
-				player.move(0.0f, -0.75f);
+			if (player.getY() > room.wall + room.startPosY) {
+				player.move(sf::Vector2f(0, -player_status.speed));
 			}
 			playerPicRow = 2;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-			if (playerPos.y + player_status.originY < room.height + room.startPosY) {
-				player.move(0.0f, 0.75f);
+			if (player.getY() + player_status.originY < room.height + room.startPosY) {
+				player.move(sf::Vector2f(0, player_status.speed));
 			}
 			playerPicRow = 0;
 		}
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-			for (int i = 0; i < 5; i++) {
-				sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-				if (player_bullet[i].bulletState == 0) {
-					player_bullet[i].bulletState = 1;
-					player_bullet[i].bulletAngle = (float)(180 / PI * atan2(abs(mousePos.y - playerPos.y), abs(mousePos.x - playerPos.x)));
-					playerBullet[i].setPosition(playerPos);
-					if (playerPos.x <= mousePos.x) {
-						if (player_bullet[i].bulletAngle <= 45) {
-							player_bullet[i].bulletVectorX = player_bullet[i].bulletSpeed;
-							player_bullet[i].bulletVectorY = 0;
-						}
-						else {
-							if (playerPos.y < mousePos.y) {
-								player_bullet[i].bulletVectorX = 0;
-								player_bullet[i].bulletVectorY = player_bullet[i].bulletSpeed;
-							}
-							else {
-								player_bullet[i].bulletVectorX = 0;
-								player_bullet[i].bulletVectorY = (-1) * player_bullet[i].bulletSpeed;
-							}
-						}
+			player_bullet.bulletState = true;
+		}
+
+		animation.Update(playerPicRow, deltaTime);
+		player.loadAnime(animation.uvRect);
+		window.clear(sf::Color(0, 0, 0));
+		window.draw(roomMap);
+
+		if (player_bullet.bulletState == true) {
+			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+			player_bullet.bulletAngle = (float)(180 / PI * atan2(abs(mousePos.y - player.getY()), abs(mousePos.x - player.getX())));
+			newBullet.setPos(sf::Vector2f(player.getX(), player.getY()));
+			bulletVec.push_back(newBullet);
+			player_bullet.bulletState = false;
+			if (player.getX() <= mousePos.x) {
+				if (player_bullet.bulletAngle <= 45) {
+					player_bullet.bulletVector = 2;
+				}
+				else {
+					if (player.getY() < mousePos.y) {
+						player_bullet.bulletVector = 3;
 					}
 					else {
-						if (player_bullet[i].bulletAngle <= 45) {
-							player_bullet[i].bulletVectorX = (-1) * player_bullet[i].bulletSpeed;
-							player_bullet[i].bulletVectorY = 0;
-						}
-						else {
-							if (playerPos.y < mousePos.y) {
-								player_bullet[i].bulletVectorX = 0;
-								player_bullet[i].bulletVectorY = player_bullet[i].bulletSpeed;
-							}
-							else {
-								player_bullet[i].bulletVectorX = 0;
-								player_bullet[i].bulletVectorY = (-1) * player_bullet[i].bulletSpeed;
-							}
-						}
+						player_bullet.bulletVector = 1;
 					}
-					break;
+				}
+			}
+			else {
+				if (player_bullet.bulletAngle <= 45) {
+					player_bullet.bulletVector = 4;
+				}
+				else {
+					if (player.getY() < mousePos.y) {
+						player_bullet.bulletVector = 3;
+					}
+					else {
+						player_bullet.bulletVector = 1;
+					}
 				}
 			}
 		}
 
-		animation.Update(playerPicRow, deltaTime);
-		player.setTextureRect(animation.uvRect);
-		window.clear(sf::Color(0, 0, 0));
-		window.draw(roomMap);
-		window.draw(player);
-		for (int i = 0; i < 5; i++) {
-			if (player_bullet[i].bulletState == 1) {
-				playerBullet[i].move(player_bullet[i].bulletVectorX, player_bullet[i].bulletVectorY);
-				sf::Vector2f playerBulletPos = playerBullet[i].getPosition();
+		for (int i = 0; i < bulletVec.size(); i++) {
+			bulletVec[i].draw(window);
+			bulletVec[i].fire(player_bullet.bulletSpeed, player_bullet.bulletVector);
+			enemy.checkColl(bulletVec[i]);
+		}
+		enemy.draw(window);
+		player.draw(window);
+		/*for (int i = 0; i < 5; i++) {
+			if (player_bullet.bulletState == 1) {
+				playerBullet.move(player_bullet.bulletVectorX, player_bullet.bulletVectorY);
+				sf::Vector2f playerBulletPos = playerBullet.getPosition();
 				printf("%d : %f , %f\n", i, playerBulletPos.x, playerBulletPos.y); //check bullet's positions
-				if (playerBulletPos.x <= room.wall + room.startPosX || playerBulletPos.y <= room.wall + room.startPosY || playerBulletPos.x + player_bullet->bulletOriginX >= room.width - room.wall + room.startPosX || playerBulletPos.y + player_bullet->bulletOriginY >= room.height - room.wall + room.startPosY) {
-					player_bullet[i].bulletState = 0;
+				if (playerBulletPos.x <= room.wall + room.startPosX || playerBulletPos.y <= room.wall + room.startPosY || playerBulletPos.x + player_bullet.bulletOriginX >= room.width - room.wall + room.startPosX || playerBulletPos.y + player_bullet.bulletOriginY >= room.height - room.wall + room.startPosY) {
+					player_bullet.bulletState = 0;
 				}
 				else {
-					window.draw(playerBullet[i]);
+					window.draw(playerBullet);
 				}
 			}
-		}
+		}*/
         window.display();
     }
 xx:
