@@ -15,7 +15,7 @@
 
 struct player_status {
 	int hp = 5;
-	int heartType[5] = { 2, 2, 2, 2, 2 };
+	int heartType[5] = { 2, 2, 1, 0, 0 };
 	int lastHp = 0;
 	float speed = 1;
 	int myArtifact = 0;
@@ -144,9 +144,9 @@ int main()
 		player.loadAnime(animation.uvRect);
 		window.clear(sf::Color(0, 0, 0));
 		window.draw(roomMap);
-		//if (player_status.lastHp != player_status.hp) {
-			for (int i = 0; i < player_status.hp; i++) {
-				heart.setPos(sf::Vector2f(10 + 20 * i, 10));
+		for (int i = 0; i < player_status.hp; i++) {
+			heart.setPos(sf::Vector2f(10 + 20 * i, 10));
+			if (player_status.lastHp != player_status.hp) {
 				if (player_status.heartType[i] == 0) {
 					heartTexture.loadFromFile("PlayerHeart-0.png");
 				}
@@ -157,10 +157,10 @@ int main()
 					heartTexture.loadFromFile("PlayerHeart-2.png");
 				}
 				heart.setTexture(&heartTexture);
-				heart.draw(window);
-				player_status.lastHp = player_status.hp;
 			}
-		//}
+			heart.draw(window);
+			player_status.lastHp = player_status.hp;
+		}
 
 		if (player_bullet.bulletState == true) {
 			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
