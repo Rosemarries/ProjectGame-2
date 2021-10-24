@@ -12,6 +12,10 @@ public:
 		player.setOrigin(40, 40);
 	}
 
+	void setPos(sf::Vector2f newPos) {
+		player.setPosition(newPos);
+	}
+
 	void move(sf::Vector2f dir) {
 		player.move(dir);
 	}

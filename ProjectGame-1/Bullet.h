@@ -46,8 +46,8 @@ public:
 		bullet.setPosition(newPos);
 	}
 
-	void setTexture(sf::Texture* playerTexture) {
-		bullet.setTexture(playerTexture);
+	void setTexture(sf::Texture* bulletTexture) {
+		bullet.setTexture(bulletTexture);
 	}
 
 private:

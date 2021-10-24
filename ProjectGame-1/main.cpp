@@ -7,6 +7,7 @@
 #include"Bullet.h"
 #include"Enemy.h"
 #include"Player.h"
+#include"PlayerHeart.h"
 
 #define screen_x 720
 #define screen_y 720
@@ -14,6 +15,8 @@
 
 struct player_status {
 	int hp = 5;
+	int heartType[5] = { 2, 2, 2, 2, 2 };
+	int lastHp = 0;
 	float speed = 1;
 	int myArtifact = 0;
 	float originX = 40;
@@ -68,9 +71,12 @@ int main()
 	Player player(sf::Vector2f(player_status.width, player_status.height));
 	Enemy enemy(sf::Vector2f(player_status.width, player_status.height));
 	Bullet newBullet(sf::Vector2f(15, 15));
+	Heart heart(sf::Vector2f(20, 20));
+
 	std::vector<Bullet> bulletVec;
 	enemy.setPos(sf::Vector2f(500, 50));
 	player.setOrigin();
+	player.setPos(sf::Vector2f(300, 300));
 	roomMap.setPosition(room.startPosX, room.startPosY);
 
 	sf::Texture playerTexture;
@@ -82,6 +88,7 @@ int main()
 	player.setTexture(&playerTexture);
 	roomMap.setTexture(&roomMapTexture);
 	newBullet.setTexture(&playerBulletTexture);
+	sf::Texture heartTexture;
 
 	Animation animation(&playerTexture, sf::Vector2u(4, 10), 0.3f);
 
@@ -137,6 +144,23 @@ int main()
 		player.loadAnime(animation.uvRect);
 		window.clear(sf::Color(0, 0, 0));
 		window.draw(roomMap);
+		//if (player_status.lastHp != player_status.hp) {
+			for (int i = 0; i < player_status.hp; i++) {
+				heart.setPos(sf::Vector2f(10 + 20 * i, 10));
+				if (player_status.heartType[i] == 0) {
+					heartTexture.loadFromFile("PlayerHeart-0.png");
+				}
+				else if (player_status.heartType[i] == 1) {
+					heartTexture.loadFromFile("PlayerHeart-1.png");
+				}
+				else if (player_status.heartType[i] == 2) {
+					heartTexture.loadFromFile("PlayerHeart-2.png");
+				}
+				heart.setTexture(&heartTexture);
+				heart.draw(window);
+				player_status.lastHp = player_status.hp;
+			}
+		//}
 
 		if (player_bullet.bulletState == true) {
 			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
