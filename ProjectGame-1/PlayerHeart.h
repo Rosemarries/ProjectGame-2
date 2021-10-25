@@ -4,21 +4,25 @@
 class Heart {
 public:
 	Heart(sf::Vector2f size) {
-		heart.setSize(size);
+		for (int i = 0; i < 5; i++) {
+			heart[i].setSize(size);
+		}
 	}
 
-	void setPos(sf::Vector2f newPos) {
-		heart.setPosition(newPos);
+	void setPos(sf::Vector2f newPos, int i) {
+		heart[i].setPosition(newPos);
 	}
 
-	void draw(sf::RenderWindow &window) {
-		window.draw(heart);
+	void draw(sf::RenderWindow &window, int n) {
+		for (int i = 0; i < n; i++) {
+			window.draw(heart[i]);
+		}
 	}
 
-	void setTexture(sf::Texture* playerTexture) {
-		heart.setTexture(playerTexture);
+	void setTexture(sf::Texture* playerHeartTexture, int i) {
+		heart[i].setTexture(playerHeartTexture);
 	}
 
 private:
-	sf::RectangleShape heart;
+	sf::RectangleShape heart[5];
 };

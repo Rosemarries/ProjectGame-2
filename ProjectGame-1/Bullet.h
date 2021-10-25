@@ -3,7 +3,9 @@
 
 class Bullet {
 public:
-	Bullet(sf::Vector2f size) {
+	int currVelocity;
+	Bullet(sf::Vector2f size) 
+	{
 		bullet.setSize(size);
 	}
 
@@ -20,6 +22,14 @@ public:
 		else if (bulletVector == 4) {
 			bullet.move(-speed, 0);
 		}
+	}
+
+	int getX() {
+		return bullet.getPosition().x;
+	}
+
+	int getY() {
+		return bullet.getPosition().y;
 	}
 	
 	int getRight() {

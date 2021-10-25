@@ -13,11 +13,10 @@
 #define screen_y 720
 #define PI 3.14159265
 
+int score = 0;
+
 struct player_status {
-	int hp = 5;
-	int heartType[5] = { 2, 2, 1, 0, 0 };
-	int lastHp = 0;
-	float speed = 1;
+	float speed = 0.75;
 	int myArtifact = 0;
 	float originX = 40;
 	float originY = 40;
@@ -26,13 +25,22 @@ struct player_status {
 };
 
 struct player_bullet {
-	int bulletVector = 0;
-	float bulletSpeed = 2;
+	int bulletVector;
+	float bulletSpeed = 1.75;
+	int bulletTimer = 40;
 	bool bulletState = false;
 	int bulletDamage = 1;
 	float bulletAngle;
 	float bulletOriginX = 7.5;
 	float bulletOriginY = 7.5;
+};
+
+struct player_heart {
+	int hp = 5;
+	int maxHeart = 5;
+	int heartType[5] = { 2, 2, 1, 0, 0 };
+	int lastHp = 0;
+	int remainHp = 0; //Calculate
 };
 
 struct artifact {
@@ -60,6 +68,7 @@ int main()
 {
 	player_status player_status;
 	player_bullet player_bullet;
+	player_heart player_heart;
 	artifact artifact;
 	room room;
 
@@ -79,21 +88,27 @@ int main()
 	player.setPos(sf::Vector2f(300, 300));
 	roomMap.setPosition(room.startPosX, room.startPosY);
 
+	//Set Texture:
 	sf::Texture playerTexture;
 	sf::Texture playerBulletTexture;
 	sf::Texture roomMapTexture;
+	sf::Texture heartTexture[5];
 	playerTexture.loadFromFile("TheLost-4.png");
 	playerBulletTexture.loadFromFile("CharacterBullet-1.png");
 	roomMapTexture.loadFromFile("RoomLevel1-1.png");
 	player.setTexture(&playerTexture);
 	roomMap.setTexture(&roomMapTexture);
 	newBullet.setTexture(&playerBulletTexture);
-	sf::Texture heartTexture;
+	for (int i = 0; i < player_heart.hp; i++) {
+		heartTexture[i].loadFromFile("PlayerHeart-2.png");
+		heart.setTexture(&heartTexture[i], i);
+	}
 
 	Animation animation(&playerTexture, sf::Vector2u(4, 10), 0.3f);
 
 	float deltaTime = 0.0f;
 	int playerPicRow = 0;
+	int bulletShootTime = 0;
 	sf::Clock clock;
 	
     while (window.isOpen())
@@ -136,86 +151,102 @@ int main()
 			}
 			playerPicRow = 0;
 		}
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bulletShootTime >= player_bullet.bulletTimer) {
 			player_bullet.bulletState = true;
+			bulletShootTime = 0;
+		}
+		if (bulletShootTime < player_bullet.bulletTimer) {
+			bulletShootTime++;
 		}
 
+		//Player Animation:
 		animation.Update(playerPicRow, deltaTime);
 		player.loadAnime(animation.uvRect);
+
 		window.clear(sf::Color(0, 0, 0));
 		window.draw(roomMap);
-		for (int i = 0; i < player_status.hp; i++) {
-			heart.setPos(sf::Vector2f(10 + 20 * i, 10));
-			if (player_status.lastHp != player_status.hp) {
-				if (player_status.heartType[i] == 0) {
-					heartTexture.loadFromFile("PlayerHeart-0.png");
+
+		//Player Heart:
+		if (player_heart.lastHp != player_heart.hp) {
+			player_heart.remainHp = player_heart.hp;
+			for (int i = 0; i < player_heart.maxHeart; i++) {
+				if (player_heart.remainHp > 1) {
+					player_heart.heartType[i] = 2;
+					player_heart.remainHp -= 2;
 				}
-				else if (player_status.heartType[i] == 1) {
-					heartTexture.loadFromFile("PlayerHeart-1.png");
+				else if (player_heart.remainHp == 1) {
+					player_heart.heartType[i] = 1;
+					player_heart.remainHp -= 1;
 				}
-				else if (player_status.heartType[i] == 2) {
-					heartTexture.loadFromFile("PlayerHeart-2.png");
+				else if (player_heart.remainHp < 1) {
+					player_heart.heartType[i] = 0;
 				}
-				heart.setTexture(&heartTexture);
+				heart.setPos(sf::Vector2f(10 + 20 * i, 10), i);
+				if (player_heart.heartType[i] == 0) {
+					heartTexture[i].loadFromFile("PlayerHeart-0.png");
+				}
+				else if (player_heart.heartType[i] == 1) {
+					heartTexture[i].loadFromFile("PlayerHeart-1.png");
+				}
+				else if (player_heart.heartType[i] == 2) {
+					heartTexture[i].loadFromFile("PlayerHeart-2.png");
+				}
+				heart.setTexture(&heartTexture[i], i);
 			}
-			heart.draw(window);
-			player_status.lastHp = player_status.hp;
+			player_heart.lastHp = player_heart.hp;
 		}
+		heart.draw(window, player_heart.maxHeart);
 
 		if (player_bullet.bulletState == true) {
 			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 			player_bullet.bulletAngle = (float)(180 / PI * atan2(abs(mousePos.y - player.getY()), abs(mousePos.x - player.getX())));
-			newBullet.setPos(sf::Vector2f(player.getX(), player.getY()));
-			bulletVec.push_back(newBullet);
 			player_bullet.bulletState = false;
 			if (player.getX() <= mousePos.x) {
 				if (player_bullet.bulletAngle <= 45) {
 					player_bullet.bulletVector = 2;
+					playerPicRow = 1;
 				}
 				else {
 					if (player.getY() < mousePos.y) {
 						player_bullet.bulletVector = 3;
+						playerPicRow = 0;
 					}
 					else {
 						player_bullet.bulletVector = 1;
+						playerPicRow = 2;
 					}
 				}
 			}
 			else {
 				if (player_bullet.bulletAngle <= 45) {
 					player_bullet.bulletVector = 4;
+					playerPicRow = 3;
 				}
 				else {
 					if (player.getY() < mousePos.y) {
 						player_bullet.bulletVector = 3;
+						playerPicRow = 0;
 					}
 					else {
 						player_bullet.bulletVector = 1;
+						playerPicRow = 2;
 					}
 				}
 			}
+			newBullet.setPos(sf::Vector2f(player.getX(), player.getY()));
+			newBullet.currVelocity = player_bullet.bulletVector;
+			bulletVec.push_back(newBullet);
 		}
-
 		for (int i = 0; i < bulletVec.size(); i++) {
 			bulletVec[i].draw(window);
-			bulletVec[i].fire(player_bullet.bulletSpeed, player_bullet.bulletVector);
+			bulletVec[i].fire(player_bullet.bulletSpeed, bulletVec[i].currVelocity);
 			enemy.checkColl(bulletVec[i]);
-		}
-		enemy.draw(window);
-		player.draw(window);
-		/*for (int i = 0; i < 5; i++) {
-			if (player_bullet.bulletState == 1) {
-				playerBullet.move(player_bullet.bulletVectorX, player_bullet.bulletVectorY);
-				sf::Vector2f playerBulletPos = playerBullet.getPosition();
-				printf("%d : %f , %f\n", i, playerBulletPos.x, playerBulletPos.y); //check bullet's positions
-				if (playerBulletPos.x <= room.wall + room.startPosX || playerBulletPos.y <= room.wall + room.startPosY || playerBulletPos.x + player_bullet.bulletOriginX >= room.width - room.wall + room.startPosX || playerBulletPos.y + player_bullet.bulletOriginY >= room.height - room.wall + room.startPosY) {
-					player_bullet.bulletState = 0;
-				}
-				else {
-					window.draw(playerBullet);
-				}
+			if (bulletVec[i].getX() <= room.wall + room.startPosX || bulletVec[i].getY() <= room.wall + room.startPosY || bulletVec[i].getX() + player_bullet.bulletOriginX >= room.width - room.wall + room.startPosX || bulletVec[i].getY() + player_bullet.bulletOriginY >= room.height - room.wall + room.startPosY) {
+				bulletVec.erase(bulletVec.begin() + i);
 			}
-		}*/
+		}
+		//enemy.draw(window);
+		player.draw(window);
         window.display();
     }
 xx:
