@@ -10,6 +10,7 @@
 #include"Collider.h"
 #include"Platform.h"
 #include"Menu.h"
+#include"Scoreboard.h"
 
 #define screen_x 720
 #define screen_y 720
@@ -37,7 +38,7 @@ struct player_bullet {
 };
 
 struct player_heart {
-	int hp = 5;
+	int hp = 6;
 	int maxHeart = 5;
 	int heartType[5] = { 2, 2, 1, 0, 0 };
 	int lastHp = 0;
@@ -99,11 +100,14 @@ int main()
 	playerBulletTexture.loadFromFile("CharacterBullet-1.png");
 	roomMapTexture.loadFromFile("RoomLevel1-1.png");
 	bgMenu.loadFromFile("MenuBg-2.png");
+
+	//Declare:
 	Player player(&playerTexture, sf::Vector2u(4, 10), 0.3f, 200.0f);
 	Bullet newBullet(sf::Vector2f(15, 15), &playerBulletTexture);
 	Menu menu(window.getSize().x, window.getSize().y, &bgMenu);
+	Scoreboard scoreboard(window.getSize().x, window.getSize().y, &bgMenu);
 	roomMap.setTexture(&roomMapTexture);
-	for (int i = 0; i < player_heart.hp; i++) {
+	for (int i = 0; i < player_heart.maxHeart; i++) {
 		heartTexture[i].loadFromFile("PlayerHeart-2.png");
 		heart.setTexture(&heartTexture[i], i);
 	}
@@ -112,6 +116,7 @@ int main()
 	int playerPicRow = 0;
 	int bulletShootTime = 0;
 	bool menuState = true;
+	bool scoreboardState = false;
 	sf::Clock clock;
 	
     while (window.isOpen())
@@ -120,8 +125,8 @@ int main()
         sf::Event evnt;
         while (window.pollEvent(evnt))
         {
-			switch (evnt.type) {
-				if (menuState == true) {
+			if (menuState == true) {
+				switch (evnt.type) {
 				case sf::Event::KeyReleased:
 					switch (evnt.key.code) {
 					case sf::Keyboard::W:
@@ -134,13 +139,16 @@ int main()
 						switch (menu.GetPressedItem()) {
 						case 0:
 							menuState = false;
-							goto start;
 							break;
 						case 1:
+							menuState = false;
 							break;
 						case 2:
+							menuState = false;
+							scoreboardState = true;
 							break;
 						case 3:
+							menuState = false;
 							goto xx;
 							break;
 						}
@@ -148,14 +156,24 @@ int main()
 					}
 					break;
 				}
+			}
+			else if (scoreboardState == true) {
+				switch (evnt.type) {
+				case sf::Event::KeyReleased:
+					case sf::Keyboard::Return:
+						menuState = true;
+						scoreboardState = false;
+						break;
+				}
+			}
 
+			switch (evnt.type) {
 			case sf::Event::Closed:
 				window.close();
 				break;
 			}
         }
 
-	start:
 		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
 			menuState = true;
@@ -163,7 +181,13 @@ int main()
 
 		window.clear(sf::Color(0, 0, 0));
 		
-		if (menuState == false) {
+		if (menuState == true) {
+			menu.Draw(window);
+		}
+		else if (scoreboardState == true) {
+			scoreboard.Draw(window);
+		}
+		else {
 			window.draw(roomMap);
 			//Player:
 			player.Update(deltaTime);
@@ -200,9 +224,6 @@ int main()
 				player_heart.lastHp = player_heart.hp;
 			}
 			heart.draw(window, player_heart.maxHeart);
-		}
-		else {
-			menu.Draw(window);
 		}
 
         window.display();
