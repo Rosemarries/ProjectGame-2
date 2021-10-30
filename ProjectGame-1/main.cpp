@@ -7,7 +7,8 @@
 #include"Enemy.h"
 #include"Player.h"
 #include"PlayerHeart.h"
-#include"Collision.h"
+#include"Collider.h"
+#include"Platform.h"
 
 #define screen_x 720
 #define screen_y 720
@@ -124,8 +125,7 @@ int main()
 		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
 			goto xx;
-		}
-		
+		}	
 
 		window.clear(sf::Color(0, 0, 0));
 		window.draw(roomMap);
@@ -133,7 +133,7 @@ int main()
 		player.Update(deltaTime);
 		player.Draw(window);
 		//Player Bullet:
-		newBullet.Update(mousePos, window, sf::Vector2f(player.getX(), player.getY()), &playerBulletTexture);
+		newBullet.Update(mousePos, window, sf::Vector2f(player.GetPosition().x, player.GetPosition().y), &playerBulletTexture);
 		//Player Heart:
 		if (player_heart.lastHp != player_heart.hp) {
 			player_heart.remainHp = player_heart.hp;
@@ -165,7 +165,6 @@ int main()
 		}
 		heart.draw(window, player_heart.maxHeart);
 
-		
         window.display();
     }
 xx:

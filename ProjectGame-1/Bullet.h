@@ -1,5 +1,6 @@
 #pragma once
 #include<SFML/Graphics.hpp>
+#include"Collider.h"
 
 class Bullet {
 public:
@@ -33,6 +34,10 @@ public:
 	void setPos(sf::Vector2f newPos);
 
 	void Update(sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vector2f player, sf::Texture* texture);
+
+	Collider GetCollider() {
+		return Collider(bullet);
+	}
 
 private:
 	sf::RectangleShape bullet;

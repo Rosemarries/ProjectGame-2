@@ -1,14 +1,14 @@
-#include"Collision.h"
-Collision::Collision(sf::RectangleShape& body) : body(body)
+#include"Collider.h"
+Collider::Collider(sf::RectangleShape& body) : body(body)
 {
 
 }
 
-Collision::~Collision() {
+Collider::~Collider() {
 
 }
 
-bool Collision::CheckCollision(Collision& other, float push) {
+bool Collider::CheckCollision(Collider& other, float push) {
 	sf::Vector2f otherPosition = other.GetPosition();
 	sf::Vector2f otherHalfSize = other.GetHalfSize();
 	sf::Vector2f thisPosition = GetPosition();

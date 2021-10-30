@@ -1,4 +1,6 @@
+#include<SFML\Graphics.hpp>
 #include"Player.h"
+#include"Collider.h"
 
 Player::Player(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed) : animation(texture, imageCount, switchTime){
 	this->speed = speed;
