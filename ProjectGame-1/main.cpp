@@ -9,6 +9,7 @@
 #include"PlayerHeart.h"
 #include"Collider.h"
 #include"Platform.h"
+#include"Menu.h"
 
 #define screen_x 720
 #define screen_y 720
@@ -73,6 +74,7 @@ int main()
 	room room;
 
 	sf::RenderWindow window(sf::VideoMode(screen_x, screen_y), "GAME START!");
+	Menu menu(window.getSize().x, window.getSize().y);
 	sf::RectangleShape roomMap(sf::Vector2f(room.width, room.height));
 	sf::CircleShape playerBullet;
 	sf::RectangleShape door[4];
@@ -107,6 +109,7 @@ int main()
 	float deltaTime = 0.0f;
 	int playerPicRow = 0;
 	int bulletShootTime = 0;
+	bool menuState = true;
 	sf::Clock clock;
 	
     while (window.isOpen())
@@ -116,58 +119,93 @@ int main()
         while (window.pollEvent(evnt))
         {
 			switch (evnt.type) {
+				if (menuState == true) {
+				case sf::Event::KeyReleased:
+					switch (evnt.key.code) {
+					case sf::Keyboard::W:
+						menu.MoveUp();
+						break;
+					case sf::Keyboard::S:
+						menu.MoveDown();
+						break;
+					case sf::Keyboard::Return:
+						switch (menu.GetPressedItem()) {
+						case 0:
+							menuState = false;
+							goto start;
+							break;
+						case 1:
+							break;
+						case 2:
+							break;
+						case 3:
+							goto xx;
+							break;
+						}
+						break;
+					}
+					break;
+				}
+
 			case sf::Event::Closed:
 				window.close();
 				break;
 			}
         }
 
+	start:
 		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
-			goto xx;
-		}	
+			menuState = true;
+		}
 
 		window.clear(sf::Color(0, 0, 0));
-		window.draw(roomMap);
-		//Player:
-		player.Update(deltaTime);
-		player.Draw(window);
-		//Player Bullet:
-		newBullet.Update(mousePos, window, sf::Vector2f(player.GetPosition().x, player.GetPosition().y), &playerBulletTexture);
-		//Player Heart:
-		if (player_heart.lastHp != player_heart.hp) {
-			player_heart.remainHp = player_heart.hp;
-			for (int i = 0; i < player_heart.maxHeart; i++) {
-				if (player_heart.remainHp > 1) {
-					player_heart.heartType[i] = 2;
-					player_heart.remainHp -= 2;
+		
+		if (menuState == false) {
+			window.draw(roomMap);
+			//Player:
+			player.Update(deltaTime);
+			player.Draw(window);
+			//Player Bullet:
+			newBullet.Update(mousePos, window, sf::Vector2f(player.GetPosition().x, player.GetPosition().y), &playerBulletTexture);
+			//Player Heart:
+			if (player_heart.lastHp != player_heart.hp) {
+				player_heart.remainHp = player_heart.hp;
+				for (int i = 0; i < player_heart.maxHeart; i++) {
+					if (player_heart.remainHp > 1) {
+						player_heart.heartType[i] = 2;
+						player_heart.remainHp -= 2;
+					}
+					else if (player_heart.remainHp == 1) {
+						player_heart.heartType[i] = 1;
+						player_heart.remainHp -= 1;
+					}
+					else if (player_heart.remainHp < 1) {
+						player_heart.heartType[i] = 0;
+					}
+					heart.setPos(sf::Vector2f(10 + 20 * i, 10), i);
+					if (player_heart.heartType[i] == 0) {
+						heartTexture[i].loadFromFile("PlayerHeart-0.png");
+					}
+					else if (player_heart.heartType[i] == 1) {
+						heartTexture[i].loadFromFile("PlayerHeart-1.png");
+					}
+					else if (player_heart.heartType[i] == 2) {
+						heartTexture[i].loadFromFile("PlayerHeart-2.png");
+					}
+					heart.setTexture(&heartTexture[i], i);
 				}
-				else if (player_heart.remainHp == 1) {
-					player_heart.heartType[i] = 1;
-					player_heart.remainHp -= 1;
-				}
-				else if (player_heart.remainHp < 1) {
-					player_heart.heartType[i] = 0;
-				}
-				heart.setPos(sf::Vector2f(10 + 20 * i, 10), i);
-				if (player_heart.heartType[i] == 0) {
-					heartTexture[i].loadFromFile("PlayerHeart-0.png");
-				}
-				else if (player_heart.heartType[i] == 1) {
-					heartTexture[i].loadFromFile("PlayerHeart-1.png");
-				}
-				else if (player_heart.heartType[i] == 2) {
-					heartTexture[i].loadFromFile("PlayerHeart-2.png");
-				}
-				heart.setTexture(&heartTexture[i], i);
+				player_heart.lastHp = player_heart.hp;
 			}
-			player_heart.lastHp = player_heart.hp;
+			heart.draw(window, player_heart.maxHeart);
 		}
-		heart.draw(window, player_heart.maxHeart);
+		else {
+			menu.Draw(window);
+		}
 
         window.display();
     }
-xx:
 
+xx:
     return 0;
 }
