@@ -32,7 +32,7 @@ public:
 
 	void setPos(sf::Vector2f newPos);
 
-	void Update(sf::Vector2i mousePos);
+	void Update(sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vector2f player, sf::Texture* texture);
 
 private:
 	sf::RectangleShape bullet;

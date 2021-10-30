@@ -129,12 +129,11 @@ int main()
 
 		window.clear(sf::Color(0, 0, 0));
 		window.draw(roomMap);
-		//Player Animation:
+		//Player:
 		player.Update(deltaTime);
 		player.Draw(window);
 		//Player Bullet:
-		newBullet.Update(mousePos);
-		newBullet.draw(window);
+		newBullet.Update(mousePos, window, sf::Vector2f(player.getX(), player.getY()), &playerBulletTexture);
 		//Player Heart:
 		if (player_heart.lastHp != player_heart.hp) {
 			player_heart.remainHp = player_heart.hp;
