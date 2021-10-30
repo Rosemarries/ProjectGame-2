@@ -27,7 +27,7 @@ struct player_status {
 struct player_bullet {
 	int bulletVector;
 	float bulletSpeed = 1.75;
-	int bulletTimer = 40;
+	int bulletTimer = 60;
 	bool bulletState = false;
 	int bulletDamage = 1;
 	float bulletAngle;
@@ -146,7 +146,7 @@ int main()
 			playerPicRow = 2;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-			if (player.getY() + player_status.originY < room.height + room.startPosY) {
+			if (player.getY() + 2 * player_status.originY < room.height + room.startPosY) {
 				player.move(sf::Vector2f(0, player_status.speed));
 			}
 			playerPicRow = 0;
