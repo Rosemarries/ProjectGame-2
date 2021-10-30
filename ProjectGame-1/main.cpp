@@ -8,6 +8,7 @@
 #include"Enemy.h"
 #include"Player.h"
 #include"PlayerHeart.h"
+#include"Collision.h"
 
 #define screen_x 720
 #define screen_y 720
@@ -75,6 +76,10 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(screen_x, screen_y), "GAME START!");
 	sf::RectangleShape roomMap(sf::Vector2f(room.width, room.height));
 	sf::CircleShape playerBullet;
+	sf::RectangleShape door[4];
+	for (int i = 0; i < 4; i++) {
+		door[i].setSize(sf::Vector2f(room.wall, room.wall));
+	}
 
 	//Define Objects:
 	Player player(sf::Vector2f(player_status.width, player_status.height));
