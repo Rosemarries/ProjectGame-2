@@ -74,7 +74,6 @@ int main()
 	room room;
 
 	sf::RenderWindow window(sf::VideoMode(screen_x, screen_y), "GAME START!");
-	Menu menu(window.getSize().x, window.getSize().y);
 	sf::RectangleShape roomMap(sf::Vector2f(room.width, room.height));
 	sf::CircleShape playerBullet;
 	sf::RectangleShape door[4];
@@ -95,11 +94,14 @@ int main()
 	sf::Texture playerBulletTexture;
 	sf::Texture roomMapTexture;
 	sf::Texture heartTexture[5];
+	sf::Texture bgMenu;
 	playerTexture.loadFromFile("TheLost-4.png");
 	playerBulletTexture.loadFromFile("CharacterBullet-1.png");
 	roomMapTexture.loadFromFile("RoomLevel1-1.png");
+	bgMenu.loadFromFile("MenuBg-2.png");
 	Player player(&playerTexture, sf::Vector2u(4, 10), 0.3f, 200.0f);
 	Bullet newBullet(sf::Vector2f(15, 15), &playerBulletTexture);
+	Menu menu(window.getSize().x, window.getSize().y, &bgMenu);
 	roomMap.setTexture(&roomMapTexture);
 	for (int i = 0; i < player_heart.hp; i++) {
 		heartTexture[i].loadFromFile("PlayerHeart-2.png");
