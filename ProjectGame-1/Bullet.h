@@ -4,33 +4,13 @@
 class Bullet {
 public:
 	int currVelocity;
-	Bullet(sf::Vector2f size) 
-	{
-		bullet.setSize(size);
-	}
+	Bullet(sf::Vector2f size, sf::Texture* texture);
 
-	void fire(int speed, int bulletVector) {
-		if (bulletVector == 1) {
-			bullet.move(0, -speed);
-		}
-		else if (bulletVector == 2) {
-			bullet.move(speed, 0);
-		}
-		else if (bulletVector == 3) {
-			bullet.move(0, speed);
-		}
-		else if (bulletVector == 4) {
-			bullet.move(-speed, 0);
-		}
-	}
+	void fire(int speed, int bulletVector);
 
-	int getX() {
-		return bullet.getPosition().x;
-	}
+	int getX();
 
-	int getY() {
-		return bullet.getPosition().y;
-	}
+	int getY();
 	
 	int getRight() {
 		return bullet.getPosition().x + bullet.getSize().x;
@@ -48,17 +28,11 @@ public:
 		return bullet.getPosition().y + bullet.getSize().y;
 	}
 
-	void draw(sf::RenderWindow& window) {
-		window.draw(bullet);
-	}
+	void draw(sf::RenderWindow& window);
 
-	void setPos(sf::Vector2f newPos) {
-		bullet.setPosition(newPos);
-	}
+	void setPos(sf::Vector2f newPos);
 
-	void setTexture(sf::Texture* bulletTexture) {
-		bullet.setTexture(bulletTexture);
-	}
+	void Update(sf::Vector2i mousePos);
 
 private:
 	sf::RectangleShape bullet;

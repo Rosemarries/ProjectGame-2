@@ -1,45 +1,25 @@
 #pragma once
-#include<SFML/Graphics.hpp>
+#include<SFML\Graphics.hpp>
 #include"Animation.h"
 
 class Player {
 public:
-	Player(sf::Vector2f size) {
-		player.setSize(size);
-	}
+	Player(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed);
+	~Player();
 
-	void setOrigin() {
-		player.setOrigin(40, 40);
-	}
-
-	void setPos(sf::Vector2f newPos) {
-		player.setPosition(newPos);
-	}
-
-	void move(sf::Vector2f dir) {
-		player.move(dir);
-	}
-
+	void Update(float deltaTime);
+	void Draw(sf::RenderWindow& window);
 	int getX() {
-		return player.getPosition().x;
+		return body.getPosition().x;
 	}
-
 	int getY() {
-		return player.getPosition().y;
-	}
-
-	void draw(sf::RenderWindow& window) {
-		window.draw(player);
-	}
-
-	void setTexture(sf::Texture* playerTexture) {
-		player.setTexture(playerTexture);
-	}
-
-	void loadAnime(sf::IntRect uvRect) {
-		player.setTextureRect(uvRect);
+		return body.getPosition().y;
 	}
 
 private:
-	sf::RectangleShape player;
+	sf::RectangleShape body;
+	Animation animation;
+	unsigned int row;
+	float speed;
+	int face;
 };

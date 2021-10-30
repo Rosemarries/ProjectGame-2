@@ -159,6 +159,8 @@ sfml-window-d.lib
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="draftgame-1.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Bullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
