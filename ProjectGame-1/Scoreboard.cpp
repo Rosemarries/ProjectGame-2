@@ -1,16 +1,16 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include "Scoreboard.h"
-#include<string.h>
-
-struct top5 {
-	char name[10];
-	int score = 0;
-};
+#include<iostream>
+#include<algorithm>
 
 Scoreboard::Scoreboard(float width, float height, sf::Texture* texture) {
 	if (!font.loadFromFile("IsaacScript2.ttf")) {
 		//handle error
 	}
+
+	scoreboard_array.resize(5);
+	Reset();
+	LoadScoreboardFromFile();
 
 	bg.setSize(sf::Vector2f(width, height));
 	bg.setPosition(0.0f, 0.0f);
@@ -21,39 +21,38 @@ Scoreboard::Scoreboard(float width, float height, sf::Texture* texture) {
 	text.setCharacterSize(2 * size);
 	text.setPosition(sf::Vector2f(160.0f, 50.0f));
 	text.setFillColor(sf::Color::Black);
+	text.setStyle(sf::Text::Bold);
 	text.setString("SCOREBOARD");
 
 	back.setFont(font);
 	back.setCharacterSize(size);
-	back.setPosition(sf::Vector2f(150.0f, 500.0f));
+	back.setPosition(sf::Vector2f(150.0f, 550.0f));
 	back.setFillColor(sf::Color::Red);
 	back.setString("BACK");
+
+	sf::Text table_name_text;
+	table_name_text.setFont(font);
+	table_name_text.setCharacterSize(90);
+	table_name_text.setString("Name");
+	table_name_text.setStyle(sf::Text::Bold);
+	table_name_text.setFillColor(sf::Color::Black);
+	table_name_text.setPosition(sf::Vector2f(width / 2 - (table_name_text.getLocalBounds().width + 70), 120));
+
+	sf::Text table_score_text;
+	table_score_text.setFont(font);
+	table_score_text.setCharacterSize(90);
+	table_score_text.setString("Score");
+	table_score_text.setStyle(sf::Text::Bold);
+	table_score_text.setFillColor(sf::Color::Black);
+	table_score_text.setPosition(sf::Vector2f(width / 2 + 70, 120));
+
+	score_text.setFont(font);
+	score_text.setCharacterSize(70);
+	score_text.setFillColor(sf::Color::Black);
 }
 
 Scoreboard::~Scoreboard() {
 
-}
-
-void Scoreboard::Update(char name[10], int score) {
-	top5 top[5];
-	top5 temp;
-	FILE* fpw = fopen("Text/Top5.txt", "w");
-	if (fpw == (FILE*)NULL) printf("Cannot open file\n");
-	else {
-		int i = 0;
-		for (int i = 0; i < 5; i++) {
-			fprintf(fpw, "%s %d\n", "Aa", 10 + i);
-		}
-		FILE* fpr = fopen("Text/Top5.txt", "r");
-		while (!feof(fpr)) {
-			fscanf(fpr, "%s", top[i].name);
-			fscanf(fpr, "%d", &top[i].score);
-			printf("%s %d\n", top[i].name, top[i].score);
-			i++;
-		}
-		fclose(fpr);
-	}
-	fclose(fpw);
 }
 
 void Scoreboard::Draw(sf::RenderWindow& window) {
@@ -61,7 +60,99 @@ void Scoreboard::Draw(sf::RenderWindow& window) {
 	window.draw(bg);
 	window.draw(text);
 	window.draw(back);
-	for (int i = 0; i < 5; i++) {
-		window.draw(scoreboard[i]);
+	int i = 0;
+	for (auto it = Scoreboard::BEGIN(); it != Scoreboard::END(); ++it) {
+		score_text.setString(it->name);
+		score_text.setPosition(200, i * 50 + 200);
+		window.draw(score_text);
+		score_text.setString(std::to_string(it->score));
+		score_text.setPosition(500, i * 50 + 200);
+		window.draw(score_text);
+		i++;
 	}
+}
+
+void Scoreboard::Reset() {
+	if (scoreboard_array.size() == 5) {
+		Record empty;
+		empty.name = "-----";
+		empty.score = 0;
+		for (auto it = scoreboard_array.begin(); it != scoreboard_array.end(); ++it) {
+			*it = empty;
+		}
+	}
+}
+
+void Scoreboard::Add(const std::string& name, int score) {
+	Record r;
+	r.name = name;
+	r.score = score;
+	scoreboard_array.back() = r;
+	std::sort(scoreboard_array.begin(), scoreboard_array.end(), [](const Record& sbr1, const Record& sbr2) {return (sbr1.score > sbr2.score); });
+}
+
+void Scoreboard::LoadScoreboardFromFile() {
+	std::ifstream file;
+	file.open("Text/Top5.txt");
+	if (!file.good()) {
+		std::cout << "Cannot open file.\n";
+		abort();
+	}
+
+	scoreboard_array.clear();
+	Record sbr;
+	std::string line_str = "";
+	int line_counter = 0;
+	while (std::getline(file, line_str)) {
+		switch (line_counter) {
+		case 0: {
+			sbr.name = line_str;
+		}
+			  break;
+		case 1: {
+			sbr.score = std::stoi(line_str);
+		}
+			  break;
+		}
+
+		line_counter++;
+		if (line_counter == 2) {
+			line_counter = 0;
+			scoreboard_array.push_back(sbr);
+		}
+	}
+
+	file.close();
+}
+
+void Scoreboard::SaveScoreboardToFile() {
+	std::ofstream file;
+	file.open("Text/Top5.txt");
+	if (!file.good()) {
+		std::cout << "Cannot open file.\n";
+		abort();
+	}
+
+	for (auto it = scoreboard_array.begin(); it != scoreboard_array.end(); ++it) {
+		file << it->name << "\n";
+		file << it->score << "\n";
+	}
+
+	file.close();
+}
+
+int Scoreboard::GetLastScore() const {
+	return scoreboard_array[scoreboard_array.size() - 1].score;
+}
+
+std::string Scoreboard::GetName(int i) const {
+	return scoreboard_array[i].name;
+}
+
+int Scoreboard::GetScore(int i) const {
+	return scoreboard_array[i].score;
+}
+
+int Scoreboard::GetSize() const {
+	return scoreboard_array.size();
 }

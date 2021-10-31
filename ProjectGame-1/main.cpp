@@ -11,6 +11,7 @@
 #include"Menu.h"
 #include"Scoreboard.h"
 #include"Room.h"
+#include"GameTile.h"
 
 #define screen_x 720
 #define screen_y 720
@@ -106,6 +107,8 @@ int main()
 	Menu menu(window.getSize().x, window.getSize().y, &bgMenu);
 	Scoreboard scoreboard(window.getSize().x, window.getSize().y, &bgMenu);
 	Room roomMap(&roomMapTexture, sf::Vector2f(room.width, room.height), sf::Vector2f(window.getSize()));
+	//std::string enemyFileName = "Image/Maggot.png";
+	//GameTile gametile(enemyFileName);
 	for (int i = 0; i < player_heart.maxHeart; i++) {
 		heartTexture[i].loadFromFile("Image/PlayerHeart-2.png");
 		heart.setTexture(&heartTexture[i], i);
@@ -151,6 +154,7 @@ int main()
 							menuState = false;
 							goto xx;
 							break;
+						scoreboard.SaveScoreboardToFile();
 						}
 						break;
 					}
@@ -185,7 +189,6 @@ int main()
 			menu.Draw(window);
 		}
 		else if (scoreboardState == true) {
-			scoreboard.Update(player_status.name, player_status.score);
 			scoreboard.Draw(window);
 		}
 		else {
