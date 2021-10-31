@@ -18,7 +18,7 @@ Menu::Menu(float width, float height, sf::Texture* texture) {
 	}
 	menu[0].setFillColor(sf::Color::Red);
 	menu[0].setString("PLAY");
-	menu[1].setString("OBTIONS");
+	menu[1].setString("OPTIONS");
 	menu[2].setString("SCOREBOARD");
 	menu[3].setString("EXIT");
 

@@ -80,8 +80,15 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(screen_x, screen_y), "GAME START!");
 	sf::RectangleShape door[4];
 	for (int i = 0; i < 4; i++) {
-		door[i].setSize(sf::Vector2f(room.wall, room.wall));
+		door[i].setSize(sf::Vector2f(60, 60));
 	}
+	door[0].setPosition(sf::Vector2f(330, 90));
+	door[1].setPosition(sf::Vector2f(390, 630));
+	door[1].setRotation(180);
+	door[2].setPosition(sf::Vector2f(50, 380));
+	door[2].setRotation(270);
+	door[3].setPosition(sf::Vector2f(670, 330));
+	door[3].setRotation(90);
 
 	//Define Objects:
 	Enemy enemy(sf::Vector2f(player_status.width, player_status.height));
@@ -96,10 +103,12 @@ int main()
 	sf::Texture roomMapTexture;
 	sf::Texture heartTexture[5];
 	sf::Texture bgMenu;
+	sf::Texture doorTexture;
 	playerTexture.loadFromFile("Image/TheLost-4.png");
 	playerBulletTexture.loadFromFile("Image/CharacterBullet-1.png");
 	roomMapTexture.loadFromFile("Image/RoomLevel1-1.png");
 	bgMenu.loadFromFile("Image/MenuBg-2.png");
+	doorTexture.loadFromFile("Image/Door-1.png");
 
 	//Declare:
 	Player player(&playerTexture, sf::Vector2u(4, 10), 0.3f, 200.0f);
@@ -107,6 +116,9 @@ int main()
 	Menu menu(window.getSize().x, window.getSize().y, &bgMenu);
 	Scoreboard scoreboard(window.getSize().x, window.getSize().y, &bgMenu);
 	Room roomMap(&roomMapTexture, sf::Vector2f(room.width, room.height), sf::Vector2f(window.getSize()));
+	for (int i = 0; i < 4; i++) {
+		door[i].setTexture(&doorTexture);
+	}
 	//std::string enemyFileName = "Image/Maggot.png";
 	//GameTile gametile(enemyFileName);
 	for (int i = 0; i < player_heart.maxHeart; i++) {
@@ -193,6 +205,9 @@ int main()
 		}
 		else {
 			roomMap.Draw(window);
+			for (int i = 0; i < 4; i++) {
+				window.draw(door[i]);
+			}
 			//Player:
 			player.Update(deltaTime);
 			playerCollis = true;
