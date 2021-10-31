@@ -66,3 +66,28 @@ void Player::Update(float deltaTime) {
 void Player::Draw(sf::RenderWindow& window) {
 	window.draw(body);
 }
+
+void Player::Hitted(float dmg) {
+	if (clock.getElapsedTime() >= sf::seconds(0.5f)) {
+		hp -= dmg;
+		clock.restart();
+	}
+}
+
+void Player::Upgrade(int item_id) {
+	switch (item_id) {
+	case 0:
+		hp += 1;
+		break;
+	}
+}
+
+void Player::Reset() {
+	body.setPosition(200, 200);
+	body.setFillColor(sf::Color::Blue);
+	speed = 3.f;
+	damage = 3.5f;
+	hp = 3.f;
+
+	clock.restart();
+}
