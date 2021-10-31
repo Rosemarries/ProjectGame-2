@@ -105,7 +105,7 @@ void Bullet::Update(sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vector2
 	for (int i = 0; i < bulletVec.size(); i++) {
 		bulletVec[i].draw(window);
 		bulletVec[i].fire(bulletSpeed, bulletVec[i].currVelocity);
-		if (bulletVec[i].getX() <= room.wall + room.startPosX || bulletVec[i].getY() <= room.wall + room.startPosY || bulletVec[i].getX() + bullet.getOrigin().x >= room.width - room.wall + room.startPosX || bulletVec[i].getY() + bullet.getOrigin().y >= room.height - room.wall + room.startPosY) {
+		if (bulletVec[i].getX() <= room.startPosX || bulletVec[i].getY() <= room.wall + room.startPosY || bulletVec[i].getX() >= 720 - room.startPosX || bulletVec[i].getY() >= room.height - room.wall + room.startPosY) {
 			bulletVec.erase(bulletVec.begin() + i);
 		}
 	}

@@ -7,7 +7,6 @@
 #include"Enemy.h"
 #include"Player.h"
 #include"PlayerHeart.h"
-#include"Collider.h"
 #include"Platform.h"
 #include"Menu.h"
 #include"Scoreboard.h"
