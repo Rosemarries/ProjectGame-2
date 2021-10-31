@@ -95,10 +95,10 @@ int main()
 	sf::Texture roomMapTexture;
 	sf::Texture heartTexture[5];
 	sf::Texture bgMenu;
-	playerTexture.loadFromFile("TheLost-4.png");
-	playerBulletTexture.loadFromFile("CharacterBullet-1.png");
-	roomMapTexture.loadFromFile("RoomLevel1-1.png");
-	bgMenu.loadFromFile("MenuBg-2.png");
+	playerTexture.loadFromFile("Image/TheLost-4.png");
+	playerBulletTexture.loadFromFile("Image/CharacterBullet-1.png");
+	roomMapTexture.loadFromFile("Image/RoomLevel1-1.png");
+	bgMenu.loadFromFile("Image/MenuBg-2.png");
 
 	//Declare:
 	Player player(&playerTexture, sf::Vector2u(4, 10), 0.3f, 200.0f);
@@ -107,7 +107,7 @@ int main()
 	Scoreboard scoreboard(window.getSize().x, window.getSize().y, &bgMenu);
 	Room roomMap(&roomMapTexture, sf::Vector2f(room.width, room.height), sf::Vector2f(window.getSize()));
 	for (int i = 0; i < player_heart.maxHeart; i++) {
-		heartTexture[i].loadFromFile("PlayerHeart-2.png");
+		heartTexture[i].loadFromFile("Image/PlayerHeart-2.png");
 		heart.setTexture(&heartTexture[i], i);
 	}
 
@@ -213,13 +213,13 @@ int main()
 					}
 					heart.setPos(sf::Vector2f(10 + 20 * i, 10), i);
 					if (player_heart.heartType[i] == 0) {
-						heartTexture[i].loadFromFile("PlayerHeart-0.png");
+						heartTexture[i].loadFromFile("Image/PlayerHeart-0.png");
 					}
 					else if (player_heart.heartType[i] == 1) {
-						heartTexture[i].loadFromFile("PlayerHeart-1.png");
+						heartTexture[i].loadFromFile("Image/PlayerHeart-1.png");
 					}
 					else if (player_heart.heartType[i] == 2) {
-						heartTexture[i].loadFromFile("PlayerHeart-2.png");
+						heartTexture[i].loadFromFile("Image/PlayerHeart-2.png");
 					}
 					heart.setTexture(&heartTexture[i], i);
 				}
