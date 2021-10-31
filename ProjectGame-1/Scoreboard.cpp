@@ -37,14 +37,14 @@ Scoreboard::~Scoreboard() {
 void Scoreboard::Update(char name[10], int score) {
 	top5 top[5];
 	top5 temp;
-	FILE* fpw = fopen("Top5.txt", "w");
+	FILE* fpw = fopen("Text/Top5.txt", "w");
 	if (fpw == (FILE*)NULL) printf("Cannot open file\n");
 	else {
 		int i = 0;
 		for (int i = 0; i < 5; i++) {
 			fprintf(fpw, "%s %d\n", "Aa", 10 + i);
 		}
-		FILE* fpr = fopen("Top5.txt", "r");
+		FILE* fpr = fopen("Text/Top5.txt", "r");
 		while (!feof(fpr)) {
 			fscanf(fpr, "%s", top[i].name);
 			fscanf(fpr, "%d", &top[i].score);
