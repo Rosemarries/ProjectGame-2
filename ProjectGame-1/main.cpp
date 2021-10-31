@@ -11,6 +11,7 @@
 #include"Platform.h"
 #include"Menu.h"
 #include"Scoreboard.h"
+#include"Room.h"
 
 #define screen_x 720
 #define screen_y 720
@@ -24,6 +25,8 @@ struct player_status {
 	float originY = 40;
 	float height = 75;
 	float width = 60;
+	char name[10];
+	int score;
 };
 
 struct player_bullet {
@@ -57,7 +60,7 @@ struct artifact {
 };
 
 struct room {
-	float width = 500;
+	float width = 600;
 	float height = 500;
 	float wall = 35;
 	int number = 0;
@@ -75,8 +78,6 @@ int main()
 	room room;
 
 	sf::RenderWindow window(sf::VideoMode(screen_x, screen_y), "GAME START!");
-	sf::RectangleShape roomMap(sf::Vector2f(room.width, room.height));
-	sf::CircleShape playerBullet;
 	sf::RectangleShape door[4];
 	for (int i = 0; i < 4; i++) {
 		door[i].setSize(sf::Vector2f(room.wall, room.wall));
@@ -88,7 +89,6 @@ int main()
 
 	//std::vector<Bullet> bulletVec;
 	enemy.setPos(sf::Vector2f(500, 50));
-	roomMap.setPosition(room.startPosX, room.startPosY);
 
 	//Set Texture:
 	sf::Texture playerTexture;
@@ -106,7 +106,7 @@ int main()
 	Bullet newBullet(sf::Vector2f(15, 15), &playerBulletTexture);
 	Menu menu(window.getSize().x, window.getSize().y, &bgMenu);
 	Scoreboard scoreboard(window.getSize().x, window.getSize().y, &bgMenu);
-	roomMap.setTexture(&roomMapTexture);
+	Room roomMap(&roomMapTexture, sf::Vector2f(room.width, room.height), sf::Vector2f(window.getSize()));
 	for (int i = 0; i < player_heart.maxHeart; i++) {
 		heartTexture[i].loadFromFile("PlayerHeart-2.png");
 		heart.setTexture(&heartTexture[i], i);
@@ -117,6 +117,7 @@ int main()
 	int bulletShootTime = 0;
 	bool menuState = true;
 	bool scoreboardState = false;
+	bool playerCollis = false;
 	sf::Clock clock;
 	
     while (window.isOpen())
@@ -185,12 +186,14 @@ int main()
 			menu.Draw(window);
 		}
 		else if (scoreboardState == true) {
+			scoreboard.Update(player_status.name, player_status.score);
 			scoreboard.Draw(window);
 		}
 		else {
-			window.draw(roomMap);
+			roomMap.Draw(window);
 			//Player:
 			player.Update(deltaTime);
+			playerCollis = true;
 			player.Draw(window);
 			//Player Bullet:
 			newBullet.Update(mousePos, window, sf::Vector2f(player.GetPosition().x, player.GetPosition().y), &playerBulletTexture);

@@ -14,6 +14,9 @@ public:
 	sf::Vector2f GetPosition() {
 		return body.getPosition();
 	}
+	sf::FloatRect GetGlobalRounds() {
+		return body.getGlobalBounds();
+	}
 	Collider GetCollider() {
 		return Collider(body);
 	}

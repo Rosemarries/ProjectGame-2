@@ -157,12 +157,12 @@ sfml-window-d.lib
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Collider.cpp" />
-    <ClCompile Include="draftgame-1.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Room.cpp" />
     <ClCompile Include="Scoreboard.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -174,7 +174,22 @@ sfml-window-d.lib
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerHeart.h" />
+    <ClInclude Include="Room.h" />
     <ClInclude Include="Scoreboard.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="CharacterBullet-1.png" />
+    <Image Include="CharacterWeapon-1.png" />
+    <Image Include="Door-1.png" />
+    <Image Include="MenuBg-2.png" />
+    <Image Include="PlayerHeart-0.png" />
+    <Image Include="PlayerHeart-1.png" />
+    <Image Include="PlayerHeart-2.png" />
+    <Image Include="RoomLevel1-1.png" />
+    <Image Include="TheLost-4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Top5.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

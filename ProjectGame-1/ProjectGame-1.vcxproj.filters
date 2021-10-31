@@ -13,11 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\Image">
+      <UniqueIdentifier>{4c4f4ff8-f9e1-43a1-b4c6-06343d287b91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="draftgame-1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -40,6 +40,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Scoreboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,5 +74,42 @@
     <ClInclude Include="Scoreboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="CharacterBullet-1.png">
+      <Filter>Resource Files\Image</Filter>
+    </Image>
+    <Image Include="CharacterWeapon-1.png">
+      <Filter>Resource Files\Image</Filter>
+    </Image>
+    <Image Include="Door-1.png">
+      <Filter>Resource Files\Image</Filter>
+    </Image>
+    <Image Include="MenuBg-2.png">
+      <Filter>Resource Files\Image</Filter>
+    </Image>
+    <Image Include="PlayerHeart-0.png">
+      <Filter>Resource Files\Image</Filter>
+    </Image>
+    <Image Include="PlayerHeart-1.png">
+      <Filter>Resource Files\Image</Filter>
+    </Image>
+    <Image Include="PlayerHeart-2.png">
+      <Filter>Resource Files\Image</Filter>
+    </Image>
+    <Image Include="RoomLevel1-1.png">
+      <Filter>Resource Files\Image</Filter>
+    </Image>
+    <Image Include="TheLost-4.png">
+      <Filter>Resource Files\Image</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Top5.txt">
+      <Filter>Resource Files\Image</Filter>
+    </Text>
   </ItemGroup>
 </Project>

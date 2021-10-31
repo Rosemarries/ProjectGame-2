@@ -9,6 +9,7 @@ public:
 	~Scoreboard();
 
 	void Draw(sf::RenderWindow& window);
+	void Update(char name[10], int score);
 
 private:
 	sf::Font font;
