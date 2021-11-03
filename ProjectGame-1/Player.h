@@ -1,7 +1,6 @@
 #pragma once
 #include<SFML\Graphics.hpp>
 #include"Animation.h"
-#include"Collider.h"
 
 class Player {
 public:
@@ -32,6 +31,7 @@ private:
 	sf::RectangleShape body;
 	sf::Vector2f position;
 	sf::Clock clock;
+	sf::Texture texture;
 	Animation animation;
 	unsigned int row;
 	float speed;

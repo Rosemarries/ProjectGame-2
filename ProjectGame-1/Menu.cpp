@@ -1,13 +1,13 @@
 #include "Menu.h"
 
-Menu::Menu(float width, float height, sf::Texture* texture) {
-	if (!font.loadFromFile("IsaacScript2.ttf")) {
-		//handle error
+Menu::Menu(float width, float height) {
+	if (!font.loadFromFile("IsaacScript2.ttf") || !bgMenu.loadFromFile("Image/MenuBg-2.png")) {
+		abort();
 	}
 
 	bg.setSize(sf::Vector2f(width, height));
 	bg.setPosition(0.0f, 0.0f);
-	bg.setTexture(texture);
+	bg.setTexture(&bgMenu);
 
 	int size = 75;
 	for (int i = 0; i < MAX_NUMBER_OF_ITEMS; i++) {

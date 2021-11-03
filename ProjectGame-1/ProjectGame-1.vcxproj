@@ -156,28 +156,28 @@ sfml-window-d.lib
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameTile.cpp" />
     <ClCompile Include="GameWorld.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="Platform.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="PlayerHeart.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="Scoreboard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Bullet.h" />
-    <ClInclude Include="Collider.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Engine.h" />
     <ClInclude Include="GameTile.h" />
     <ClInclude Include="GameWorld.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Menu.h" />
-    <ClInclude Include="Platform.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerHeart.h" />
     <ClInclude Include="Room.h" />

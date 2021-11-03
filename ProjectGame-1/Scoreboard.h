@@ -19,7 +19,7 @@ class Scoreboard
 	static bool compareScore(const Record& sbr1, const Record& sbr2);
 
 public:
-	Scoreboard(float width, float height, sf::Texture* texture);
+	Scoreboard(float width, float height);
 	~Scoreboard();
 
 	void Draw(sf::RenderWindow& window);
@@ -45,6 +45,7 @@ private:
 	sf::Text table_name_text;
 	sf::Text table_score_text;
 	sf::RectangleShape bg;
+	sf::Texture texture;
 };
 
 #endif // !SCOREBOARD_H

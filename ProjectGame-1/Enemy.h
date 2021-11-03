@@ -1,27 +1,34 @@
 #pragma once
-#include<SFML/Graphics.hpp>
-#include"Bullet.h"
+#ifndef ENEMY_H
+#define ENEMY_H
+
+#include <SFML/Graphics.hpp>
+
+enum move { BOTH, HORIZONTAL, VERTICAL };
 
 class Enemy {
+protected:
+	sf::RectangleShape hitbox;
+	sf::Texture hitbox_texture;
+	sf::Sprite hitbox_sprite;
+	sf::Vector2f position;
+	float hp;
+	float damage;
+	sf::Vector2f movement_speed;
+	bool fly;
 public:
-	Enemy(sf::Vector2f size) {
-		enemy.setSize(size);
-	}
+	virtual int sign(float number);
 
-	void setPos(sf::Vector2f newPos) {
-		enemy.setPosition(newPos);
-	}
-
-	void checkColl(Bullet bullet) {
-		if (bullet.getRight() > enemy.getPosition().x && bullet.getTop() < enemy.getPosition().y + enemy.getSize().y && bullet.getBottom() > enemy.getPosition().y) {
-			enemy.setPosition(sf::Vector2f(4234432, 4234423));
-		}
-	}
-
-	void draw(sf::RenderWindow& window) {
-		window.draw(enemy);
-	}
-
-private:
-	sf::RectangleShape enemy;
+	virtual sf::RectangleShape getShape() const;
+	virtual sf::FloatRect getHitbox() const;
+	virtual sf::Sprite getSprite() const;
+	virtual float getDamage() const;
+	virtual bool isFlying() const;
+	virtual float getHp() const;
+	virtual void hitted(float dmg);
+	virtual void update(sf::Vector2f player_pos, bool reverse = false, move m = BOTH) = 0;
+	virtual sf::FloatRect fakeUpdate(move m, bool reverse) = 0;
+	virtual ~Enemy() = 0;
 };
+
+#endif

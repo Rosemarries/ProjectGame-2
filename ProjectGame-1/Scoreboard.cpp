@@ -3,7 +3,7 @@
 #include<iostream>
 #include<algorithm>
 
-Scoreboard::Scoreboard(float width, float height, sf::Texture* texture) {
+Scoreboard::Scoreboard(float width, float height) {
 	if (!font.loadFromFile("IsaacScript2.ttf")) {
 		//handle error
 	}
@@ -12,9 +12,10 @@ Scoreboard::Scoreboard(float width, float height, sf::Texture* texture) {
 	Reset();
 	LoadScoreboardFromFile();
 
+	texture.loadFromFile("Image/MenuBg-2.png");
 	bg.setSize(sf::Vector2f(width, height));
 	bg.setPosition(0.0f, 0.0f);
-	bg.setTexture(texture);
+	bg.setTexture(&texture);
 
 	int size = 50;
 	text.setFont(font);

@@ -7,11 +7,10 @@
 #include"Enemy.h"
 #include"Player.h"
 #include"PlayerHeart.h"
-#include"Platform.h"
 #include"Menu.h"
 #include"Scoreboard.h"
 #include"Room.h"
-#include"GameTile.h"
+#include"Map.h"
 
 #define screen_x 720
 #define screen_y 720
@@ -27,6 +26,7 @@ struct player_status {
 	float width = 60;
 	char name[10];
 	int score;
+	int hp = 6;
 };
 
 struct player_bullet {
@@ -38,25 +38,6 @@ struct player_bullet {
 	float bulletAngle;
 	float bulletOriginX = 7.5;
 	float bulletOriginY = 7.5;
-};
-
-struct player_heart {
-	int hp = 6;
-	int maxHeart = 5;
-	int heartType[5] = { 2, 2, 1, 0, 0 };
-	int lastHp = 0;
-	int remainHp = 0; //Calculate
-};
-
-struct artifact {
-	int number = 0;
-	int boostCharacterHp = 2;
-	int boostCharacterSpeed = 1;
-	float boostMonsterDropMoney = 0.5;
-	int boostCharacterDamage = 1;
-	int reduceMonsterDamage = 1;
-	int reduceMonsterHp = 1;
-	int boostMonsterDropMed = 1;
 };
 
 struct room {
@@ -73,58 +54,25 @@ int main()
 {
 	player_status player_status;
 	player_bullet player_bullet;
-	player_heart player_heart;
-	artifact artifact;
 	room room;
 
 	sf::RenderWindow window(sf::VideoMode(screen_x, screen_y), "GAME START!");
-	sf::RectangleShape door[4];
-	for (int i = 0; i < 4; i++) {
-		door[i].setSize(sf::Vector2f(60, 60));
-	}
-	door[0].setPosition(sf::Vector2f(330, 90));
-	door[1].setPosition(sf::Vector2f(390, 630));
-	door[1].setRotation(180);
-	door[2].setPosition(sf::Vector2f(50, 380));
-	door[2].setRotation(270);
-	door[3].setPosition(sf::Vector2f(670, 330));
-	door[3].setRotation(90);
-
-	//Define Objects:
-	Enemy enemy(sf::Vector2f(player_status.width, player_status.height));
-	Heart heart(sf::Vector2f(20, 20));
-
-	//std::vector<Bullet> bulletVec;
-	enemy.setPos(sf::Vector2f(500, 50));
 
 	//Set Texture:
 	sf::Texture playerTexture;
 	sf::Texture playerBulletTexture;
 	sf::Texture roomMapTexture;
-	sf::Texture heartTexture[5];
-	sf::Texture bgMenu;
-	sf::Texture doorTexture;
 	playerTexture.loadFromFile("Image/TheLost-4.png");
 	playerBulletTexture.loadFromFile("Image/CharacterBullet-1.png");
 	roomMapTexture.loadFromFile("Image/RoomLevel1-1.png");
-	bgMenu.loadFromFile("Image/MenuBg-2.png");
-	doorTexture.loadFromFile("Image/Door-1.png");
 
 	//Declare:
 	Player player(&playerTexture, sf::Vector2u(4, 10), 0.3f, 200.0f);
 	Bullet newBullet(sf::Vector2f(15, 15), &playerBulletTexture);
-	Menu menu(window.getSize().x, window.getSize().y, &bgMenu);
-	Scoreboard scoreboard(window.getSize().x, window.getSize().y, &bgMenu);
+	Menu menu(screen_x, screen_y);
+	Scoreboard scoreboard(screen_x, screen_y);
 	Room roomMap(&roomMapTexture, sf::Vector2f(room.width, room.height), sf::Vector2f(window.getSize()));
-	for (int i = 0; i < 4; i++) {
-		door[i].setTexture(&doorTexture);
-	}
-	//std::string enemyFileName = "Image/Maggot.png";
-	//GameTile gametile(enemyFileName);
-	for (int i = 0; i < player_heart.maxHeart; i++) {
-		heartTexture[i].loadFromFile("Image/PlayerHeart-2.png");
-		heart.setTexture(&heartTexture[i], i);
-	}
+	Heart heart;
 
 	float deltaTime = 0.0f;
 	int playerPicRow = 0;
@@ -134,52 +82,61 @@ int main()
 	bool playerCollis = false;
 	sf::Clock clock;
 	
-    while (window.isOpen())
-    {
+	while (window.isOpen())
+	{
 		deltaTime = clock.restart().asSeconds();
-        sf::Event evnt;
-        while (window.pollEvent(evnt))
-        {
+		sf::Event evnt;
+		while (window.pollEvent(evnt))
+		{
 			if (menuState == true) {
 				switch (evnt.type) {
-				case sf::Event::KeyReleased:
-					switch (evnt.key.code) {
-					case sf::Keyboard::W:
-						menu.MoveUp();
-						break;
-					case sf::Keyboard::S:
-						menu.MoveDown();
-						break;
-					case sf::Keyboard::Return:
-						switch (menu.GetPressedItem()) {
-						case 0:
-							menuState = false;
+					case sf::Event::KeyReleased: {
+						switch (evnt.key.code) {
+						case sf::Keyboard::W: {
+							menu.MoveUp();
 							break;
-						case 1:
-							menuState = false;
+						}
+						case sf::Keyboard::S: {
+							menu.MoveDown();
 							break;
-						case 2:
-							menuState = false;
-							scoreboardState = true;
+						}
+						case sf::Keyboard::Return:
+							switch (menu.GetPressedItem()) {
+								case 0: {
+									menuState = false;
+									break;
+								}
+								case 1: {
+									menuState = false;
+									break;
+								}
+								case 2: {
+									menuState = false;
+									scoreboardState = true;
+									break;
+								}
+								case 3: {
+									menuState = false;
+									goto ex;
+									break;
+									//scoreboard.SaveScoreboardToFile();
+								}
+							}
 							break;
-						case 3:
-							menuState = false;
-							goto xx;
-							break;
-						scoreboard.SaveScoreboardToFile();
 						}
 						break;
 					}
-					break;
 				}
 			}
 			else if (scoreboardState == true) {
 				switch (evnt.type) {
-				case sf::Event::KeyReleased:
-					case sf::Keyboard::Return:
-						menuState = true;
-						scoreboardState = false;
-						break;
+					case sf::Event::KeyReleased: {
+						case sf::Keyboard::Return: {
+							menuState = true;
+							scoreboardState = false;
+							break;
+						}
+					}
 				}
 			}
 
@@ -188,7 +145,7 @@ int main()
 				window.close();
 				break;
 			}
-        }
+		}
 
 		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
@@ -196,7 +153,7 @@ int main()
 		}
 
 		window.clear(sf::Color(0, 0, 0));
-		
+
 		if (menuState == true) {
 			menu.Draw(window);
 		}
@@ -205,9 +162,6 @@ int main()
 		}
 		else {
 			roomMap.Draw(window);
-			for (int i = 0; i < 4; i++) {
-				window.draw(door[i]);
-			}
 			//Player:
 			player.Update(deltaTime);
 			playerCollis = true;
@@ -215,40 +169,11 @@ int main()
 			//Player Bullet:
 			newBullet.Update(mousePos, window, sf::Vector2f(player.GetPosition().x, player.GetPosition().y), &playerBulletTexture);
 			//Player Heart:
-			if (player_heart.lastHp != player_heart.hp) {
-				player_heart.remainHp = player_heart.hp;
-				for (int i = 0; i < player_heart.maxHeart; i++) {
-					if (player_heart.remainHp > 1) {
-						player_heart.heartType[i] = 2;
-						player_heart.remainHp -= 2;
-					}
-					else if (player_heart.remainHp == 1) {
-						player_heart.heartType[i] = 1;
-						player_heart.remainHp -= 1;
-					}
-					else if (player_heart.remainHp < 1) {
-						player_heart.heartType[i] = 0;
-					}
-					heart.setPos(sf::Vector2f(10 + 20 * i, 10), i);
-					if (player_heart.heartType[i] == 0) {
-						heartTexture[i].loadFromFile("Image/PlayerHeart-0.png");
-					}
-					else if (player_heart.heartType[i] == 1) {
-						heartTexture[i].loadFromFile("Image/PlayerHeart-1.png");
-					}
-					else if (player_heart.heartType[i] == 2) {
-						heartTexture[i].loadFromFile("Image/PlayerHeart-2.png");
-					}
-					heart.setTexture(&heartTexture[i], i);
-				}
-				player_heart.lastHp = player_heart.hp;
-			}
-			heart.draw(window, player_heart.maxHeart);
+			heart.draw(window, player_status.hp);
 		}
+		window.display();
+	}
+ex:
 
-        window.display();
-    }
-
-xx:
     return 0;
 }

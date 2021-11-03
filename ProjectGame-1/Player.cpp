@@ -1,6 +1,5 @@
 #include<SFML\Graphics.hpp>
 #include"Player.h"
-#include"Collider.h"
 #include"Room.h"
 
 struct room {
@@ -59,7 +58,6 @@ void Player::Update(float deltaTime) {
 
 	animation.Update(row, deltaTime, face);
 	body.setTextureRect(animation.uvRect);
-	//printf("%f %f || %f %f\n", body.getPosition().x, body.getPosition().y, room.startPosX,room.startPosY);
 	body.move(movement);
 }
 

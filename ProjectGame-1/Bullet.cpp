@@ -24,15 +24,10 @@ struct room {
 Bullet::Bullet(sf::Vector2f size, sf::Texture* texture) {
 	bullet.setSize(size);
 	bullet.setTexture(texture);
-	bullet.setOrigin(7.5f, 7.5f);
-}
-
-int Bullet::getX() {
-	return bullet.getPosition().x;
-}
-
-int Bullet::getY() {
-	return bullet.getPosition().y;
+	bullet.setOrigin(size/2.0f);
+	speed = 0.0f;
+	damage = 10.0f;
+	is_hitted = false;
 }
 
 void Bullet::setPos(sf::Vector2f newPos) {
@@ -56,6 +51,26 @@ void Bullet::fire(int speed, int bulletVector) {
 
 void Bullet::draw(sf::RenderWindow& window) {
 	window.draw(bullet);
+}
+
+int Bullet::getX() {
+	return bullet.getPosition().x;
+}
+
+int Bullet::getY() {
+	return bullet.getPosition().y;
+}
+
+float Bullet::getDamage() const {
+	return damage;
+}
+
+bool Bullet::isHitted() const {
+	return is_hitted;
+}
+
+void Bullet::setHitted() {
+	is_hitted = true;
 }
 
 void Bullet::Update(sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vector2f player, sf::Texture* texture) {

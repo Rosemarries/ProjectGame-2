@@ -1,6 +1,6 @@
 #pragma once
 #include<SFML/Graphics.hpp>
-#include"Collider.h"
+#include"Player.h"
 
 class Bullet {
 public:
@@ -12,22 +12,6 @@ public:
 	int getX();
 
 	int getY();
-	
-	int getRight() {
-		return bullet.getPosition().x + bullet.getSize().x;
-	}
-
-	int getLeft() {
-		return bullet.getPosition().x;
-	}
-
-	int getTop() {
-		return bullet.getPosition().y;
-	}
-
-	int getBottom() {
-		return bullet.getPosition().y + bullet.getSize().y;
-	}
 
 	void draw(sf::RenderWindow& window);
 
@@ -35,10 +19,16 @@ public:
 
 	void Update(sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vector2f player, sf::Texture* texture);
 
-	Collider GetCollider() {
-		return Collider(bullet);
-	}
+	bool isHitted() const;
+
+	void setHitted();
+
+	float getDamage() const;
 
 private:
 	sf::RectangleShape bullet;
+	sf::Vector2f pos;
+	float damage;
+	float speed;
+	bool is_hitted;
 };

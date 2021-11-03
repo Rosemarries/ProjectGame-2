@@ -5,7 +5,7 @@
 class Menu
 {
 public:
-	Menu(float width, float height, sf::Texture* texture);
+	Menu(float width, float height);
 	~Menu();
 
 	void Draw(sf::RenderWindow& window);
@@ -20,5 +20,6 @@ private:
 	sf::Font font;
 	sf::Text menu[MAX_NUMBER_OF_ITEMS];
 	sf::RectangleShape bg;
+	sf::Texture bgMenu;
 };
 
