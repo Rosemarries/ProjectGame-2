@@ -69,8 +69,8 @@ int main()
 	//Declare:
 	Player player(&playerTexture, sf::Vector2u(4, 10), 0.3f, 200.0f);
 	Bullet newBullet(sf::Vector2f(15, 15), &playerBulletTexture);
-	Menu menu(screen_x, screen_y);
-	Scoreboard scoreboard(screen_x, screen_y);
+	Menu menu;
+	Scoreboard scoreboard;
 	Room roomMap(&roomMapTexture, sf::Vector2f(room.width, room.height), sf::Vector2f(window.getSize()));
 	Heart heart;
 

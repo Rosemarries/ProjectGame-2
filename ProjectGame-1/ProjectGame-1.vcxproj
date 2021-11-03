@@ -156,6 +156,7 @@ sfml-window-d.lib
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameTile.cpp" />
@@ -171,6 +172,7 @@ sfml-window-d.lib
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="Boss.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine.h" />

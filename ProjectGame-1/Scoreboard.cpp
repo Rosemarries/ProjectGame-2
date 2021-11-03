@@ -3,11 +3,11 @@
 #include<iostream>
 #include<algorithm>
 
-Scoreboard::Scoreboard(float width, float height) {
+Scoreboard::Scoreboard() {
 	if (!font.loadFromFile("IsaacScript2.ttf")) {
 		//handle error
 	}
-
+	float width = 720.0f, height = 720.0f;
 	scoreboard_array.resize(5);
 	Reset();
 	LoadScoreboardFromFile();

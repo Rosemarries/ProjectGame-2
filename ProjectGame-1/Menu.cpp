@@ -1,10 +1,11 @@
 #include "Menu.h"
 
-Menu::Menu(float width, float height) {
+Menu::Menu() {
 	if (!font.loadFromFile("IsaacScript2.ttf") || !bgMenu.loadFromFile("Image/MenuBg-2.png")) {
 		abort();
 	}
 
+	float width = 720.0f, height = 720.0f;
 	bg.setSize(sf::Vector2f(width, height));
 	bg.setPosition(0.0f, 0.0f);
 	bg.setTexture(&bgMenu);
@@ -18,9 +19,8 @@ Menu::Menu(float width, float height) {
 	}
 	menu[0].setFillColor(sf::Color::Red);
 	menu[0].setString("PLAY");
-	menu[1].setString("OPTIONS");
-	menu[2].setString("SCOREBOARD");
-	menu[3].setString("EXIT");
+	menu[1].setString("SCOREBOARD");
+	menu[2].setString("EXIT");
 
 	selectedItemIndex = 0;
 }

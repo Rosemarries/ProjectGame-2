@@ -19,7 +19,7 @@ class Scoreboard
 	static bool compareScore(const Record& sbr1, const Record& sbr2);
 
 public:
-	Scoreboard(float width, float height);
+	Scoreboard();
 	~Scoreboard();
 
 	void Draw(sf::RenderWindow& window);

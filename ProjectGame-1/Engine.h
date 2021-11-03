@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Map.h"
+#include "Menu.h"
 #include "Player.h"
 #include "Bullet.h"
 //#include "Item.h"
@@ -12,7 +13,7 @@
 #include "Scoreboard.h"
 #include "Enemy.h"
 //#include "Gaper.h"
-//#include "Boss.h"
+#include "Boss.h"
 
 struct Room {
 	int row;
@@ -37,16 +38,18 @@ class Engine {
 	std::vector <sf::Texture> room_texture;
 
 	Map map;
-	Player player;
-	Bullet bullet;
+	Menu menu;
+	sf::Texture playerTexture;
+	Player player(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed);
+	Bullet bullet(sf::Vector2f size, sf::Texture* texture);
 	Heart heart;
 	Scoreboard scoreboard;
 
 	//std::vector < Projectile > projectile_array;
 	//std::vector < Projectile > ::iterator iter_proj;
 
-	int win_width;
-	int win_height;
+	int win_width = 720;
+	int win_height = 720;
 
 	std::vector <std::vector<Tile>> room_tile_map;
 	std::vector <Room> visited_room_map;

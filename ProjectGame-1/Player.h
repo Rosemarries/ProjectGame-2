@@ -31,7 +31,6 @@ private:
 	sf::RectangleShape body;
 	sf::Vector2f position;
 	sf::Clock clock;
-	sf::Texture texture;
 	Animation animation;
 	unsigned int row;
 	float speed;
