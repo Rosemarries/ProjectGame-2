@@ -21,9 +21,11 @@ struct room {
 	float startPosY = 110;
 };
 
-Bullet::Bullet(sf::Vector2f size, sf::Texture* texture) {
+Bullet::Bullet() {
+	texture.loadFromFile("Image/CharacterBullet-1.png");
+	size = sf::Vector2f(15.0f, 15.0f);
 	bullet.setSize(size);
-	bullet.setTexture(texture);
+	bullet.setTexture(&texture);
 	bullet.setOrigin(size/2.0f);
 	speed = 0.0f;
 	damage = 10.0f;
@@ -73,7 +75,7 @@ void Bullet::setHitted() {
 	is_hitted = true;
 }
 
-void Bullet::Update(sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vector2f player, sf::Texture* texture) {
+void Bullet::Update(sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vector2f player) {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bulletShootTime >= bulletTimer) {
 		bulletState = true;
 		bulletShootTime = 0;
@@ -83,7 +85,7 @@ void Bullet::Update(sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vector2
 	}
 
 	if (bulletState == true) {
-		Bullet newBullet(sf::Vector2f(15, 15), texture);
+		Bullet newBullet;
 		bulletAngle = (float)(180 / PI * atan2(abs(mousePos.y - player.x), abs(mousePos.x - player.x)));
 		bulletState = false;
 		if (player.x <= mousePos.x) {
@@ -124,4 +126,8 @@ void Bullet::Update(sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vector2
 			bulletVec.erase(bulletVec.begin() + i);
 		}
 	}
+}
+
+sf::FloatRect Bullet::getHitbox() const {
+	return bullet.getGlobalBounds();
 }

@@ -1,4 +1,3 @@
-#include<SFML\Graphics.hpp>
 #include"Player.h"
 #include"Room.h"
 
@@ -14,14 +13,15 @@ struct room {
 	float startPosY = 110;
 };
 
-Player::Player(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed) : animation(texture, imageCount, switchTime){
+Player::Player() {
 	this->speed = speed;
 	row = 0;
 	face = 0;
+	texture.loadFromFile("Image/TheLost-4.png");
 
 	body.setSize(sf::Vector2f(60.0f, 75.0f));
 	body.setPosition(400.0f, 400.0f);
-	body.setTexture(texture);
+	body.setTexture(&texture);
 	body.setOrigin(30.0f, 32.5f);
 }
 
@@ -56,6 +56,7 @@ void Player::Update(float deltaTime) {
 	}
 	row = face;
 
+	Animation animation(&texture, imageCount, switchTime);
 	animation.Update(row, deltaTime, face);
 	body.setTextureRect(animation.uvRect);
 	body.move(movement);

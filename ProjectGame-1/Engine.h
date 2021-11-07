@@ -12,7 +12,7 @@
 #include "PlayerHeart.h"
 #include "Scoreboard.h"
 #include "Enemy.h"
-//#include "Gaper.h"
+#include "Gaper.h"
 #include "Boss.h"
 
 struct Room {
@@ -40,13 +40,13 @@ class Engine {
 	Map map;
 	Menu menu;
 	sf::Texture playerTexture;
-	Player player(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed);
-	Bullet bullet(sf::Vector2f size, sf::Texture* texture);
+	Player player;
+	Bullet bullet;
 	Heart heart;
 	Scoreboard scoreboard;
 
-	//std::vector < Projectile > projectile_array;
-	//std::vector < Projectile > ::iterator iter_proj;
+	std::vector < Bullet > bullet_array;
+	std::vector < Bullet > ::iterator iter_bullet;
 
 	int win_width = 720;
 	int win_height = 720;

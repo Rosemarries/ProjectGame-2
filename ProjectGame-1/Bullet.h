@@ -5,7 +5,7 @@
 class Bullet {
 public:
 	int currVelocity;
-	Bullet(sf::Vector2f size, sf::Texture* texture);
+	Bullet();
 
 	void fire(int speed, int bulletVector);
 
@@ -13,11 +13,21 @@ public:
 
 	int getY();
 
+	sf::Vector2f getPosition() {
+		return bullet.getPosition();
+	}
+
 	void draw(sf::RenderWindow& window);
 
 	void setPos(sf::Vector2f newPos);
 
-	void Update(sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vector2f player, sf::Texture* texture);
+	void Update(sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vector2f player);
+
+	sf::FloatRect getHitbox() const;
+
+	sf::RectangleShape getShape() const {
+		return bullet;
+	}
 
 	bool isHitted() const;
 
@@ -28,6 +38,8 @@ public:
 private:
 	sf::RectangleShape bullet;
 	sf::Vector2f pos;
+	sf::Vector2f size;
+	sf::Texture texture;
 	float damage;
 	float speed;
 	bool is_hitted;

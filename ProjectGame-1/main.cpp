@@ -59,16 +59,12 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(screen_x, screen_y), "GAME START!");
 
 	//Set Texture:
-	sf::Texture playerTexture;
-	sf::Texture playerBulletTexture;
 	sf::Texture roomMapTexture;
-	playerTexture.loadFromFile("Image/TheLost-4.png");
-	playerBulletTexture.loadFromFile("Image/CharacterBullet-1.png");
 	roomMapTexture.loadFromFile("Image/RoomLevel1-1.png");
 
 	//Declare:
-	Player player(&playerTexture, sf::Vector2u(4, 10), 0.3f, 200.0f);
-	Bullet newBullet(sf::Vector2f(15, 15), &playerBulletTexture);
+	Player player;
+	Bullet newBullet;
 	Menu menu;
 	Scoreboard scoreboard;
 	Room roomMap(&roomMapTexture, sf::Vector2f(room.width, room.height), sf::Vector2f(window.getSize()));
@@ -167,7 +163,7 @@ int main()
 			playerCollis = true;
 			player.Draw(window);
 			//Player Bullet:
-			newBullet.Update(mousePos, window, sf::Vector2f(player.GetPosition().x, player.GetPosition().y), &playerBulletTexture);
+			newBullet.Update(mousePos, window, sf::Vector2f(player.GetPosition().x, player.GetPosition().y));
 			//Player Heart:
 			heart.draw(window, player_status.hp);
 		}

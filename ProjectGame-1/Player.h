@@ -4,7 +4,7 @@
 
 class Player {
 public:
-	Player(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed);
+	Player();
 	~Player();
 
 	void Update(float deltaTime);
@@ -16,6 +16,9 @@ public:
 		body.setPosition(position);
 	}
 	void Reset();
+	int GetHp() {
+		return hp;
+	}
 
 	sf::Vector2f GetPosition() {
 		return body.getPosition();
@@ -26,15 +29,20 @@ public:
 	sf::RectangleShape GetShape() const {
 		return body;
 	}
+	sf::FloatRect getHitbox() const {
+		return body.getGlobalBounds();
+	}
 
 private:
 	sf::RectangleShape body;
 	sf::Vector2f position;
+	sf::Vector2u imageCount = sf::Vector2u(4, 10);
+	sf::Texture texture;
 	sf::Clock clock;
-	Animation animation;
 	unsigned int row;
-	float speed;
+	float switchTime = 0.3f;
+	float speed = 200.0f;
 	float damage;
-	float hp;
+	int hp;
 	int face;
 };
