@@ -2,7 +2,11 @@
 #include<SFML\Graphics.hpp>
 #include"Animation.h"
 
+enum direction { Up, Down, Left, Right };
+
 class Player {
+	Animation animation;
+
 public:
 	Player();
 	~Player();
@@ -42,7 +46,7 @@ private:
 	unsigned int row;
 	float switchTime = 0.3f;
 	float speed = 200.0f;
-	float damage;
-	int hp;
+	float damage = 3.0f;
+	int hp = 6;
 	int face;
 };

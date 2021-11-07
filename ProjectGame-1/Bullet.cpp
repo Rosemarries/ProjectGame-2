@@ -2,24 +2,7 @@
 #include<SFML/Graphics.hpp>
 
 #define PI 3.14159265
-int bulletShootTime = 0;
-int bulletTimer = 60;
-float bulletSpeed = 1.75;
-float bulletAngle;
-int bulletVector;
-bool bulletState = false;
-int bulletCurrVelocity;
-std::vector<Bullet> bulletVec;
-
-struct room {
-	float width = 500;
-	float height = 500;
-	float wall = 35;
-	int number = 0;
-	int type = 0;
-	float startPosX = 110;
-	float startPosY = 110;
-};
+//std::vector<Bullet> bulletVec;
 
 Bullet::Bullet() {
 	texture.loadFromFile("Image/CharacterBullet-1.png");
@@ -85,7 +68,7 @@ void Bullet::Update(sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vector2
 	}
 
 	if (bulletState == true) {
-		Bullet newBullet;
+		//Bullet newBullet;
 		bulletAngle = (float)(180 / PI * atan2(abs(mousePos.y - player.x), abs(mousePos.x - player.x)));
 		bulletState = false;
 		if (player.x <= mousePos.x) {
@@ -114,18 +97,18 @@ void Bullet::Update(sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vector2
 				}
 			}
 		}
-		newBullet.setPos(sf::Vector2f(player.x, player.y));
+		/*newBullet.setPos(sf::Vector2f(player.x, player.y));
 		newBullet.currVelocity = bulletVector;
-		bulletVec.push_back(newBullet);
+		bulletVec.push_back(newBullet);*/
 	}
-	room room;
+	/*room room;
 	for (int i = 0; i < bulletVec.size(); i++) {
 		bulletVec[i].draw(window);
 		bulletVec[i].fire(bulletSpeed, bulletVec[i].currVelocity);
 		if (bulletVec[i].getX() <= room.startPosX || bulletVec[i].getY() <= room.wall + room.startPosY || bulletVec[i].getX() >= 720 - room.startPosX || bulletVec[i].getY() >= room.height - room.wall + room.startPosY) {
 			bulletVec.erase(bulletVec.begin() + i);
 		}
-	}
+	}*/
 }
 
 sf::FloatRect Bullet::getHitbox() const {

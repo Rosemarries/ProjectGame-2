@@ -92,9 +92,8 @@ std::vector<std::vector<char>> Map::GetRoomTileMap() const {
 
 void Map::SetupTileMap(int room_map_pos_y, int room_map_pos_x) {
 	std::ifstream file;
-	file.open("rooms/room" + std::to_string(room_map[room_map_pos_y][room_map_pos_x]) + ".txt");
+	file.open("Text/Room" + std::to_string(room_map[room_map_pos_y][room_map_pos_x]) + ".txt");
 	if (!file.good()) {
-		std::cout << "Nie udalo sie wczytac mapy!\n";
 		abort();
 	}
 

@@ -13,7 +13,7 @@ struct room {
 	float startPosY = 110;
 };
 
-Player::Player() {
+Player::Player() : animation(&texture, imageCount, switchTime) {
 	this->speed = speed;
 	row = 0;
 	face = 0;
@@ -35,28 +35,27 @@ void Player::Update(float deltaTime) {
 	room.startPosX = 110;
 	room.startPosY = 110;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-		if(body.getPosition().x > room.startPosX)
+		//if(body.getPosition().x > room.startPosX)
 			movement.x -= speed * deltaTime;
 		face = 3;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-		if(body.getPosition().x < 720.0f - room.startPosX)
+		//if(body.getPosition().x < 720.0f - room.startPosX)
 			movement.x += speed * deltaTime;
 		face = 1;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-		if(body.getPosition().y > room.startPosY)
+		//if(body.getPosition().y > room.startPosY)
 			movement.y -= speed * deltaTime;
 		face = 2;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-		if(body.getPosition().y < 720.0f - room.startPosY - 2 * room.wall)
+		//if(body.getPosition().y < 720.0f - room.startPosY - 2 * room.wall)
 			movement.y += speed * deltaTime;
 		face = 0;
 	}
 	row = face;
 
-	Animation animation(&texture, imageCount, switchTime);
 	animation.Update(row, deltaTime, face);
 	body.setTextureRect(animation.uvRect);
 	body.move(movement);

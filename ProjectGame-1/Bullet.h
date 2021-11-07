@@ -43,4 +43,11 @@ private:
 	float damage;
 	float speed;
 	bool is_hitted;
+	int bulletShootTime = 0;
+	int bulletTimer = 60;
+	float bulletSpeed = 1.75;
+	float bulletAngle;
+	int bulletVector;
+	bool bulletState = false;
+	int bulletCurrVelocity;
 };

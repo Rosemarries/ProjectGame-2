@@ -1,16 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS 1
-#include<stdio.h>
-#include<math.h>
-#include<SFML/Graphics.hpp>
-#include<vector>
-#include"Bullet.h"
-#include"Enemy.h"
-#include"Player.h"
-#include"PlayerHeart.h"
-#include"Menu.h"
-#include"Scoreboard.h"
-#include"Room.h"
-#include"Map.h"
+#include"Engine.h"
 
 #define screen_x 720
 #define screen_y 720
@@ -50,9 +39,14 @@ struct room {
 	float startPosY = 110;
 };
 
-int main()
+int main(int argc,char const*argv[])
 {
-	player_status player_status;
+	srand(time(0));
+	Engine game;
+	game.run();
+	return 0;
+
+	/*player_status player_status;
 	player_bullet player_bullet;
 	room room;
 
@@ -171,5 +165,5 @@ int main()
 	}
 ex:
 
-    return 0;
+    return 0;*/
 }

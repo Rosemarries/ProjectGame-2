@@ -162,6 +162,7 @@ sfml-window-d.lib
     <ClCompile Include="GameTile.cpp" />
     <ClCompile Include="GameWorld.cpp" />
     <ClCompile Include="Gaper.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -180,6 +181,7 @@ sfml-window-d.lib
     <ClInclude Include="GameTile.h" />
     <ClInclude Include="GameWorld.h" />
     <ClInclude Include="Gaper.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />

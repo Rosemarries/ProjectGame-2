@@ -8,12 +8,13 @@
 #include "Menu.h"
 #include "Player.h"
 #include "Bullet.h"
-//#include "Item.h"
+#include "Item.h"
 #include "PlayerHeart.h"
 #include "Scoreboard.h"
 #include "Enemy.h"
 #include "Gaper.h"
 #include "Boss.h"
+#include "Animation.h"
 
 struct Room {
 	int row;
@@ -33,7 +34,8 @@ class Engine {
 
 	sf::RenderWindow win;
 	sf::Font font;
-	sf::Clock clock_to_delay_between_projectiles;
+	sf::Clock clock_to_delay_between_bullet;
+	sf::Clock clock;
 
 	std::vector <sf::Texture> room_texture;
 
@@ -48,7 +50,7 @@ class Engine {
 	std::vector < Bullet > bullet_array;
 	std::vector < Bullet > ::iterator iter_bullet;
 
-	int win_width = 720;
+	int win_width = 1050;
 	int win_height = 720;
 
 	std::vector <std::vector<Tile>> room_tile_map;
@@ -61,6 +63,7 @@ class Engine {
 	bool isWin;
 	bool treasure_picked;
 	bool boss_defeated;
+	float deltaTime;
 
 	void stateMachine();
 	void stateMENU();
@@ -83,7 +86,7 @@ class Engine {
 	void drawRoom();
 	void playerShoot();
 
-	bool isCollsionWithWall(sf::FloatRect objectPos, bool isProjectile = false) const;
+	bool isCollsionWithWall(sf::FloatRect objectPos, bool isBullet = false) const;
 
 	enum states { MENU, PLAY, TREASURE_ROOM, BOSS_ROOM, SCOREBOARD, END, PERM_END };
 	states current_state;
