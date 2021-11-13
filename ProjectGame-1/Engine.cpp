@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-Engine::Engine() {
+Engine::Engine(sf::Texture* playerTexture) : animation(playerTexture,sf::Vector2u(4,10),0.3f) {
     win.create(sf::VideoMode(win_width, win_height), "GAME START!");
 	win.setFramerateLimit(60);
 	font.loadFromFile("IsaacScript2.ttf");
@@ -164,7 +164,7 @@ void Engine::statePLAY() {
 			}
 		}
 
-		movePlayer();
+		movePlayer(deltaTime);
 		playerShoot();
 
 		if (enemy_array.size() == 0) {
@@ -173,22 +173,26 @@ void Engine::statePLAY() {
 			movePlayerNextRoom();
 		}
 
-		for (int i = 0; i < enemy_array.size(); i++) {
-			//Player:
-			if (enemy_array[i]->getHitbox().intersects(player.getHitbox())) {
-				player.Hitted(enemy_array[i]->getDamage());
-			}
-
+		for (int i = 0; i < enemy_array.size(); ++i) {
 			//Bullet:
-			for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); iter_bullet++) {
+			for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
 				if (enemy_array[i]->getHitbox().intersects(iter_bullet->getHitbox())) {
 					iter_bullet->setHitted();
 					enemy_array[i]->hitted(iter_bullet->getDamage());
 				}
 			}
+		}
 
+		for (int i = 0; i < enemy_array.size(); ++i) {
+			//Player:
+			if (enemy_array[i]->getHitbox().intersects(player.getHitbox())) {
+				player.Hitted(enemy_array[i]->getDamage());
+			}
+		}
+
+		for (int i = 0; i < enemy_array.size(); ++i) {
 			//CollisWall:
-			enemy_array[i]->update(player.GetPosition());
+			enemy_array[i]->update(player.GetShape().getPosition());
 			if (isCollsionWithWall(enemy_array[i]->getHitbox())) {
 				while (isCollsionWithWall(enemy_array[i]->getHitbox())) {
 					enemy_array[i]->update(player.GetShape().getPosition(), true);
@@ -210,21 +214,23 @@ void Engine::statePLAY() {
 					enemy_array[i]->update(player.GetShape().getPosition(), false, HORIZONTAL);
 				}
 			}
+		}
 
+		//Bullet hitted Wall:
+		for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
+			if (isCollsionWithWall(iter_bullet->getHitbox(), true) or iter_bullet->isHitted() or iter_bullet->getShape().getPosition().x <= 0 or iter_bullet->getShape().getPosition().x + iter_bullet->getHitbox().width >= win_width or iter_bullet->getShape().getPosition().y <= 0 or iter_bullet->getShape().getPosition().y + iter_bullet->getHitbox().height >= win_height) {
+				bullet_array.erase(iter_bullet);
+				--iter_bullet;
+			}
+		}
+
+		for (int i = 0; i < enemy_array.size(); ++i) {
 			//Enemy Dead:
 			if (enemy_array[i]->getHp() <= 0) {
 				enemy_array.erase(enemy_array.begin() + i);
 				score++;
 				win.setTitle("Score : " + std::to_string(score));
 				--i;
-			}
-		}
-
-		//Bullet hitted Wall:
-		for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); iter_bullet++) {
-			if (isCollsionWithWall(iter_bullet->getHitbox(), true) or iter_bullet->isHitted() or iter_bullet->getX() <= 0 or iter_bullet->getX() + iter_bullet->getHitbox().width >= win_width or iter_bullet->getY() <= 0 or iter_bullet->getY() + iter_bullet->getHitbox().height >= win_height) {
-				bullet_array.erase(iter_bullet);
-				--iter_bullet;
 			}
 		}
 
@@ -236,13 +242,13 @@ void Engine::statePLAY() {
 		win.clear();
 		drawRoom();
 
-		for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); iter_bullet++) {
+		for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
 			sf::Vector2i mousePos = sf::Mouse::getPosition(win);
-			iter_bullet->Update(mousePos,win,player.GetPosition());
+			iter_bullet->Update(/*mousePos, win, player.GetPosition()*/);
 			win.draw(iter_bullet->getShape());
 		}
 
-		for (int i = 0; i < enemy_array.size(); i++) {
+		for (int i = 0; i < enemy_array.size(); ++i) {
 			win.draw(enemy_array[i]->getSprite());
 		}
 
@@ -288,7 +294,7 @@ void Engine::stateBR() {
 			}
 		}
 
-		movePlayer();
+		movePlayer(deltaTime);
 		movePlayerNextRoom();
 
 		if (player.getHitbox().intersects(trophy.getGlobalBounds()) and enemy_array.size() == 0) {
@@ -312,7 +318,7 @@ void Engine::stateBR() {
 			boss_defeated = true;
 		}
 
-		for (int i = 0; i < enemy_array.size(); i++) {
+		for (int i = 0; i < enemy_array.size(); ++i) {
 			enemy_array[i]->update(player.GetShape().getPosition());
 			if (isCollsionWithWall(enemy_array[i]->getHitbox())) {
 				while (isCollsionWithWall(enemy_array[i]->getHitbox())) {
@@ -326,28 +332,34 @@ void Engine::stateBR() {
 					enemy_array[i]->update(player.GetShape().getPosition(), false, HORIZONTAL);
 				}
 			}
+		}
 
-			for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); iter_bullet++) {
+		for (int i = 0; i < enemy_array.size(); ++i) {
+			for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
 				if (enemy_array[i]->getHitbox().intersects(iter_bullet->getHitbox())) {
 					iter_bullet->setHitted();
 					enemy_array[i]->hitted(iter_bullet->getDamage());
 				}
 			}
+		}
 
+		for (int i = 0; i < enemy_array.size(); ++i) {
 			if (enemy_array[i]->getHitbox().intersects(player.getHitbox())) {
 				player.Hitted(enemy_array[i]->getDamage());
 			}
-
-			if (enemy_array[i]->getHp() <= 0) {
-				enemy_array.erase(enemy_array.begin() + i);
-				--i;
-			}
 		}
 
-		for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); iter_bullet++) {
+		for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
 			if (isCollsionWithWall(iter_bullet->getHitbox(), true) or iter_bullet->isHitted() or iter_bullet->getX() <= 0 or iter_bullet->getX() + iter_bullet->getHitbox().width >= win_width or iter_bullet->getY() <= 0 or iter_bullet->getY() + iter_bullet->getHitbox().height >= win_height) {
 				bullet_array.erase(iter_bullet);
 				--iter_bullet;
+			}
+		}
+
+		for (int i = 0; i < enemy_array.size(); ++i) {
+			if (enemy_array[i]->getHp() <= 0) {
+				enemy_array.erase(enemy_array.begin() + i);
+				--i;
 			}
 		}
 
@@ -355,9 +367,9 @@ void Engine::stateBR() {
 		drawRoom();
 		win.draw(player.GetShape());
 
-		for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); iter_bullet++) {
+		for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
 			sf::Vector2i mousePos = sf::Mouse::getPosition(win);
-			iter_bullet->Update(mousePos, win, player.GetPosition());
+			iter_bullet->Update(/*mousePos, win, player.GetPosition()*/);
 			win.draw(iter_bullet->getShape());
 		}
 
@@ -365,7 +377,7 @@ void Engine::stateBR() {
 			win.draw(trophySprite);
 		}
 		else {
-			for (int i = 0; i < enemy_array.size(); i++) {
+			for (int i = 0; i < enemy_array.size(); ++i) {
 				win.draw(enemy_array[i]->getSprite());
 			}
 		}
@@ -392,7 +404,7 @@ void Engine::stateTR() {
 			}
 		}
 
-		movePlayer();
+		movePlayer(deltaTime);
 		if (item.getHitbox().intersects(player.getHitbox()) and treasure_picked == false) {
 			player.Upgrade(item.getId());
 			treasure_picked = true;
@@ -456,10 +468,6 @@ void Engine::stateEND() {
 	confirmation_text.setOrigin(confirmation_text.getLocalBounds().width / 2, confirmation_text.getLocalBounds().height / 2);
 	confirmation_text.setPosition(sf::Vector2f(win.getSize().x / 2, win.getSize().y - 230));
 
-	if (score <= scoreboard.GetLastScore() or isWin == false) {
-		current_state = MENU;
-	}
-
 	while (current_state == END) {
 		sf::Event event;
 		while (win.pollEvent(event)) {
@@ -502,18 +510,60 @@ void Engine::stateEND() {
 		win.draw(confirmation_text);
 		win.display();
 	}
+
+	if (score <= scoreboard.GetLastScore() or isWin == false) {
+		current_state = MENU;
+	}
 }
 
 void Engine::playerShoot() {
-	sf::Vector2i mousePos = sf::Mouse::getPosition(win);
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) and clock_to_delay_between_bullet.getElapsedTime() >= sf::seconds(player.GetFireSpeed())) {
+		sf::Vector2i mousePos = sf::Mouse::getPosition(win);
+		direction d;
+		float bulletAngle = (float)(180 / PI * atan2(abs(mousePos.y - player.GetShape().getPosition().x), abs(mousePos.x - player.GetShape().getPosition().y)));
+
+		if (player.GetShape().getPosition().x <= mousePos.x) {
+			if (bulletAngle <= 45) {
+				d = Right;
+			}
+			else {
+				if (player.GetShape().getPosition().y < mousePos.y) {
+					d = Up;
+				}
+				else {
+					d = Down;
+				}
+			}
+		}
+		else {
+			if (bulletAngle <= 45) {
+				d = Left;
+			}
+			else {
+				if (player.GetShape().getPosition().y < mousePos.y) {
+					d = Up;
+				}
+				else {
+					d = Down;
+				}
+			}
+		}
+
+		bullet.setPos(sf::Vector2f(player.GetShape().getPosition().x + player.getHitbox().width / 2, player.GetShape().getPosition().y + player.getHitbox().height / 2), player.GetDamage(), player.GetFireSpeed(), d);
 		bullet_array.push_back(bullet);
 		clock_to_delay_between_bullet.restart();
 	}
 }
 
-void Engine::movePlayer() {
-	player.Update(deltaTime);
+void Engine::movePlayer(float deltaTime) {
+	//deltaTime = clock.restart().asSeconds();
+	float playerspeed = 5.0f;
+	if (isCollsionWithWall(player.getHitbox())) {
+		playerspeed = 1.0f;
+	}
+	player.Update(deltaTime, playerspeed);
+	animation.Update(player.GetRow(), deltaTime);
+	player.setAnime(animation.uvRect);
 }
 
 bool Engine::movePlayerNextRoom() {

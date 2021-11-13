@@ -42,7 +42,9 @@ struct room {
 int main(int argc,char const*argv[])
 {
 	srand(time(0));
-	Engine game;
+	sf::Texture playerTexture;
+	playerTexture.loadFromFile("Image/TheLost-4.png");
+	Engine game(&playerTexture);
 	game.run();
 	return 0;
 

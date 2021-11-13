@@ -15,6 +15,7 @@
 #include "Gaper.h"
 #include "Boss.h"
 #include "Animation.h"
+#define PI 3.14159265
 
 struct Room {
 	int row;
@@ -31,6 +32,7 @@ struct Tile {
 };
 
 class Engine {
+	Animation animation;
 
 	sf::RenderWindow win;
 	sf::Font font;
@@ -63,7 +65,7 @@ class Engine {
 	bool isWin;
 	bool treasure_picked;
 	bool boss_defeated;
-	float deltaTime;
+	float deltaTime = 0.0f;
 
 	void stateMachine();
 	void stateMENU();
@@ -78,7 +80,7 @@ class Engine {
 	bool checkIsUniqueVisitedRoom(int row, int col) const;
 	void addVisitedRoom();
 
-	void movePlayer();
+	void movePlayer(float deltaTime);
 	bool movePlayerNextRoom();
 	void unlockDoors();
 
@@ -91,9 +93,8 @@ class Engine {
 	enum states { MENU, PLAY, TREASURE_ROOM, BOSS_ROOM, SCOREBOARD, END, PERM_END };
 	states current_state;
 public:
-	Engine();
+	Engine(sf::Texture* playerTexture);
 	void run();
 };
 
 #endif
-

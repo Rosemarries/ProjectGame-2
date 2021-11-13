@@ -1,17 +1,18 @@
 #pragma once
 #include<SFML\Graphics.hpp>
+#include<vector>
 #include"Animation.h"
 
 enum direction { Up, Down, Left, Right };
 
 class Player {
-	Animation animation;
+	//Animation animation;
 
 public:
 	Player();
 	~Player();
 
-	void Update(float deltaTime);
+	void Update(float deltaTime, float speedX);
 	void Draw(sf::RenderWindow& window);
 	void Hitted(float dmg);
 	void Upgrade(int item_id);
@@ -20,8 +21,20 @@ public:
 		body.setPosition(position);
 	}
 	void Reset();
+	void setAnime(sf::IntRect uvRect) {
+		body.setTextureRect(uvRect);
+	}
+	int GetRow() {
+		return row;
+	}
 	int GetHp() {
 		return hp;
+	}
+	float GetFireSpeed() {
+		return fireSpeed;
+	}
+	float GetDamage() {
+		return damage;
 	}
 
 	sf::Vector2f GetPosition() {
@@ -46,6 +59,7 @@ private:
 	unsigned int row;
 	float switchTime = 0.3f;
 	float speed = 200.0f;
+	float fireSpeed;
 	float damage = 3.0f;
 	int hp = 6;
 	int face;

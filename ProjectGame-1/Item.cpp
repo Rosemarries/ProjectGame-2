@@ -8,7 +8,7 @@ Item::Item(sf::Vector2f pos) {
 
 	hitbox_sprite.setTexture(hitbox_texture);
 
-	hitbox.setSize(sf::Vector2f(60, 80));
+	hitbox.setSize(sf::Vector2f(40, 50));
 	hitbox.setPosition(pos);
 	hitbox_sprite.setPosition(pos);
 	hitbox.setFillColor(sf::Color::Cyan);

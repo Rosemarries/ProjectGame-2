@@ -14,20 +14,21 @@ Scoreboard::Scoreboard() {
 
 	texture.loadFromFile("Image/MenuBg-2.png");
 	bg.setSize(sf::Vector2f(width, height));
-	bg.setPosition(0.0f, 0.0f);
+	bg.setOrigin(sf::Vector2f(width / 2.0f, height / 2.0f));
+	bg.setPosition(1050.0f / 2.0f, 720.0f / 2.0f);
 	bg.setTexture(&texture);
 
 	int size = 50;
 	text.setFont(font);
 	text.setCharacterSize(2 * size);
-	text.setPosition(sf::Vector2f(160.0f, 50.0f));
+	text.setPosition(sf::Vector2f(320.0f, 50.0f));
 	text.setFillColor(sf::Color::Black);
 	text.setStyle(sf::Text::Bold);
 	text.setString("SCOREBOARD");
 
 	back.setFont(font);
 	back.setCharacterSize(size);
-	back.setPosition(sf::Vector2f(150.0f, 550.0f));
+	back.setPosition(sf::Vector2f(320.0f, 550.0f));
 	back.setFillColor(sf::Color::Red);
 	back.setString("BACK");
 
@@ -61,13 +62,15 @@ void Scoreboard::Draw(sf::RenderWindow& window) {
 	window.draw(bg);
 	window.draw(text);
 	window.draw(back);
+	window.draw(table_name_text);
+	window.draw(table_score_text);
 	int i = 0;
 	for (auto it = Scoreboard::BEGIN(); it != Scoreboard::END(); ++it) {
 		score_text.setString(it->name);
-		score_text.setPosition(200, i * 50 + 200);
+		score_text.setPosition(320.0f, i * 50 + 200);
 		window.draw(score_text);
 		score_text.setString(std::to_string(it->score));
-		score_text.setPosition(500, i * 50 + 200);
+		score_text.setPosition(700.0f, i * 50 + 200);
 		window.draw(score_text);
 		i++;
 	}

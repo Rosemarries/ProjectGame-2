@@ -1,12 +1,7 @@
 #include "Boss.h"
 #include <math.h>
 
-Boss::Boss(sf::Vector2f pos,
-	sf::Vector2f size,
-	float hp,
-	float damage,
-	float movement_speed) {
-
+Boss::Boss(sf::Vector2f pos, sf::Vector2f size, float hp, float damage, float movement_speed) {
 	if (!hitbox_texture.loadFromFile("Image/Boss1.png")) {
 		abort();
 	}
