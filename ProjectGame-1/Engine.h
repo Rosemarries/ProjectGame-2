@@ -32,7 +32,8 @@ struct Tile {
 };
 
 class Engine {
-	Animation animation;
+	Animation playerAnimation;
+	Animation bossAnimation;
 
 	sf::RenderWindow win;
 	sf::Font font;
@@ -44,6 +45,7 @@ class Engine {
 	Map map;
 	Menu menu;
 	sf::Texture playerTexture;
+	sf::Texture bossTexture;
 	Player player;
 	Bullet bullet;
 	Heart heart;
@@ -93,7 +95,7 @@ class Engine {
 	enum states { MENU, PLAY, TREASURE_ROOM, BOSS_ROOM, SCOREBOARD, END, PERM_END };
 	states current_state;
 public:
-	Engine(sf::Texture* playerTexture);
+	Engine(sf::Texture* playerTexture, sf::Texture* bossTexture);
 	void run();
 };
 

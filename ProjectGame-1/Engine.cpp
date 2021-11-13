@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-Engine::Engine(sf::Texture* playerTexture) : animation(playerTexture,sf::Vector2u(4,10),0.3f) {
+Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAnimation(playerTexture,sf::Vector2u(4,10),0.3f), bossAnimation(bossTexture, sf::Vector2u(4,2), 0.3f) {
     win.create(sf::VideoMode(win_width, win_height), "GAME START!");
 	win.setFramerateLimit(60);
 	font.loadFromFile("IsaacScript2.ttf");
@@ -433,7 +433,7 @@ void Engine::stateEND() {
 	top_score_text.setStyle(sf::Text::Bold);
 	top_score_text.setFillColor(sf::Color::Magenta);
 	top_score_text.setCharacterSize(120);
-	top_score_text.setString("New Top Score");
+	top_score_text.setString("New Score");
 	top_score_text.setOrigin(top_score_text.getLocalBounds().width / 2, top_score_text.getLocalBounds().height / 2);
 	top_score_text.setPosition(sf::Vector2f(win.getSize().x / 2, 100));
 
@@ -562,8 +562,8 @@ void Engine::movePlayer(float deltaTime) {
 		playerspeed = 1.0f;
 	}
 	player.Update(deltaTime, playerspeed);
-	animation.Update(player.GetRow(), deltaTime);
-	player.setAnime(animation.uvRect);
+	playerAnimation.Update(player.GetRow(), deltaTime);
+	player.setAnime(playerAnimation.uvRect);
 }
 
 bool Engine::movePlayerNextRoom() {

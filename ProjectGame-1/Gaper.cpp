@@ -10,11 +10,9 @@ Gaper::Gaper(sf::Vector2f pos, sf::Vector2f size, float hp, float damage, float 
 	}
 
 	hitbox_sprite.setTexture(hitbox_texture);
-	sf::IntRect sizeS;
 	position = pos;
 	hitbox.setPosition(position);
 	hitbox_sprite.setPosition(position);
-	hitbox_sprite.setTextureRect(sizeS);
 	hitbox.setSize(size);
 	hitbox.setFillColor(sf::Color::Green);
 	this->hp = hp;

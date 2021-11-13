@@ -43,8 +43,10 @@ int main(int argc,char const*argv[])
 {
 	srand(time(0));
 	sf::Texture playerTexture;
+	sf::Texture bossTexture;
 	playerTexture.loadFromFile("Image/TheLost-4.png");
-	Engine game(&playerTexture);
+	bossTexture.loadFromFile("Image/Boss1.png");
+	Engine game(&playerTexture, &bossTexture);
 	game.run();
 	return 0;
 
