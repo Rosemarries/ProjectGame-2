@@ -209,11 +209,11 @@ void Engine::statePLAY() {
 				current_state = PERM_END;
 				win.close();
 			}
-			if (evnt.type == sf::Event::KeyReleased) {
-				if (sf::Keyboard::Escape) {
-					roomNow = PLAY;
-					current_state = PAUSE;
-				}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+				roomNow = PLAY;
+				current_state = PAUSE;
+				statePAUSE();
+				break;
 			}
 		}
 
@@ -354,11 +354,11 @@ void Engine::stateBR() {
 				current_state = PERM_END;
 				win.close();
 			}
-			if (evnt.type == sf::Event::KeyReleased) {
-				if (sf::Keyboard::Escape) {
-					roomNow = BOSS_ROOM;
-					current_state = PAUSE;
-				}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+				roomNow = BOSS_ROOM;
+				current_state = PAUSE;
+				statePAUSE();
+				break;
 			}
 		}
 
@@ -482,11 +482,11 @@ void Engine::stateTR() {
 				current_state = PERM_END;
 				win.close();
 			}
-			if (evnt.type == sf::Event::KeyReleased) {
-				if (sf::Keyboard::Escape) {
-					roomNow = TREASURE_ROOM;
-					current_state = PAUSE;
-				}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+				roomNow = TREASURE_ROOM;
+				current_state = PAUSE;
+				statePAUSE();
+				break;
 			}
 		}
 
