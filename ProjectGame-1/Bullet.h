@@ -14,7 +14,7 @@ public:
 		return bullet.getPosition();
 	}
 	void draw(sf::RenderWindow& window);
-	void setPos(sf::Vector2f newPos, float dmg, float mvs, direction dir);
+	void setPos(sf::Vector2f newPos, float dmg, float mvs, int bulletVector);
 	void Update(/*sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vector2f player*/);
 	sf::FloatRect getHitbox() const;
 	sf::RectangleShape getShape() const {
@@ -22,6 +22,12 @@ public:
 	}
 	bool isHitted() const;
 	void setHitted();
+	void setBulletVector(int x) {
+		bulletVector = x;
+	}
+	int getbulletVector() {
+		return bulletVector;
+	}
 	float getDamage() const;
 
 private:
@@ -42,5 +48,5 @@ private:
 	float bulletAngle;
 	int bulletVector;
 	bool bulletState = false;
-	//int bulletCurrVelocity;
+	int bulletCurrVelocity;
 };

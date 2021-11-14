@@ -217,10 +217,17 @@ void Engine::statePLAY() {
 		}
 
 		//Bullet hitted Wall:
-		for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
-			if (isCollsionWithWall(iter_bullet->getHitbox(), true) or iter_bullet->isHitted() or iter_bullet->getShape().getPosition().x <= 0 or iter_bullet->getShape().getPosition().x + iter_bullet->getHitbox().width >= win_width or iter_bullet->getShape().getPosition().y <= 0 or iter_bullet->getShape().getPosition().y + iter_bullet->getHitbox().height >= win_height) {
-				bullet_array.erase(iter_bullet);
-				--iter_bullet;
+		for (auto iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end();) {
+			if (isCollsionWithWall(iter_bullet->getHitbox(), true)
+				or iter_bullet->isHitted()
+				or iter_bullet->getShape().getPosition().x <= 0
+				or iter_bullet->getShape().getPosition().x + iter_bullet->getHitbox().width >= win_width
+				or iter_bullet->getShape().getPosition().y <= 0 or iter_bullet->getShape().getPosition().y + iter_bullet->getHitbox().height >= win_height) {
+
+				iter_bullet = bullet_array.erase(iter_bullet);
+			}
+			else {
+				++iter_bullet;
 			}
 		}
 
@@ -245,6 +252,7 @@ void Engine::statePLAY() {
 		for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
 			sf::Vector2i mousePos = sf::Mouse::getPosition(win);
 			iter_bullet->Update(/*mousePos, win, player.GetPosition()*/);
+			iter_bullet->fire(player.GetFireSpeed(), iter_bullet->getbulletVector());
 			win.draw(iter_bullet->getShape());
 		}
 
@@ -349,10 +357,17 @@ void Engine::stateBR() {
 			}
 		}
 
-		for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
-			if (isCollsionWithWall(iter_bullet->getHitbox(), true) or iter_bullet->isHitted() or iter_bullet->getX() <= 0 or iter_bullet->getX() + iter_bullet->getHitbox().width >= win_width or iter_bullet->getY() <= 0 or iter_bullet->getY() + iter_bullet->getHitbox().height >= win_height) {
-				bullet_array.erase(iter_bullet);
-				--iter_bullet;
+		for (auto iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end();) {
+			if (isCollsionWithWall(iter_bullet->getHitbox(), true)
+				or iter_bullet->isHitted()
+				or iter_bullet->getShape().getPosition().x <= 0
+				or iter_bullet->getShape().getPosition().x + iter_bullet->getHitbox().width >= win_width
+				or iter_bullet->getShape().getPosition().y <= 0 or iter_bullet->getShape().getPosition().y + iter_bullet->getHitbox().height >= win_height) {
+
+				iter_bullet = bullet_array.erase(iter_bullet);
+			}
+			else {
+				++iter_bullet;
 			}
 		}
 
@@ -370,6 +385,7 @@ void Engine::stateBR() {
 		for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
 			sf::Vector2i mousePos = sf::Mouse::getPosition(win);
 			iter_bullet->Update(/*mousePos, win, player.GetPosition()*/);
+			iter_bullet->fire(player.GetFireSpeed(), iter_bullet->getbulletVector());
 			win.draw(iter_bullet->getShape());
 		}
 
@@ -517,39 +533,40 @@ void Engine::stateEND() {
 }
 
 void Engine::playerShoot() {
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) and clock_to_delay_between_bullet.getElapsedTime() >= sf::seconds(player.GetFireSpeed())) {
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) /* and clock_to_delay_between_bullet.getElapsedTime() >= sf::seconds(player.GetFireSpeed())*/) {
 		sf::Vector2i mousePos = sf::Mouse::getPosition(win);
-		direction d;
-		float bulletAngle = (float)(180 / PI * atan2(abs(mousePos.y - player.GetShape().getPosition().x), abs(mousePos.x - player.GetShape().getPosition().y)));
+		int bulletVector = 0;
+		float bulletAngle = (float)(180 / PI * atan2(abs(mousePos.y - player.GetPosition().y), abs(mousePos.x - player.GetPosition().x)));
 
-		if (player.GetShape().getPosition().x <= mousePos.x) {
+		if (player.GetPosition().x <= mousePos.x) {
 			if (bulletAngle <= 45) {
-				d = Right;
+				bulletVector = 2;
 			}
 			else {
-				if (player.GetShape().getPosition().y < mousePos.y) {
-					d = Up;
+				if (player.GetPosition().y < mousePos.y) {
+					bulletVector = 3;
 				}
 				else {
-					d = Down;
+					bulletVector = 1;
 				}
 			}
 		}
-		else {
+		else if (player.GetPosition().x > mousePos.x) {
 			if (bulletAngle <= 45) {
-				d = Left;
+				bulletVector = 4;
 			}
 			else {
-				if (player.GetShape().getPosition().y < mousePos.y) {
-					d = Up;
+				if (player.GetPosition().y < mousePos.y) {
+					bulletVector = 3;
 				}
 				else {
-					d = Down;
+					bulletVector = 1;
 				}
 			}
 		}
-
-		bullet.setPos(sf::Vector2f(player.GetShape().getPosition().x + player.getHitbox().width / 2, player.GetShape().getPosition().y + player.getHitbox().height / 2), player.GetDamage(), player.GetFireSpeed(), d);
+		
+		bullet.setBulletVector(bulletVector);
+		bullet.setPos(sf::Vector2f(player.GetShape().getPosition().x + player.getHitbox().width / 2, player.GetShape().getPosition().y + player.getHitbox().height / 2), player.GetDamage(), player.GetFireSpeed(), bulletVector);
 		bullet_array.push_back(bullet);
 		clock_to_delay_between_bullet.restart();
 	}

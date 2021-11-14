@@ -7,9 +7,9 @@ Bullet::Bullet() {
 	texture.loadFromFile("Image/CharacterBullet-1.png");
 	size = sf::Vector2f(15.0f, 15.0f);
 
-	//bullet.setSize(size);
-	//bullet.setTexture(&texture);
-	//bullet.setOrigin(size/2.0f);
+	bullet.setSize(size);
+	bullet.setTexture(&texture);
+	bullet.setOrigin(size/2.0f);
 
 	hitbox.setRadius(10.0f);
 	hitbox.setOrigin(hitbox.getLocalBounds().width / 2, hitbox.getLocalBounds().height / 2);
@@ -21,13 +21,14 @@ Bullet::Bullet() {
 	is_hitted = false;
 }
 
-void Bullet::setPos(sf::Vector2f newPos, float dmg, float mvs, direction dir) {
-	//bullet.setPosition(newPos);
+void Bullet::setPos(sf::Vector2f newPos, float dmg, float mvs, int bulletVec) {
+	bullet.setPosition(newPos);
 	pos = newPos;
 	hitbox.setPosition(pos);
 	damage = dmg;
 	speed = mvs;
-	d = dir;
+	bulletVector = bulletVec;
+	//d = dir;
 }
 
 void Bullet::fire(int speed, int bulletVector) {
@@ -127,7 +128,7 @@ void Bullet::Update(/*sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vecto
 		}
 	}*/
 
-	if (d == Up) {
+	/*if (d == Up) {
 		pos.y -= speed;
 	}
 	if (d == Down) {
@@ -139,7 +140,8 @@ void Bullet::Update(/*sf::Vector2i mousePos, sf::RenderWindow& window, sf::Vecto
 	if (d == Right) {
 		pos.x += speed;
 	}
-	hitbox.setPosition(pos);
+	bullet.setPosition(pos);
+	hitbox.setPosition(pos);*/
 }
 
 sf::FloatRect Bullet::getHitbox() const {

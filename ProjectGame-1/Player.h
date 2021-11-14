@@ -59,7 +59,7 @@ private:
 	unsigned int row;
 	float switchTime = 0.3f;
 	float speed = 200.0f;
-	float fireSpeed;
+	float fireSpeed = 3.0f;
 	float damage = 3.0f;
 	int hp = 6;
 	int face;
