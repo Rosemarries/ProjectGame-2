@@ -2,6 +2,7 @@
 
 Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAnimation(playerTexture,sf::Vector2u(4,10),0.3f), bossAnimation(bossTexture, sf::Vector2u(1,9), 0.3f) {
     win.create(sf::VideoMode(win_width, win_height), "GAME START!");
+	view.setSize(sf::Vector2f(win_width, win_height));
 	win.setFramerateLimit(60);
 	font.loadFromFile("IsaacScript2.ttf");
 	room_tile_map.resize(11, std::vector < Tile >(15));
@@ -17,6 +18,11 @@ Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAni
 	scoreboard.LoadScoreboardFromFile();
 	current_state = MENU;
 }
+
+/*void ResizeView(sf::RenderWindow& window, sf::View& view, float width, float height) {
+	float aspectRatio = float(window.getSize().x) / float(window.getSize().y);
+	view.setSize(width * aspectRatio, height);
+}*/
 
 void Engine::run() {
     stateMachine();
@@ -91,6 +97,9 @@ void Engine::stateMENU() {
                 current_state = PERM_END;
                 win.close();
             }
+			/*if (evnt.type == sf::Event::Resized) {
+				ResizeView(win, view, win_width, win_height);
+			}*/
         }
 		win.clear();
 		menu.Draw(win);

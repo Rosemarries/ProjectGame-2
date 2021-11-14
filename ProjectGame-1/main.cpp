@@ -6,39 +6,6 @@
 
 int score = 0;
 
-struct player_status {
-	float speed = 0.75;
-	int myArtifact = 0;
-	float originX = 40;
-	float originY = 40;
-	float height = 75;
-	float width = 60;
-	char name[10];
-	int score;
-	int hp = 6;
-};
-
-struct player_bullet {
-	int bulletVector;
-	float bulletSpeed = 1.75;
-	int bulletTimer = 60;
-	bool bulletState = false;
-	int bulletDamage = 1;
-	float bulletAngle;
-	float bulletOriginX = 7.5;
-	float bulletOriginY = 7.5;
-};
-
-struct room {
-	float width = 600;
-	float height = 500;
-	float wall = 35;
-	int number = 0;
-	int type = 0;
-	float startPosX = 110;
-	float startPosY = 110;
-};
-
 int main(int argc,char const*argv[])
 {
 	srand(time(0));

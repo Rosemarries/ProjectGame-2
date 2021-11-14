@@ -33,10 +33,14 @@ struct Tile {
 };
 
 class Engine {
+	static const float VIEW_WIDTH;
+	static const float VIEW_HEIGHT;
+
 	Animation playerAnimation;
 	Animation bossAnimation;
 
 	sf::RenderWindow win;
+	sf::View view;
 	sf::Font font;
 	sf::Clock clock_to_delay_between_bullet;
 	sf::Clock clock;
@@ -56,8 +60,8 @@ class Engine {
 	std::vector < Bullet > bullet_array;
 	std::vector < Bullet > ::iterator iter_bullet;
 
-	int win_width = 1050;
-	int win_height = 720;
+	float win_width = 1050;
+	float win_height = 720;
 
 	std::vector <std::vector<Tile>> room_tile_map;
 	std::vector <Room> visited_room_map;
@@ -97,6 +101,7 @@ class Engine {
 	void playerShoot();
 
 	bool isCollsionWithWall(sf::FloatRect objectPos, bool isBullet = false) const;
+	void ResizeView(sf::RenderWindow& window, sf::View& view, float width, float height);
 
 	enum states { MENU, PLAY, TREASURE_ROOM, BOSS_ROOM, SCOREBOARD, END, PERM_END, PAUSE };
 	states current_state;
