@@ -180,6 +180,7 @@ void Engine::statePLAY() {
 			for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
 				if (enemy_array[i]->getHitbox().intersects(iter_bullet->getHitbox())) {
 					iter_bullet->setHitted();
+					score++;
 					enemy_array[i]->hitted(iter_bullet->getDamage());
 				}
 			}
@@ -237,7 +238,7 @@ void Engine::statePLAY() {
 			//Enemy Dead:
 			if (enemy_array[i]->getHp() <= 0) {
 				enemy_array.erase(enemy_array.begin() + i);
-				score++;
+				score += 10;
 				win.setTitle("Score : " + std::to_string(score));
 				--i;
 			}
@@ -348,6 +349,7 @@ void Engine::stateBR() {
 			for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
 				if (enemy_array[i]->getHitbox().intersects(iter_bullet->getHitbox())) {
 					iter_bullet->setHitted();
+					score++;
 					enemy_array[i]->hitted(iter_bullet->getDamage());
 				}
 			}
@@ -375,6 +377,7 @@ void Engine::stateBR() {
 
 		for (int i = 0; i < enemy_array.size(); ++i) {
 			if (enemy_array[i]->getHp() <= 0) {
+				score += 100;
 				enemy_array.erase(enemy_array.begin() + i);
 				--i;
 			}
