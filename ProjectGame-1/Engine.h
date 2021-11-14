@@ -14,6 +14,7 @@
 #include "Enemy.h"
 #include "Gaper.h"
 #include "Boss.h"
+#include "Pause.h"
 #include "Animation.h"
 #define PI 3.14159265
 
@@ -44,6 +45,7 @@ class Engine {
 
 	Map map;
 	Menu menu;
+	Pause pause;
 	sf::Texture playerTexture;
 	sf::Texture bossTexture;
 	Player player;
@@ -79,6 +81,7 @@ class Engine {
 	void stateTR(); 	// TR - treasure room
 	void stateBR(); 	// BR - boss room
 	void stateEND();
+	void statePAUSE();
 
 	void reset();
 
@@ -95,8 +98,9 @@ class Engine {
 
 	bool isCollsionWithWall(sf::FloatRect objectPos, bool isBullet = false) const;
 
-	enum states { MENU, PLAY, TREASURE_ROOM, BOSS_ROOM, SCOREBOARD, END, PERM_END };
+	enum states { MENU, PLAY, TREASURE_ROOM, BOSS_ROOM, SCOREBOARD, END, PERM_END, PAUSE };
 	states current_state;
+	states roomNow;
 public:
 	Engine(sf::Texture* playerTexture, sf::Texture* bossTexture);
 	void run();

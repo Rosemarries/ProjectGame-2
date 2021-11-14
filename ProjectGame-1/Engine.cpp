@@ -117,6 +117,50 @@ void Engine::stateSCOREBOARD() {
 	}
 }
 
+void Engine::statePAUSE() {
+	while (current_state == PAUSE) {
+		win.setTitle("PAUSE");
+		sf::Event evnt;
+		while (win.pollEvent(evnt)) {
+			switch (evnt.type) {
+			case sf::Event::KeyReleased: {
+				switch (evnt.key.code) {
+				case sf::Keyboard::W: {
+					pause.MoveUp();
+					break;
+				}
+				case sf::Keyboard::S: {
+					pause.MoveDown();
+					break;
+				}
+				case sf::Keyboard::Return:
+					switch (pause.GetPressedItem()) {
+					case 0: {
+						current_state = roomNow;
+						break;
+					}
+					case 1: {
+						current_state = MENU;
+						break;
+					}
+					}
+					break;
+				}
+				break;
+			}
+			}
+			if (evnt.type == sf::Event::Closed) {
+				scoreboard.SaveScoreboardToFile();
+				current_state = PERM_END;
+				win.close();
+			}
+		}
+		win.clear();
+		pause.Draw(win);
+		win.display();
+	}
+}
+
 void Engine::reset() {
 	bullet_array.clear();
 	visited_room_map.clear();
@@ -164,6 +208,12 @@ void Engine::statePLAY() {
 				scoreboard.SaveScoreboardToFile();
 				current_state = PERM_END;
 				win.close();
+			}
+			if (evnt.type == sf::Event::KeyReleased) {
+				if (sf::Keyboard::Escape) {
+					roomNow = PLAY;
+					current_state = PAUSE;
+				}
 			}
 		}
 
@@ -304,6 +354,12 @@ void Engine::stateBR() {
 				current_state = PERM_END;
 				win.close();
 			}
+			if (evnt.type == sf::Event::KeyReleased) {
+				if (sf::Keyboard::Escape) {
+					roomNow = BOSS_ROOM;
+					current_state = PAUSE;
+				}
+			}
 		}
 
 		movePlayer(deltaTime);
@@ -425,6 +481,12 @@ void Engine::stateTR() {
 				scoreboard.SaveScoreboardToFile();
 				current_state = PERM_END;
 				win.close();
+			}
+			if (evnt.type == sf::Event::KeyReleased) {
+				if (sf::Keyboard::Escape) {
+					roomNow = TREASURE_ROOM;
+					current_state = PAUSE;
+				}
 			}
 		}
 
