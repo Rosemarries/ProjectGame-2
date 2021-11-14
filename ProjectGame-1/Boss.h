@@ -3,6 +3,7 @@
 #define BOSS_H
 
 #include "Enemy.h"
+#include "Animation.h"
 
 class Boss : public Enemy {
 public:

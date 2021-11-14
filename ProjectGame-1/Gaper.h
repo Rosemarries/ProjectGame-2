@@ -6,7 +6,7 @@
 
 class Gaper : public Enemy {
 public:
-	explicit Gaper(sf::Vector2f pos, sf::Vector2f size = sf::Vector2f(50.0f, 50.0f), float hp = 10.f, float damage = 0.5f, float movement_speed = 2.f);
+	explicit Gaper(sf::Vector2f pos, sf::Vector2f size = sf::Vector2f(50.0f, 70.0f), float hp = 10.f, float damage = 0.5f, float movement_speed = 2.f);
 	void update(sf::Vector2f player_pos, bool reverse = false, move m = BOTH) override;
 	sf::FloatRect fakeUpdate(move m, bool reverse) override;
 };

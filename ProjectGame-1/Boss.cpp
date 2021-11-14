@@ -11,7 +11,8 @@ Boss::Boss(sf::Vector2f pos, sf::Vector2f size, float hp, float damage, float mo
 	hitbox.setPosition(position);
 	hitbox_sprite.setPosition(position);
 	hitbox.setSize(size);
-	hitbox.setFillColor(sf::Color::Green);
+	//hitbox.setFillColor(sf::Color::Green);
+	hitbox.setTexture(&hitbox_texture);
 	this->hp = hp;
 	this->damage = damage;
 	this->movement_speed = sf::Vector2f(movement_speed, movement_speed);

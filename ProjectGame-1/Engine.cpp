@@ -49,6 +49,7 @@ void Engine::stateMachine() {
 
 void Engine::stateMENU() {
     while (current_state == MENU) {
+		win.setTitle("MENU");
         sf::Event evnt;
         while (win.pollEvent(evnt)) {
 			switch (evnt.type) {
@@ -99,6 +100,7 @@ void Engine::stateMENU() {
 
 void Engine::stateSCOREBOARD() {
 	while (current_state == SCOREBOARD) {
+		win.setTitle("SCOREBOARD");
 		sf::Event evnt;
 		while (win.pollEvent(evnt)) {
 			switch (evnt.type) {
@@ -257,7 +259,7 @@ void Engine::statePLAY() {
 		}
 
 		for (int i = 0; i < enemy_array.size(); ++i) {
-			win.draw(enemy_array[i]->getSprite());
+			win.draw(enemy_array[i]->getShape());
 		}
 
 		win.draw(player.GetShape());
@@ -394,7 +396,7 @@ void Engine::stateBR() {
 		}
 		else {
 			for (int i = 0; i < enemy_array.size(); ++i) {
-				win.draw(enemy_array[i]->getSprite());
+				win.draw(enemy_array[i]->getShape());
 			}
 		}
 
@@ -573,7 +575,6 @@ void Engine::playerShoot() {
 }
 
 void Engine::movePlayer(float deltaTime) {
-	//deltaTime = clock.restart().asSeconds();
 	float playerspeed = 5.0f;
 	if (isCollsionWithWall(player.getHitbox())) {
 		playerspeed = 1.0f;
