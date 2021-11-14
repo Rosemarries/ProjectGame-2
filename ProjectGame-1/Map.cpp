@@ -6,7 +6,7 @@ Map::Map() {
 
 	room_tile_map.resize(11, std::vector<char>(15, ' '));
 
-	number_of_rooms = 5;
+	number_of_rooms = 7;
 	room_map_size = 5;
 	//generate();
 }

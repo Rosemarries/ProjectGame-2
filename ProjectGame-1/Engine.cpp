@@ -147,8 +147,9 @@ void Engine::statePLAY() {
 		if (new_room) {
 			prepareRoomTileMap();
 			if (checkIsUniqueVisitedRoom(room_map_pos_y, room_map_pos_x)) {
+				int maxMon = rand() % 7;
 				int i = 0;
-				while (i < 2) {
+				while (i < maxMon) {
 					std::shared_ptr<Gaper> gaper = std::make_shared<Gaper>(sf::Vector2f(100 * i + 100, 100 * i + 100));
 					enemy_array.push_back(gaper);
 					++i;
@@ -440,7 +441,7 @@ void Engine::stateTR() {
 		drawRoom();
 
 		if (!treasure_picked) {
-			win.draw(item.getSprite());
+			win.draw(item.getShape());
 		}
 		win.draw(player.GetShape());
 		heart.draw(win, player.GetHp());
@@ -540,7 +541,7 @@ void Engine::stateEND() {
 }
 
 void Engine::playerShoot() {
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) /* and clock_to_delay_between_bullet.getElapsedTime() >= sf::seconds(player.GetFireSpeed())*/) {
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)  and clock_to_delay_between_bullet.getElapsedTime() >= sf::seconds(fireSpeed)) {
 		sf::Vector2i mousePos = sf::Mouse::getPosition(win);
 		int bulletVector = 0;
 		float bulletAngle = (float)(180 / PI * atan2(abs(mousePos.y - player.GetPosition().y), abs(mousePos.x - player.GetPosition().x)));

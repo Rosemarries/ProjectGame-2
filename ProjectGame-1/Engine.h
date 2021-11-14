@@ -69,6 +69,9 @@ class Engine {
 	bool boss_defeated;
 	float deltaTime = 0.0f;
 
+	float fireSpeed = 0.5f;
+	int randomHeart;
+
 	void stateMachine();
 	void stateMENU();
 	void statePLAY();
