@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAnimation(playerTexture,sf::Vector2u(4,10),0.3f), bossAnimation(bossTexture, sf::Vector2u(4,2), 0.3f) {
+Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAnimation(playerTexture,sf::Vector2u(4,10),0.3f), bossAnimation(bossTexture, sf::Vector2u(1,9), 0.3f) {
     win.create(sf::VideoMode(win_width, win_height), "GAME START!");
 	win.setFramerateLimit(60);
 	font.loadFromFile("IsaacScript2.ttf");
@@ -396,6 +396,8 @@ void Engine::stateBR() {
 		}
 		else {
 			for (int i = 0; i < enemy_array.size(); ++i) {
+				bossAnimation.Update(0, deltaTime);
+				enemy_array[i]->setAnime(bossAnimation.uvRect);
 				win.draw(enemy_array[i]->getShape());
 			}
 		}

@@ -31,7 +31,6 @@ void Boss::update(sf::Vector2f player_pos, bool reverse, move m) {
 		movement_speed.x *= (-1);
 		movement_speed.y *= (-1);
 	}
-
 	position.x += movement_speed.x;
 	position.y += movement_speed.y;
 	hitbox_sprite.setPosition(position);
