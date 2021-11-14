@@ -184,6 +184,13 @@ void Engine::reset() {
 }
 
 void Engine::statePLAY() {
+	sf::RectangleShape roomBg;
+	roomBg.setSize(sf::Vector2f(win_width, win_height));
+	roomBg.setPosition(sf::Vector2f(0.0f, 0.0f));
+	sf::Texture roomTexture;
+	roomTexture.loadFromFile("Image/RoomLevel1.png");
+	roomBg.setTexture(&roomTexture);
+
 	win.setTitle("Score : 0");
 	std::vector < std::shared_ptr < Enemy >> enemy_array;
 	while (current_state == PLAY) {
@@ -301,6 +308,7 @@ void Engine::statePLAY() {
 		}
 
 		win.clear();
+		win.draw(roomBg);
 		drawRoom();
 
 		for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
@@ -321,6 +329,13 @@ void Engine::statePLAY() {
 }
 
 void Engine::stateBR() {
+	sf::RectangleShape roomBg;
+	roomBg.setSize(sf::Vector2f(win_width, win_height));
+	roomBg.setPosition(sf::Vector2f(0.0f, 0.0f));
+	sf::Texture roomTexture;
+	roomTexture.loadFromFile("Image/RoomLevel1-Boss.png");
+	roomBg.setTexture(&roomTexture);
+
 	prepareRoomTileMap();
 	addVisitedRoom();
 
@@ -441,6 +456,7 @@ void Engine::stateBR() {
 		}
 
 		win.clear();
+		win.draw(roomBg);
 		drawRoom();
 		win.draw(player.GetShape());
 
@@ -468,6 +484,12 @@ void Engine::stateBR() {
 }
 
 void Engine::stateTR() {
+	sf::RectangleShape roomBg;
+	roomBg.setSize(sf::Vector2f(win_width, win_height));
+	roomBg.setPosition(sf::Vector2f(0.0f, 0.0f));
+	sf::Texture roomTexture;
+	roomTexture.loadFromFile("Image/RoomLevel2.png");
+	roomBg.setTexture(&roomTexture);
 	Item item(sf::Vector2f(win_width / 2, win_height / 2));
 	prepareRoomTileMap();
 	unlockDoors();
@@ -500,6 +522,7 @@ void Engine::stateTR() {
 
 		movePlayerNextRoom();
 		win.clear();
+		win.draw(roomBg);
 		drawRoom();
 
 		if (!treasure_picked) {
@@ -751,8 +774,8 @@ void Engine::prepareRoomTileMap() {
 
 	for (int row = 0; row < char_tile_map.size(); row++) {
 		for (int col = 0; col < char_tile_map[row].size(); col++) {
-			room_tile_map[row][col].shape.setSize(sf::Vector2f(70, 70));
-			room_tile_map[row][col].shape.setPosition(sf::Vector2f(col * 70, row * 70));
+			room_tile_map[row][col].shape.setSize(sf::Vector2f(70, 65));
+			room_tile_map[row][col].shape.setPosition(sf::Vector2f(col * 70, row * 65));
 			room_tile_map[row][col].shape_sprite.setPosition(room_tile_map[row][col].shape.getPosition());
 			room_tile_map[row][col].is_wall = true;
 			room_tile_map[row][col].can_go_through = false;
@@ -798,8 +821,10 @@ void Engine::prepareRoomTileMap() {
 void Engine::drawRoom() {
 	for (int row = 0; row < room_tile_map.size(); row++) {
 		for (int col = 0; col < room_tile_map[row].size(); col++) {
-			win.draw(room_tile_map[row][col].shape);
-			win.draw(room_tile_map[row][col].shape_sprite);
+			if (room_tile_map[row][col].is_door == true && room_tile_map[row][col].can_go_through == true) {
+				win.draw(room_tile_map[row][col].shape);
+				win.draw(room_tile_map[row][col].shape_sprite);
+			}
 		}
 	}
 }
