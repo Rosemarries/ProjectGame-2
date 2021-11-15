@@ -82,7 +82,7 @@ void Player::Hitted(float dmg) {
 void Player::Upgrade(int item_id) {
 	switch (item_id) {
 	case 0:
-		hp += 2;
+		hp += 4;
 		break;
 
 	case 1:
