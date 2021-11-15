@@ -30,6 +30,9 @@ public:
 	virtual void setAnime(sf::IntRect uvRect) {
 		hitbox.setTextureRect(uvRect);
 	}
+	virtual sf::Vector2f getPos() {
+		return hitbox.getPosition();
+	}
 	virtual sf::FloatRect fakeUpdate(move m, bool reverse) = 0;
 	virtual ~Enemy() = 0;
 };

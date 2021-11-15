@@ -6,7 +6,7 @@
 
 class Item {
 	sf::RectangleShape hitbox;
-	sf::Texture hitbox_texture[3];
+	sf::Texture hitbox_texture[4];
 	sf::Sprite hitbox_sprite;
 	int id;
 	int item_poll;
@@ -18,6 +18,10 @@ public:
 	sf::Sprite getSprite() const;
 	int getId() const;
 	void randId();
+
+	void setPos(sf::Vector2f pos) {
+		hitbox.setPosition(pos);
+	}
 };
 
 #endif

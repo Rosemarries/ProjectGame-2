@@ -82,15 +82,19 @@ void Player::Hitted(float dmg) {
 void Player::Upgrade(int item_id) {
 	switch (item_id) {
 	case 0:
-		hp += 4;
+		hp += 2;
 		break;
 
 	case 1:
-		damage = 3.5f;
+		damage += 1.5f;
 		break;
 
 	case 2:
 		fireTime = 0.2f;
+		break;
+
+	case 3:
+		fireSpeed += 3.0f;
 		break;
 	}
 }

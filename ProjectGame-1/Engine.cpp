@@ -199,6 +199,8 @@ void Engine::statePLAY() {
 	sf::Texture roomTexture;
 	roomTexture.loadFromFile("Image/RoomLevel1.png");
 	roomBg.setTexture(&roomTexture);
+	Item item;
+	std::vector <Item> item_array;
 
 	win.setTitle("Score : 0");
 	std::vector < std::shared_ptr < Enemy >> enemy_array;
@@ -304,11 +306,23 @@ void Engine::statePLAY() {
 		for (int i = 0; i < enemy_array.size(); ++i) {
 			//Enemy Dead:
 			if (enemy_array[i]->getHp() <= 0) {
+				randomHeart = rand() % 10;
+				if (randomHeart >= 8) {
+					item.setPos(enemy_array[i]->getPos());
+					item_array.push_back(item);
+				}
 				enemy_array.erase(enemy_array.begin() + i);
 				score += 10;
 				win.setTitle("Score : " + std::to_string(score));
 				--i;
 			}
+		}
+
+		if (item.getHitbox().intersects(player.getHitbox()) and treasure_picked == false) {
+			player.Upgrade(item.getId());
+			treasure_picked = true;
+			score += 10;
+			win.setTitle("Score : " + std::to_string(score));
 		}
 
 		if (player.GetHp() <= 0) {
@@ -319,6 +333,12 @@ void Engine::statePLAY() {
 		win.clear();
 		win.draw(roomBg);
 		drawRoom();
+
+		for (int i = 0; i < item_array.size(); i++) {
+			if (!treasure_picked) {
+				win.draw(item_array[i].getShape());
+			}
+		}
 
 		for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
 			sf::Vector2i mousePos = sf::Mouse::getPosition(win);
