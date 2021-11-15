@@ -3,6 +3,7 @@
 #define ENGINE_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 #include "Map.h"
 #include "Menu.h"
@@ -44,6 +45,28 @@ class Engine {
 	sf::Font font;
 	sf::Clock clock_to_delay_between_bullet;
 	sf::Clock clock;
+
+	//Sound:
+	sf::SoundBuffer soundBgBuffer;
+	sf::SoundBuffer soundEffectBuffer;
+	sf::SoundBuffer soundChangePageBuffer;
+	sf::SoundBuffer soundBulletBuffer;
+	sf::SoundBuffer soundBulletHittedBuffer;
+	sf::SoundBuffer soundPlayerHurtBuffer;
+	sf::SoundBuffer soundUnlockDoorBuffer;
+	sf::SoundBuffer soundTRBuffer;
+	sf::SoundBuffer soundBossDiedBuffer;
+	sf::SoundBuffer soundItemSpawnBuffer;
+	sf::Sound soundBg;
+	sf::Sound soundEffect;
+	sf::Sound soundChangePage;
+	sf::Sound soundBullet;
+	sf::Sound soundBulletHitted;
+	sf::Sound soundPlayerHurt;
+	sf::Sound soundUnlockDoor;
+	sf::Sound soundTR;
+	sf::Sound soundBossDied;
+	sf::Sound soundItemSpawn;
 
 	std::vector <sf::Texture> room_texture;
 

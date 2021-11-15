@@ -1,5 +1,6 @@
 #pragma once
 #include<SFML\Graphics.hpp>
+#include<SFML\Audio.hpp>
 #include<vector>
 #include"Animation.h"
 
@@ -59,6 +60,9 @@ private:
 	sf::Vector2u imageCount = sf::Vector2u(4, 10);
 	sf::Texture texture;
 	sf::Clock clock;
+	sf::SoundBuffer soundHeartPickBuffer;
+	sf::Sound soundHeartPick;
+
 	unsigned int row;
 	float switchTime = 0.3f;
 	float speed = 200.0f;

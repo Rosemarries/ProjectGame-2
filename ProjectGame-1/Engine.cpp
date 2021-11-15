@@ -7,6 +7,18 @@ Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAni
 	font.loadFromFile("IsaacScript2.ttf");
 	room_tile_map.resize(11, std::vector < Tile >(15));
 
+	if (!soundPlayerHurtBuffer.loadFromFile("Sound/Isaac_Hurt_Grunt1.wav") || !soundBulletBuffer.loadFromFile("Sound/plop.wav") || !soundUnlockDoorBuffer.loadFromFile("Sound/Unlock00.wav") || !soundTRBuffer.loadFromFile("Sound/weapon room.wav") || !soundChangePageBuffer.loadFromFile("Sound/Book Page Turn 12.wav") || !soundBulletHittedBuffer.loadFromFile("Sound/animal_squish1.wav") || !soundBossDiedBuffer.loadFromFile("Sound/boss1_explosions1.wav") || !soundItemSpawnBuffer.loadFromFile("Sound/bloodbank spawn1.wav")) {
+		abort();
+	}
+	soundPlayerHurt.setBuffer(soundPlayerHurtBuffer);
+	soundBullet.setBuffer(soundBulletBuffer);
+	soundUnlockDoor.setBuffer(soundUnlockDoorBuffer);
+	soundTR.setBuffer(soundTRBuffer);
+	soundChangePage.setBuffer(soundChangePageBuffer);
+	soundBulletHitted.setBuffer(soundBulletHittedBuffer);
+	soundBossDied.setBuffer(soundBossDiedBuffer);
+	soundItemSpawn.setBuffer(soundItemSpawnBuffer);
+
 	sf::Texture tmp_texture;
 	for (int i = 0; i < 4; ++i) {
 		if (!tmp_texture.loadFromFile("Image/" + std::to_string(i) + ".png")) {
@@ -54,6 +66,12 @@ void Engine::stateMachine() {
 }
 
 void Engine::stateMENU() {
+	if (!soundBgBuffer.loadFromFile("Sound/7689.wav")) {
+		abort();
+	}
+	soundChangePage.play();
+	soundBg.setBuffer(soundBgBuffer);
+	soundBg.play();
     while (current_state == MENU) {
 		win.setTitle("MENU");
         sf::Event evnt;
@@ -73,14 +91,17 @@ void Engine::stateMENU() {
 						switch (menu.GetPressedItem()) {
 						case 0: {
 							reset();
+							soundBg.stop();
 							current_state = PLAY;
 							break;
 						}
 						case 1: {
+							soundBg.stop();
 							current_state = SCOREBOARD;
 							break;
 						}
 						case 2: {
+							soundBg.stop();
 							current_state = PERM_END;
 							scoreboard.SaveScoreboardToFile();
 							win.close();
@@ -108,6 +129,13 @@ void Engine::stateMENU() {
 }
 
 void Engine::stateSCOREBOARD() {
+	if (!soundBgBuffer.loadFromFile("Sound/7702.wav")) {
+		abort();
+	}
+	soundChangePage.play();
+	soundBg.setBuffer(soundBgBuffer);
+	soundBg.play();
+
 	while (current_state == SCOREBOARD) {
 		win.setTitle("SCOREBOARD");
 		sf::Event evnt;
@@ -127,6 +155,7 @@ void Engine::stateSCOREBOARD() {
 }
 
 void Engine::statePAUSE() {
+	soundChangePage.play();
 	while (current_state == PAUSE) {
 		win.setTitle("PAUSE");
 		sf::Event evnt;
@@ -193,6 +222,11 @@ void Engine::reset() {
 }
 
 void Engine::statePLAY() {
+	if (!soundEffectBuffer.loadFromFile("Sound/Death_Burst_Small_1.wav")) {
+		abort();
+	}
+	soundEffect.setBuffer(soundEffectBuffer);
+
 	sf::RectangleShape roomBg;
 	roomBg.setSize(sf::Vector2f(win_width, win_height));
 	roomBg.setPosition(sf::Vector2f(0.0f, 0.0f));
@@ -248,6 +282,7 @@ void Engine::statePLAY() {
 			//Bullet:
 			for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
 				if (enemy_array[i]->getHitbox().intersects(iter_bullet->getHitbox())) {
+					soundBulletHitted.play();
 					iter_bullet->setHitted();
 					score++;
 					enemy_array[i]->hitted(iter_bullet->getDamage());
@@ -259,6 +294,7 @@ void Engine::statePLAY() {
 			//Player:
 			if (enemy_array[i]->getHitbox().intersects(player.getHitbox())) {
 				player.Hitted(enemy_array[i]->getDamage());
+				soundPlayerHurt.play();
 			}
 		}
 
@@ -296,6 +332,7 @@ void Engine::statePLAY() {
 				or iter_bullet->getShape().getPosition().x + iter_bullet->getHitbox().width >= win_width
 				or iter_bullet->getShape().getPosition().y <= 0 or iter_bullet->getShape().getPosition().y + iter_bullet->getHitbox().height >= win_height) {
 
+				soundBulletHitted.play();
 				iter_bullet = bullet_array.erase(iter_bullet);
 			}
 			else {
@@ -306,8 +343,10 @@ void Engine::statePLAY() {
 		for (int i = 0; i < enemy_array.size(); ++i) {
 			//Enemy Dead:
 			if (enemy_array[i]->getHp() <= 0) {
+				soundEffect.play();
 				randomHeart = rand() % 10;
 				if (randomHeart >= 8) {
+					soundItemSpawn.play();
 					item.setPos(enemy_array[i]->getPos());
 					item_array.push_back(item);
 				}
@@ -449,6 +488,7 @@ void Engine::stateBR() {
 		for (int i = 0; i < enemy_array.size(); ++i) {
 			for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
 				if (enemy_array[i]->getHitbox().intersects(iter_bullet->getHitbox())) {
+					soundBulletHitted.play();
 					iter_bullet->setHitted();
 					score++;
 					enemy_array[i]->hitted(iter_bullet->getDamage());
@@ -458,6 +498,7 @@ void Engine::stateBR() {
 
 		for (int i = 0; i < enemy_array.size(); ++i) {
 			if (enemy_array[i]->getHitbox().intersects(player.getHitbox())) {
+				soundPlayerHurt.play();
 				player.Hitted(enemy_array[i]->getDamage());
 			}
 		}
@@ -469,6 +510,7 @@ void Engine::stateBR() {
 				or iter_bullet->getShape().getPosition().x + iter_bullet->getHitbox().width >= win_width
 				or iter_bullet->getShape().getPosition().y <= 0 or iter_bullet->getShape().getPosition().y + iter_bullet->getHitbox().height >= win_height) {
 
+				soundBulletHitted.play();
 				iter_bullet = bullet_array.erase(iter_bullet);
 			}
 			else {
@@ -479,6 +521,7 @@ void Engine::stateBR() {
 		for (int i = 0; i < enemy_array.size(); ++i) {
 			if (enemy_array[i]->getHp() <= 0) {
 				score += 100;
+				soundBossDied.play();
 				enemy_array.erase(enemy_array.begin() + i);
 				--i;
 			}
@@ -523,6 +566,7 @@ void Engine::stateTR() {
 	prepareRoomTileMap();
 	unlockDoors();
 	addVisitedRoom();
+	soundTR.play();
 
 	while (current_state == TREASURE_ROOM) {
 		sf::Event evnt;
@@ -656,6 +700,7 @@ void Engine::stateEND() {
 
 void Engine::playerShoot() {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)  and clock_to_delay_between_bullet.getElapsedTime() >= sf::seconds(player.GetFireTime())) {
+		soundBullet.play();
 		sf::Vector2i mousePos = sf::Mouse::getPosition(win);
 		int bulletVector = 0;
 		float bulletAngle = (float)(180 / PI * atan2(abs(mousePos.y - player.GetPosition().y), abs(mousePos.x - player.GetPosition().x)));
@@ -796,6 +841,7 @@ void Engine::unlockDoors() {
 			}
 		}
 	}
+	soundUnlockDoor.play();
 }
 
 void Engine::prepareRoomTileMap() {

@@ -22,6 +22,11 @@ Player::Player(){
 	face = 0;
 	texture.loadFromFile("Image/TheLost-4.png");
 
+	if (!soundHeartPickBuffer.loadFromFile("Sound/bloodbank touched.wav")) {
+		abort();
+	}
+	soundHeartPick.setBuffer(soundHeartPickBuffer);
+
 	body.setSize(sf::Vector2f(60.0f, 75.0f));
 	body.setPosition(400.0f, 400.0f);
 	body.setTexture(&texture);
@@ -80,6 +85,7 @@ void Player::Hitted(float dmg) {
 }
 
 void Player::Upgrade(int item_id) {
+	soundHeartPick.play();
 	switch (item_id) {
 	case 0:
 		hp += 2;
