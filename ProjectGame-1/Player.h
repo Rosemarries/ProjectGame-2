@@ -33,6 +33,9 @@ public:
 	float GetFireSpeed() {
 		return fireSpeed;
 	}
+	float GetFireTime() {
+		return fireTime;
+	}
 	float GetDamage() {
 		return damage;
 	}
@@ -60,6 +63,7 @@ private:
 	float switchTime = 0.3f;
 	float speed = 200.0f;
 	float fireSpeed = 3.0f;
+	float fireTime = 0.5f;
 	float damage = 3.0f;
 	int hp = 6;
 	int face;

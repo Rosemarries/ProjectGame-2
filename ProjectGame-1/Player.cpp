@@ -15,7 +15,7 @@ struct room {
 
 Player::Player(){
 	speed = 3.0f;
-	damage = 3.5f;
+	damage = 2.0f;
 	hp = 6;
 	this->speed = speed;
 	row = 0;
@@ -41,23 +41,23 @@ void Player::Update(float deltaTime, float speedX) {
 	room.startPosX = 110;
 	room.startPosY = 110;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-		//if(body.getPosition().x > room.startPosX)
-		movement.x -= speed;// *deltaTime;
+		if(body.getPosition().x > 0.0f)
+			movement.x -= speed;// *deltaTime;
 		face = 3;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-		//if(body.getPosition().x < 720.0f - room.startPosX)
-		movement.x += speed;// *deltaTime;
+		if(body.getPosition().x < 1050.0f)
+			movement.x += speed;// *deltaTime;
 		face = 1;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-		//if(body.getPosition().y > room.startPosY)
-		movement.y -= speed;// *deltaTime;
+		if(body.getPosition().y > 0.0f)
+			movement.y -= speed;// *deltaTime;
 		face = 2;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-		//if(body.getPosition().y < 720.0f - room.startPosY - 2 * room.wall)
-		movement.y += speed;// *deltaTime;
+		if(body.getPosition().y < 720.0f)
+			movement.y += speed;// *deltaTime;
 		face = 0;
 	}
 	row = face;
@@ -83,6 +83,14 @@ void Player::Upgrade(int item_id) {
 	switch (item_id) {
 	case 0:
 		hp += 2;
+		break;
+
+	case 1:
+		damage = 3.5f;
+		break;
+
+	case 2:
+		fireTime = 0.2f;
 		break;
 	}
 }

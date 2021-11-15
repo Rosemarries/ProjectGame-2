@@ -2,7 +2,7 @@
 
 Item::Item(sf::Vector2f pos) {
 
-	if (!hitbox_texture[0].loadFromFile("Image/Item-1.png")) {
+	if (!hitbox_texture[0].loadFromFile("Image/Item-1.png") || !hitbox_texture[1].loadFromFile("Image/Item-2.png") || !hitbox_texture[2].loadFromFile("Image/Item-3.png")) {
 		abort();
 	}
 
@@ -16,7 +16,7 @@ Item::Item(sf::Vector2f pos) {
 
 	hitbox.setOrigin(hitbox.getLocalBounds().width / 2, hitbox.getLocalBounds().height / 2);
 	hitbox_sprite.setOrigin(hitbox.getLocalBounds().width / 2, hitbox.getLocalBounds().height / 2);
-	item_poll = 1;
+	item_poll = 3;
 	randId();
 }
 
@@ -38,4 +38,5 @@ int Item::getId() const {
 
 void Item::randId() {
 	id = rand() % item_poll;
+	hitbox.setTexture(&hitbox_texture[id]);
 }

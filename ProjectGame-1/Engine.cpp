@@ -635,7 +635,7 @@ void Engine::stateEND() {
 }
 
 void Engine::playerShoot() {
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)  and clock_to_delay_between_bullet.getElapsedTime() >= sf::seconds(fireSpeed)) {
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)  and clock_to_delay_between_bullet.getElapsedTime() >= sf::seconds(player.GetFireTime())) {
 		sf::Vector2i mousePos = sf::Mouse::getPosition(win);
 		int bulletVector = 0;
 		float bulletAngle = (float)(180 / PI * atan2(abs(mousePos.y - player.GetPosition().y), abs(mousePos.x - player.GetPosition().x)));

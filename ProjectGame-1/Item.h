@@ -6,7 +6,7 @@
 
 class Item {
 	sf::RectangleShape hitbox;
-	sf::Texture hitbox_texture[1];
+	sf::Texture hitbox_texture[3];
 	sf::Sprite hitbox_sprite;
 	int id;
 	int item_poll;
