@@ -16,7 +16,7 @@ struct room {
 Player::Player(){
 	speed = 3.0f;
 	damage = 2.0f;
-	hp = 6;
+	hp = 10;
 	this->speed = speed;
 	row = 0;
 	face = 0;
@@ -89,6 +89,7 @@ void Player::Upgrade(int item_id) {
 	switch (item_id) {
 	case 0:
 		hp += 2;
+		if (hp > 10) { hp = 10; }
 		break;
 
 	case 1:
@@ -96,7 +97,8 @@ void Player::Upgrade(int item_id) {
 		break;
 
 	case 2:
-		fireTime = 0.2f;
+		fireTime -= 0.1f;
+		if (fireTime < 0.1f) { fireTime = 0.1f; }
 		break;
 
 	case 3:
@@ -108,8 +110,10 @@ void Player::Upgrade(int item_id) {
 void Player::Reset() {
 	body.setPosition(200, 200);
 	speed = 3.f;
-	damage = 3.5f;
-	hp = 6.f;
+	damage = 2.0f;
+	fireSpeed = 3.0f;
+	fireTime = 0.5f;
+	hp = 10;
 
 	clock.restart();
 }

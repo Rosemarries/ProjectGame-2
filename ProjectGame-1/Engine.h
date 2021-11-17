@@ -92,14 +92,22 @@ class Engine {
 	int room_map_pos_y;
 	int room_map_pos_x;
 	int score;
+	int level = 1;
 	bool new_room;
 	bool isWin;
 	bool treasure_picked;
+	bool treasure_picked_play;
 	bool boss_defeated;
 	float deltaTime = 0.0f;
 
-	float fireSpeed = 0.5f;
 	int randomHeart;
+
+	//isaac:
+	int isaachp;
+	float isaacfireSpeed;
+	float isaacfireTime;
+	float isaacdamage;
+	int isaacscore;
 
 	void stateMachine();
 	void stateMENU();

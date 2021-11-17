@@ -31,14 +31,26 @@ public:
 	int GetHp() {
 		return hp;
 	}
+	void SetHp(int cHp) {
+		hp = cHp;
+	}
 	float GetFireSpeed() {
 		return fireSpeed;
+	}
+	void SetFireSpeed(float cFireSpeed) {
+		fireSpeed = cFireSpeed;
 	}
 	float GetFireTime() {
 		return fireTime;
 	}
+	void SetFireTime(float cFireTime) {
+		fireTime = cFireTime;
+	}
 	float GetDamage() {
 		return damage;
+	}
+	void SetDamage(float cDamage) {
+		damage = cDamage;
 	}
 
 	sf::Vector2f GetPosition() {
@@ -65,7 +77,7 @@ private:
 
 	unsigned int row;
 	float switchTime = 0.3f;
-	float speed = 200.0f;
+	float speed = 3.0f;
 	float fireSpeed = 3.0f;
 	float fireTime = 0.5f;
 	float damage = 3.0f;

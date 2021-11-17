@@ -90,6 +90,12 @@ void Engine::stateMENU() {
 					case sf::Keyboard::Return:
 						switch (menu.GetPressedItem()) {
 						case 0: {
+							level = 1;
+							isaachp = 10;
+							isaacfireSpeed = 3.0f;
+							isaacfireTime = 0.5f;
+							isaacdamage = 2.0f;
+							isaacscore = 0;
 							reset();
 							soundBg.stop();
 							current_state = PLAY;
@@ -215,8 +221,19 @@ void Engine::reset() {
 	new_room = true;
 	isWin = false;
 	treasure_picked = false;
+	treasure_picked_play = false;
 	boss_defeated = false;
-	score = 0;
+
+	if (level > 1) {
+		player.SetDamage(isaacdamage);
+		player.SetFireSpeed(isaacfireSpeed);
+		player.SetFireTime(isaacfireTime);
+		player.SetHp(isaachp);
+		score = isaacscore;
+	}
+	else {
+		score = 0;
+	}
 
 	clock_to_delay_between_bullet.restart();
 }
@@ -231,12 +248,20 @@ void Engine::statePLAY() {
 	roomBg.setSize(sf::Vector2f(win_width, win_height));
 	roomBg.setPosition(sf::Vector2f(0.0f, 0.0f));
 	sf::Texture roomTexture;
-	roomTexture.loadFromFile("Image/RoomLevel1.png");
+	if (level == 1) {
+		roomTexture.loadFromFile("Image/RoomLevel1.png");
+	}
+	else if (level == 2) {
+		roomTexture.loadFromFile("Image/RoomLevel2-1.png");
+	}
+	else {
+		roomTexture.loadFromFile("Image/RoomLevel3-1.png");
+	}
 	roomBg.setTexture(&roomTexture);
 	Item item;
 	std::vector <Item> item_array;
 
-	win.setTitle("Score : 0");
+	win.setTitle("Score : " + std::to_string(score));
 	std::vector < std::shared_ptr < Enemy >> enemy_array;
 	while (current_state == PLAY) {
 		deltaTime = clock.restart().asSeconds();
@@ -357,11 +382,14 @@ void Engine::statePLAY() {
 			}
 		}
 
-		if (item.getHitbox().intersects(player.getHitbox()) and treasure_picked == false) {
-			player.Upgrade(item.getId());
-			treasure_picked = true;
-			score += 10;
-			win.setTitle("Score : " + std::to_string(score));
+		for (int i = 0; i < item_array.size(); i++) {
+			if (item_array[i].getHitbox().intersects(player.getHitbox()) and treasure_picked_play == false) {
+				player.Upgrade(item.getId());
+				treasure_picked_play = true;
+				item_array.erase(item_array.begin() + i);
+				score += 10;
+				win.setTitle("Score : " + std::to_string(score));
+			}
 		}
 
 		if (player.GetHp() <= 0) {
@@ -374,7 +402,7 @@ void Engine::statePLAY() {
 		drawRoom();
 
 		for (int i = 0; i < item_array.size(); i++) {
-			if (!treasure_picked) {
+			if (!treasure_picked_play) {
 				win.draw(item_array[i].getShape());
 			}
 		}
@@ -416,17 +444,29 @@ void Engine::stateBR() {
 	sf::RectangleShape trophy;
 	sf::Texture trophyTexture;
 	sf::Sprite trophySprite;
+	sf::RectangleShape portal;
+	sf::Texture portalTexture;
+	sf::Sprite portalSprite;
 
 	if (!trophyTexture.loadFromFile("Image/Trophy-1.png")) {
 		abort();
 	}
+	if (!portalTexture.loadFromFile("Image/Portal-2.png")) {
+		abort();
+	}
+	
 
-	trophy.setSize(sf::Vector2f(80, 80));
+	trophy.setSize(sf::Vector2f(100, 100));
 	trophy.setOrigin(trophy.getLocalBounds().width / 2, trophy.getLocalBounds().height / 2);
 	trophy.setPosition(sf::Vector2f(win_width / 2, win_height / 2));
-	trophySprite.setTexture(trophyTexture);
-	trophySprite.setOrigin(trophySprite.getLocalBounds().width / 2, trophySprite.getLocalBounds().height / 2);
-	trophySprite.setPosition(sf::Vector2f(win_width / 2, win_height / 2));
+	trophy.setTexture(&trophyTexture);
+
+	portal.setSize(sf::Vector2f(100, 150));
+	portal.setOrigin(portal.getLocalBounds().width / 2, portal.getLocalBounds().height / 2);
+	portal.setPosition(sf::Vector2f(win_width / 2, win_height / 2));
+	portal.setTexture(&portalTexture);
+
+	Animation portalAnimation(&portalTexture, sf::Vector2u(1,4), 0.3f);
 
 	while (current_state == BOSS_ROOM) {
 		sf::Event evnt;
@@ -449,10 +489,15 @@ void Engine::stateBR() {
 		movePlayerNextRoom();
 
 		if (player.getHitbox().intersects(trophy.getGlobalBounds()) and enemy_array.size() == 0) {
-			isWin = true;
 			score += 10;
+			isaacdamage = player.GetDamage();
+			isaacfireSpeed = player.GetFireSpeed();
+			isaacfireTime = player.GetFireTime();
+			isaachp = player.GetHp();
+			isaacscore = score;
 			win.setTitle("Score : " + std::to_string(score));
-			current_state = END;
+			if (level < 3) { level++; reset(); current_state = PLAY; }
+			else { isWin = true; current_state = END; }
 		}
 
 		if (player.GetHp() <= 0) {
@@ -463,6 +508,7 @@ void Engine::stateBR() {
 		playerShoot();
 
 		if (enemy_array.size() == 0) {
+			win.setTitle("Score : " + std::to_string(score));
 			addVisitedRoom();
 			unlockDoors();
 			movePlayerNextRoom();
@@ -540,7 +586,12 @@ void Engine::stateBR() {
 		}
 
 		if (enemy_array.size() == 0) {
-			win.draw(trophySprite);
+			if(level == 3) { win.draw(trophy); }
+			else { 
+				portalAnimation.Update(0, deltaTime);
+				portal.setTextureRect(portalAnimation.uvRect);
+				win.draw(portal); 
+			}
 		}
 		else {
 			for (int i = 0; i < enemy_array.size(); ++i) {
@@ -676,7 +727,7 @@ void Engine::stateEND() {
 				}
 
 				if (user_input == 32) {
-					scoreboard.Add(user_str, score);
+					if (score > scoreboard.GetLastScore()) { scoreboard.Add(user_str, score); }
 					current_state = MENU;
 				}
 
