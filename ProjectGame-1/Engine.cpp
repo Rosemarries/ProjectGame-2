@@ -265,6 +265,20 @@ void Engine::statePLAY() {
 	std::vector < std::shared_ptr < Enemy >> enemy_array;
 	while (current_state == PLAY) {
 		deltaTime = clock.restart().asSeconds();
+		if (la == level) {
+			if (level == 1) {
+				roomTexture.loadFromFile("Image/RoomLevel1.png");
+			}
+			else if (level == 2) {
+				roomTexture.loadFromFile("Image/RoomLevel2-1.png");
+			}
+			else {
+				roomTexture.loadFromFile("Image/RoomLevel3-1.png");
+			}
+			roomBg.setTexture(&roomTexture);
+			la++;
+		}
+
 		if (new_room) {
 			prepareRoomTileMap();
 			if (checkIsUniqueVisitedRoom(room_map_pos_y, room_map_pos_x)) {

@@ -93,6 +93,7 @@ class Engine {
 	int room_map_pos_x;
 	int score;
 	int level = 1;
+	int la = 1;
 	bool new_room;
 	bool isWin;
 	bool treasure_picked;
