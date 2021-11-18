@@ -1,6 +1,6 @@
 #include "Pause.h"
 Pause::Pause() {
-	if (!font.loadFromFile("IsaacScript2.ttf") || !bgMenu.loadFromFile("Image/MenuBg-1.png")) {
+	if (!font.loadFromFile("IsaacScript2.ttf") || !bgMenu.loadFromFile("Image/MenuBg-2.png")) {
 		abort();
 	}
 
