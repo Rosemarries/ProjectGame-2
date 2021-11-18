@@ -149,6 +149,7 @@ void Engine::stateMENU() {
 						switch (menu.GetPressedItem()) {
 						case 0: {
 							level = 1;
+							la = 1;
 							isaachp = 10;
 							isaacfireSpeed = 3.0f;
 							isaacfireTime = 0.5f;
@@ -293,6 +294,7 @@ void Engine::reset() {
 		player.SetFireTime(isaacfireTime);
 		player.SetHp(isaachp);
 		score = isaacscore;
+		boss_defeated = false;
 	}
 	else {
 		score = 0;
@@ -329,6 +331,7 @@ void Engine::statePLAY() {
 	std::vector < std::shared_ptr < Enemy >> enemy_array;
 	while (current_state == PLAY) {
 		deltaTime = clock.restart().asSeconds();
+		win.setTitle("Score : " + std::to_string(score));
 		if (la == level) {
 			if (level == 1) {
 				roomTexture.loadFromFile("Image/RoomLevel1.png");
@@ -550,6 +553,8 @@ void Engine::stateBR() {
 	while (current_state == BOSS_ROOM) {
 		sf::Event evnt;
 		deltaTime = clock.restart().asSeconds();
+		win.setTitle("Score : " + std::to_string(score));
+
 		while (win.pollEvent(evnt)) {
 			if (evnt.type == sf::Event::Closed) {
 				scoreboard.SaveScoreboardToFile();
