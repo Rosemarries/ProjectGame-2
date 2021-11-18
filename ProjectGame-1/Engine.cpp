@@ -7,7 +7,7 @@ Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAni
 	font.loadFromFile("IsaacScript2.ttf");
 	room_tile_map.resize(11, std::vector < Tile >(15));
 
-	if (!soundPlayerHurtBuffer.loadFromFile("Sound/Isaac_Hurt_Grunt1.wav") || !soundBulletBuffer.loadFromFile("Sound/plop.wav") || !soundUnlockDoorBuffer.loadFromFile("Sound/Unlock00.wav") || !soundTRBuffer.loadFromFile("Sound/weapon room.wav") || !soundChangePageBuffer.loadFromFile("Sound/Book Page Turn 12.wav") || !soundBulletHittedBuffer.loadFromFile("Sound/animal_squish1.wav") || !soundBossDiedBuffer.loadFromFile("Sound/boss1_explosions1.wav") || !soundItemSpawnBuffer.loadFromFile("Sound/bloodbank spawn1.wav")) {
+	if (!soundPlayerHurtBuffer.loadFromFile("Sound/Isaac_Hurt_Grunt1.wav") || !soundBulletBuffer.loadFromFile("Sound/plop.wav") || !soundUnlockDoorBuffer.loadFromFile("Sound/Unlock00.wav") || !soundTRBuffer.loadFromFile("Sound/weapon room.wav") || !soundChangePageBuffer.loadFromFile("Sound/Book Page Turn 12.wav") || !soundBulletHittedBuffer.loadFromFile("Sound/animal_squish1.wav") || !soundBossDiedBuffer.loadFromFile("Sound/boss1_explosions1.wav") || !soundItemSpawnBuffer.loadFromFile("Sound/bloodbank spawn1.wav") || !soundBOSSBuffer.loadFromFile("Sound/isaacunicorn.wav") || !soundPLAYBuffer.loadFromFile("Sound/levelbumper.wav")) {
 		abort();
 	}
 	soundPlayerHurt.setBuffer(soundPlayerHurtBuffer);
@@ -18,6 +18,8 @@ Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAni
 	soundBulletHitted.setBuffer(soundBulletHittedBuffer);
 	soundBossDied.setBuffer(soundBossDiedBuffer);
 	soundItemSpawn.setBuffer(soundItemSpawnBuffer);
+	soundPLAY.setBuffer(soundPLAYBuffer);
+	soundBOSS.setBuffer(soundBOSSBuffer);
 
 	sf::Texture tmp_texture;
 	for (int i = 0; i < 4; ++i) {
@@ -28,7 +30,7 @@ Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAni
 	}
 	clock_to_delay_between_bullet.restart();
 	scoreboard.LoadScoreboardFromFile();
-	current_state = MENU;
+	current_state = GAME_START;
 }
 
 /*void ResizeView(sf::RenderWindow& window, sf::View& view, float width, float height) {
@@ -61,12 +63,68 @@ void Engine::stateMachine() {
         case END:
             stateEND();
             break;
+		case CREDIT:
+			stateCREDIT();
+			break;
+		case GAME_START:
+			stateGAME_START();
+			break;
         }
     }
 }
 
+void Engine::stateGAME_START() {
+	sf::SoundBuffer soundBuffer;
+	sf::Sound sound;
+	if (!soundBuffer.loadFromFile("Sound/7689.wav")) {
+		abort();
+	}
+	sound.setBuffer(soundBuffer);
+	sound.play();
+
+	sf::RectangleShape bg;
+	bg.setSize(sf::Vector2f(1280.0f, 720.0f));
+	bg.setOrigin(bg.getSize() / 2.0f);
+	bg.setPosition(sf::Vector2f(win_width / 2.0f, win_height / 2.0f));
+	sf::Texture startTexture;
+	if (!startTexture.loadFromFile("Image/IsaacGameStart-1.jpg")) {
+		abort();
+	}
+	//bg.setFillColor(sf::Color::Black);
+	bg.setTexture(&startTexture);
+
+	sf::Text pressedPlease;
+	pressedPlease.setString("Press any button.");
+	pressedPlease.setFont(font);
+	pressedPlease.setCharacterSize(30);
+	pressedPlease.setPosition(sf::Vector2f(win_width / 2.0f - 80.0f, 650.0f));
+
+	while (current_state == GAME_START)
+	{
+		win.setTitle("GAME START!");
+		sf::Event evnt;
+		while (win.pollEvent(evnt)) {
+			switch (evnt.type) {
+				case sf::Event::KeyReleased: {
+					sound.stop();
+					current_state = MENU;
+					break;
+				}
+			}
+			if (evnt.type == sf::Event::Closed) {
+				scoreboard.SaveScoreboardToFile();
+				current_state = PERM_END;
+				win.close();
+			}
+		}
+		win.draw(bg);
+		win.draw(pressedPlease);
+		win.display();
+	}
+}
+
 void Engine::stateMENU() {
-	if (!soundBgBuffer.loadFromFile("Sound/7689.wav")) {
+	if (!soundBgBuffer.loadFromFile("Sound/7702.wav")) {
 		abort();
 	}
 	soundChangePage.play();
@@ -108,6 +166,11 @@ void Engine::stateMENU() {
 						}
 						case 2: {
 							soundBg.stop();
+							current_state = CREDIT;
+							break;
+						}
+						case 3: {
+							soundBg.stop();
 							current_state = PERM_END;
 							scoreboard.SaveScoreboardToFile();
 							win.close();
@@ -135,7 +198,7 @@ void Engine::stateMENU() {
 }
 
 void Engine::stateSCOREBOARD() {
-	if (!soundBgBuffer.loadFromFile("Sound/7702.wav")) {
+	if (!soundBgBuffer.loadFromFile("Sound/7669.wav")) {
 		abort();
 	}
 	soundChangePage.play();
@@ -248,7 +311,7 @@ void Engine::statePLAY() {
 	roomBg.setSize(sf::Vector2f(win_width, win_height));
 	roomBg.setPosition(sf::Vector2f(0.0f, 0.0f));
 	sf::Texture roomTexture;
-	if (level == 1) {
+	/*if (level == 1) {
 		roomTexture.loadFromFile("Image/RoomLevel1.png");
 	}
 	else if (level == 2) {
@@ -257,10 +320,11 @@ void Engine::statePLAY() {
 	else {
 		roomTexture.loadFromFile("Image/RoomLevel3-1.png");
 	}
-	roomBg.setTexture(&roomTexture);
+	roomBg.setTexture(&roomTexture);*/
 	Item item;
 	std::vector <Item> item_array;
 
+	soundPLAY.play();
 	win.setTitle("Score : " + std::to_string(score));
 	std::vector < std::shared_ptr < Enemy >> enemy_array;
 	while (current_state == PLAY) {
@@ -482,6 +546,7 @@ void Engine::stateBR() {
 
 	Animation portalAnimation(&portalTexture, sf::Vector2u(1,4), 0.3f);
 
+	soundBOSS.play();
 	while (current_state == BOSS_ROOM) {
 		sf::Event evnt;
 		deltaTime = clock.restart().asSeconds();
@@ -760,6 +825,56 @@ void Engine::stateEND() {
 
 	if (score <= scoreboard.GetLastScore() or isWin == false) {
 		current_state = MENU;
+	}
+}
+
+void Engine::stateCREDIT() {
+	sf::SoundBuffer soundBuffer;
+	sf::Sound sound;
+	if (!soundBuffer.loadFromFile("Sound/isaacxpholyroomreveal.wav")) {
+		abort();
+	}
+	sound.setBuffer(soundBuffer);
+	sound.play();
+
+	sf::RectangleShape bg;
+	bg.setSize(sf::Vector2f(1050.0f, 720.0f));
+	bg.setOrigin(bg.getSize() / 2.0f);
+	bg.setPosition(sf::Vector2f(win_width / 2.0f, win_height / 2.0f));
+	sf::Texture startTexture;
+	if (!startTexture.loadFromFile("Image/Credit-1.png")) {
+		abort();
+	}
+	//bg.setFillColor(sf::Color::Black);
+	bg.setTexture(&startTexture);
+
+	sf::Text pressedPlease;
+	pressedPlease.setString("Press any button.");
+	pressedPlease.setFont(font);
+	pressedPlease.setCharacterSize(30);
+	pressedPlease.setPosition(sf::Vector2f(win_width / 2.0f - 80.0f, 650.0f));
+
+	while (current_state == CREDIT)
+	{
+		win.setTitle("CREDIT");
+		sf::Event evnt;
+		while (win.pollEvent(evnt)) {
+			switch (evnt.type) {
+			case sf::Event::KeyReleased: {
+				sound.stop();
+				current_state = MENU;
+				break;
+			}
+			}
+			if (evnt.type == sf::Event::Closed) {
+				scoreboard.SaveScoreboardToFile();
+				current_state = PERM_END;
+				win.close();
+			}
+		}
+		win.draw(bg);
+		win.draw(pressedPlease);
+		win.display();
 	}
 }
 

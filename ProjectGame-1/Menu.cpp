@@ -21,7 +21,8 @@ Menu::Menu() {
 	menu[0].setFillColor(sf::Color::Red);
 	menu[0].setString("PLAY");
 	menu[1].setString("SCOREBOARD");
-	menu[2].setString("EXIT");
+	menu[2].setString("CREDIT");
+	menu[3].setString("EXIT");
 
 	selectedItemIndex = 0;
 }

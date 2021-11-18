@@ -57,6 +57,10 @@ class Engine {
 	sf::SoundBuffer soundTRBuffer;
 	sf::SoundBuffer soundBossDiedBuffer;
 	sf::SoundBuffer soundItemSpawnBuffer;
+	sf::SoundBuffer soundPLAYBuffer;
+	sf::SoundBuffer soundBOSSBuffer;
+	sf::Sound soundBOSS;
+	sf::Sound soundPLAY;
 	sf::Sound soundBg;
 	sf::Sound soundEffect;
 	sf::Sound soundChangePage;
@@ -118,6 +122,8 @@ class Engine {
 	void stateBR(); 	// BR - boss room
 	void stateEND();
 	void statePAUSE();
+	void stateCREDIT();
+	void stateGAME_START();
 
 	void reset();
 
@@ -135,7 +141,7 @@ class Engine {
 	bool isCollsionWithWall(sf::FloatRect objectPos, bool isBullet = false) const;
 	void ResizeView(sf::RenderWindow& window, sf::View& view, float width, float height);
 
-	enum states { MENU, PLAY, TREASURE_ROOM, BOSS_ROOM, SCOREBOARD, END, PERM_END, PAUSE };
+	enum states { MENU, PLAY, TREASURE_ROOM, BOSS_ROOM, SCOREBOARD, END, PERM_END, PAUSE, CREDIT, GAME_START };
 	states current_state;
 	states roomNow;
 public:
