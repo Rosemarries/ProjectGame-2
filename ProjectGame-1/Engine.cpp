@@ -738,12 +738,20 @@ void Engine::stateTR() {
 }
 
 void Engine::stateEND() {
+	sf::Texture endTexture;
+	sf::RectangleShape endX;
+	endX.setSize(sf::Vector2f(win_width, win_height));
+	endX.setOrigin(endX.getSize() / 2.0f);
+	endX.setPosition(sf::Vector2f(win_width / 2.0f, win_height / 2.0f));
+	endTexture.loadFromFile("Image/ScoreboardBg-1.png");
+	endX.setTexture(&endTexture);
+
 	std::string user_str;
 	font.loadFromFile("IsaacScript2.ttf");
 	sf::Text top_score_text;
 	top_score_text.setFont(font);
 	top_score_text.setStyle(sf::Text::Bold);
-	top_score_text.setFillColor(sf::Color::Magenta);
+	top_score_text.setFillColor(sf::Color::Black);
 	top_score_text.setCharacterSize(120);
 	top_score_text.setString("New Score");
 	top_score_text.setOrigin(top_score_text.getLocalBounds().width / 2, top_score_text.getLocalBounds().height / 2);
@@ -752,6 +760,7 @@ void Engine::stateEND() {
 	sf::Text player_score_text;
 	player_score_text.setFont(font);
 	player_score_text.setStyle(sf::Text::Bold);
+	player_score_text.setFillColor(sf::Color::Red);
 	player_score_text.setCharacterSize(80);
 	player_score_text.setString("Score: " + std::to_string(score));
 	player_score_text.setOrigin(player_score_text.getLocalBounds().width / 2, player_score_text.getLocalBounds().height / 2);
@@ -760,7 +769,7 @@ void Engine::stateEND() {
 	sf::Text enter_text;
 	enter_text.setFont(font);
 	enter_text.setStyle(sf::Text::Bold);
-	enter_text.setFillColor(sf::Color::Yellow);
+	enter_text.setFillColor(sf::Color::Black);
 	enter_text.setCharacterSize(50);
 	enter_text.setString("Enter your name:        ");
 	enter_text.setOrigin(enter_text.getLocalBounds().width / 2, 0);
@@ -769,13 +778,15 @@ void Engine::stateEND() {
 	sf::Text user_text;
 	user_text.setFont(font);
 	user_text.setCharacterSize(50);
+	user_text.setFillColor(sf::Color::Black);
 	user_text.setString(".....");
-	user_text.setPosition(sf::Vector2f(win.getSize().x / 2 + 150, 370));
+	user_text.setPosition(sf::Vector2f(win.getSize().x / 2 + 50, 370));
 
 	sf::Text confirmation_text;
 	confirmation_text.setFont(font);
-	confirmation_text.setStyle(sf::Text::Bold);
+	//confirmation_text.setStyle(sf::Text::Bold);
 	confirmation_text.setCharacterSize(70);
+	confirmation_text.setFillColor(sf::Color::Black);
 	confirmation_text.setString("Press SPACE to confirm");
 	confirmation_text.setOrigin(confirmation_text.getLocalBounds().width / 2, confirmation_text.getLocalBounds().height / 2);
 	confirmation_text.setPosition(sf::Vector2f(win.getSize().x / 2, win.getSize().y - 230));
@@ -794,7 +805,7 @@ void Engine::stateEND() {
 
 				if ((user_input >= 65 and user_input <= 90) or
 					(user_input >= 97 and user_input <= 122)) {
-					if (user_str.length() < 5) {
+					if (user_str.length() < 10) {
 						user_str += event.text.unicode;
 					}
 				}
@@ -815,6 +826,7 @@ void Engine::stateEND() {
 		}
 
 		win.clear();
+		win.draw(endX);
 		win.draw(top_score_text);
 		win.draw(player_score_text);
 		win.draw(enter_text);

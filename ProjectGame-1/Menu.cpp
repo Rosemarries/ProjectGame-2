@@ -1,11 +1,11 @@
 #include "Menu.h"
 
 Menu::Menu() {
-	if (!font.loadFromFile("IsaacScript2.ttf") || !bgMenu.loadFromFile("Image/MenuBg-2.png")) {
+	if (!font.loadFromFile("IsaacScript2.ttf") || !bgMenu.loadFromFile("Image/MenuBg-3.png")) {
 		abort();
 	}
 
-	float width = 720.0f, height = 720.0f;
+	float width = 1050.0f, height = 720.0f;
 	bg.setSize(sf::Vector2f(width, height));
 	bg.setOrigin(sf::Vector2f(width / 2.0f, height / 2.0f));
 	bg.setPosition(1050.0f / 2.0f, 720.0f / 2.0f);
@@ -15,8 +15,9 @@ Menu::Menu() {
 	for (int i = 0; i < MAX_NUMBER_OF_ITEMS; i++) {
 		menu[i].setFont(font);
 		menu[i].setCharacterSize(size);
-		menu[i].setPosition(sf::Vector2f(320.0f, height / (MAX_NUMBER_OF_ITEMS + 1) * (i + 1) - 60));
+		menu[i].setPosition(sf::Vector2f(320.0f + 20 * i, height / (MAX_NUMBER_OF_ITEMS + 1) * (i + 1) - 50));
 		menu[i].setFillColor(sf::Color::Black);
+		menu[i].setRotation(-5.0);
 	}
 	menu[0].setFillColor(sf::Color::Red);
 	menu[0].setString("PLAY");

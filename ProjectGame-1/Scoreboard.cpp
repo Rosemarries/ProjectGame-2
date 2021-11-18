@@ -7,12 +7,12 @@ Scoreboard::Scoreboard() {
 	if (!font.loadFromFile("IsaacScript2.ttf")) {
 		//handle error
 	}
-	float width = 720.0f, height = 720.0f;
+	float width = 1050.0f, height = 720.0f;
 	scoreboard_array.resize(5);
 	Reset();
 	LoadScoreboardFromFile();
 
-	texture.loadFromFile("Image/MenuBg-2.png");
+	texture.loadFromFile("Image/ScoreboardBg-1.png");
 	bg.setSize(sf::Vector2f(width, height));
 	bg.setOrigin(sf::Vector2f(width / 2.0f, height / 2.0f));
 	bg.setPosition(1050.0f / 2.0f, 720.0f / 2.0f);
@@ -21,14 +21,14 @@ Scoreboard::Scoreboard() {
 	int size = 50;
 	text.setFont(font);
 	text.setCharacterSize(2 * size);
-	text.setPosition(sf::Vector2f(320.0f, 50.0f));
+	text.setPosition(sf::Vector2f(300.0f, 100.0f));
 	text.setFillColor(sf::Color::Black);
 	text.setStyle(sf::Text::Bold);
 	text.setString("SCOREBOARD");
 
 	back.setFont(font);
 	back.setCharacterSize(size);
-	back.setPosition(sf::Vector2f(320.0f, 550.0f));
+	back.setPosition(sf::Vector2f(150.0f, 550.0f));
 	back.setFillColor(sf::Color::Red);
 	back.setString("BACK");
 
@@ -67,10 +67,10 @@ void Scoreboard::Draw(sf::RenderWindow& window) {
 	int i = 0;
 	for (auto it = Scoreboard::BEGIN(); it != Scoreboard::END(); ++it) {
 		score_text.setString(it->name);
-		score_text.setPosition(320.0f, i * 50 + 200);
+		score_text.setPosition(250.0f, i * 50 + 225);
 		window.draw(score_text);
 		score_text.setString(std::to_string(it->score));
-		score_text.setPosition(700.0f, i * 50 + 200);
+		score_text.setPosition(650.0f, i * 50 + 225);
 		window.draw(score_text);
 		i++;
 	}
