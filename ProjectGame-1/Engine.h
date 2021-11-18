@@ -45,6 +45,7 @@ class Engine {
 	sf::Font font;
 	sf::Clock clock_to_delay_between_bullet;
 	sf::Clock clock;
+	sf::Texture doorTexture;
 
 	//Sound:
 	sf::SoundBuffer soundBgBuffer;

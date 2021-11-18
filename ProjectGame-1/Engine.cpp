@@ -5,6 +5,7 @@ Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAni
 	view.setSize(sf::Vector2f(win_width, win_height));
 	win.setFramerateLimit(60);
 	font.loadFromFile("IsaacScript2.ttf");
+	doorTexture.loadFromFile("Image/Door-1.png");
 	room_tile_map.resize(11, std::vector < Tile >(15));
 
 	if (!soundPlayerHurtBuffer.loadFromFile("Sound/Isaac_Hurt_Grunt1.wav") || !soundBulletBuffer.loadFromFile("Sound/plop.wav") || !soundUnlockDoorBuffer.loadFromFile("Sound/Unlock00.wav") || !soundTRBuffer.loadFromFile("Sound/weapon room.wav") || !soundChangePageBuffer.loadFromFile("Sound/Book Page Turn 12.wav") || !soundBulletHittedBuffer.loadFromFile("Sound/animal_squish1.wav") || !soundBossDiedBuffer.loadFromFile("Sound/boss1_explosions1.wav") || !soundItemSpawnBuffer.loadFromFile("Sound/bloodbank spawn1.wav") || !soundBOSSBuffer.loadFromFile("Sound/isaacunicorn.wav") || !soundPLAYBuffer.loadFromFile("Sound/levelbumper.wav")) {
@@ -1034,7 +1035,8 @@ void Engine::unlockDoors() {
 				room_tile_map[row][col].can_go_through = true;
 				room_tile_map[row][col].can_shoot_through = true;
 				room_tile_map[row][col].shape.setFillColor(sf::Color::Yellow);
-				room_tile_map[row][col].shape_sprite.setTexture(room_texture[2]);
+				//room_tile_map[row][col].shape_sprite.setTexture(room_texture[2]);
+				room_tile_map[row][col].shape_sprite.setTexture(doorTexture);
 			}
 		}
 	}
@@ -1071,6 +1073,22 @@ void Engine::prepareRoomTileMap() {
 				}
 				case 'D': {
 					room_tile_map[row][col].shape_sprite.setTexture(room_texture[0]);
+					room_tile_map[row][col].shape_sprite.setOrigin(room_tile_map[row][col].shape.getSize() / 2.0f);
+					room_tile_map[row][col].shape_sprite.setPosition(room_tile_map[row][col].shape.getPosition()+room_tile_map[row][col].shape_sprite.getOrigin());
+					
+					if (row == 0 && col == 7) {
+						room_tile_map[row][col].shape_sprite.setRotation(0);
+					}
+					else if(row == 5 && col == 0) {
+						room_tile_map[row][col].shape_sprite.setRotation(-90);
+					}
+					else if (row == 5 && col == 14) {
+						room_tile_map[row][col].shape_sprite.setRotation(90);
+					}
+					else if (row == 10 && col == 7) {
+						room_tile_map[row][col].shape_sprite.setRotation(180);
+					}
+
 					if (map.IsMovePossible(room_map_pos_y - 1, room_map_pos_x) and row == 0) {
 						room_tile_map[row][col].is_door = true;
 					}
@@ -1096,7 +1114,7 @@ void Engine::drawRoom() {
 	for (int row = 0; row < room_tile_map.size(); row++) {
 		for (int col = 0; col < room_tile_map[row].size(); col++) {
 			if (room_tile_map[row][col].is_door == true && room_tile_map[row][col].can_go_through == true) {
-				win.draw(room_tile_map[row][col].shape);
+				//win.draw(room_tile_map[row][col].shape);
 				win.draw(room_tile_map[row][col].shape_sprite);
 			}
 			else if (char_tile_map[row][col] == '_') {
