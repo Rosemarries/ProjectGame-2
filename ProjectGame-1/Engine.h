@@ -102,7 +102,7 @@ class Engine {
 	bool isWin;
 	bool treasure_picked;
 	bool treasure_picked_play;
-	bool boss_defeated;
+	bool boss_defeated[3];
 	float deltaTime = 0.0f;
 
 	int randomHeart;

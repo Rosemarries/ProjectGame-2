@@ -286,7 +286,7 @@ void Engine::reset() {
 	isWin = false;
 	treasure_picked = false;
 	treasure_picked_play = false;
-	boss_defeated = false;
+	boss_defeated[level-1] = false;
 
 	if (level > 1) {
 		player.SetDamage(isaacdamage);
@@ -294,7 +294,6 @@ void Engine::reset() {
 		player.SetFireTime(isaacfireTime);
 		player.SetHp(isaachp);
 		score = isaacscore;
-		boss_defeated = false;
 	}
 	else {
 		score = 0;
@@ -517,7 +516,7 @@ void Engine::stateBR() {
 	addVisitedRoom();
 
 	std::vector<std::shared_ptr<Enemy>> enemy_array;
-	if (boss_defeated == false) {
+	if (boss_defeated[level - 1] == false) {
 		std::shared_ptr<Boss> boss = std::make_shared<Boss>(sf::Vector2f(win_width / 2, win_height / 2));
 		enemy_array.push_back(boss);
 	}
@@ -596,7 +595,7 @@ void Engine::stateBR() {
 			addVisitedRoom();
 			unlockDoors();
 			movePlayerNextRoom();
-			boss_defeated = true;
+			boss_defeated[level - 1] = true;
 		}
 
 		for (int i = 0; i < enemy_array.size(); ++i) {
@@ -1067,7 +1066,7 @@ void Engine::prepareRoomTileMap() {
 				case '_': {
 					room_tile_map[row][col].is_wall = false;
 					room_tile_map[row][col].can_shoot_through = true;
-					room_tile_map[row][col].shape.setFillColor(sf::Color::Green);
+					room_tile_map[row][col].shape.setFillColor(sf::Color(0,0,0,150));
 					room_tile_map[row][col].shape_sprite.setTexture(room_texture[1]);
 				}
 				case 'D': {
@@ -1092,11 +1091,17 @@ void Engine::prepareRoomTileMap() {
 }
 
 void Engine::drawRoom() {
+	std::vector<std::vector<char>> char_tile_map = map.GetRoomTileMap();
+
 	for (int row = 0; row < room_tile_map.size(); row++) {
 		for (int col = 0; col < room_tile_map[row].size(); col++) {
 			if (room_tile_map[row][col].is_door == true && room_tile_map[row][col].can_go_through == true) {
 				win.draw(room_tile_map[row][col].shape);
 				win.draw(room_tile_map[row][col].shape_sprite);
+			}
+			else if (char_tile_map[row][col] == '_') {
+				win.draw(room_tile_map[row][col].shape);
+				//win.draw(room_tile_map[row][col].shape_sprite);
 			}
 		}
 	}
