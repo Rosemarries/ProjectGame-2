@@ -981,6 +981,7 @@ bool Engine::movePlayerNextRoom() {
 			stateBR();
 		}
 		else {
+			soundPLAY.play();
 			current_state = PLAY;
 		}
 
