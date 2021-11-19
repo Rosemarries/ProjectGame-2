@@ -159,8 +159,6 @@ sfml-window-d.lib
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="GameTile.cpp" />
-    <ClCompile Include="GameWorld.cpp" />
     <ClCompile Include="Gaper.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
@@ -179,8 +177,6 @@ sfml-window-d.lib
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine.h" />
-    <ClInclude Include="GameTile.h" />
-    <ClInclude Include="GameWorld.h" />
     <ClInclude Include="Gaper.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Map.h" />
