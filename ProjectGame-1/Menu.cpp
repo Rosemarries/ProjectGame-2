@@ -15,15 +15,16 @@ Menu::Menu() {
 	for (int i = 0; i < MAX_NUMBER_OF_ITEMS; i++) {
 		menu[i].setFont(font);
 		menu[i].setCharacterSize(size);
-		menu[i].setPosition(sf::Vector2f(320.0f + 20 * i, height / (MAX_NUMBER_OF_ITEMS + 1) * (i + 1) - 50));
+		menu[i].setPosition(sf::Vector2f(320.0f + 20 * i, (height / (MAX_NUMBER_OF_ITEMS + 2)) * (i + 1) - 10));
 		menu[i].setFillColor(sf::Color::Black);
 		menu[i].setRotation(-5.0);
 	}
 	menu[0].setFillColor(sf::Color::Red);
 	menu[0].setString("PLAY");
 	menu[1].setString("SCOREBOARD");
-	menu[2].setString("CREDIT");
-	menu[3].setString("EXIT");
+	menu[2].setString("HOW TO PLAY");
+	menu[3].setString("CREDIT");
+	menu[4].setString("EXIT");
 
 	selectedItemIndex = 0;
 }

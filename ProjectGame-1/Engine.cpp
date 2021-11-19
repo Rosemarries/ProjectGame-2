@@ -70,6 +70,9 @@ void Engine::stateMachine() {
 		case GAME_START:
 			stateGAME_START();
 			break;
+		case HOW_TO_PLAY:
+			stateHOW_TO_PLAY();
+			break;
         }
     }
 }
@@ -168,10 +171,15 @@ void Engine::stateMENU() {
 						}
 						case 2: {
 							soundBg.stop();
-							current_state = CREDIT;
+							current_state = HOW_TO_PLAY;
 							break;
 						}
 						case 3: {
+							soundBg.stop();
+							current_state = CREDIT;
+							break;
+						}
+						case 4: {
 							soundBg.stop();
 							current_state = PERM_END;
 							scoreboard.SaveScoreboardToFile();
@@ -270,6 +278,56 @@ void Engine::statePAUSE() {
 	}
 }
 
+void Engine::stateHOW_TO_PLAY() {
+	sf::SoundBuffer soundBuffer;
+	sf::Sound sound;
+	if (!soundBuffer.loadFromFile("Sound/7689.wav")) {
+		abort();
+	}
+	sound.setBuffer(soundBuffer);
+	sound.play();
+
+	sf::RectangleShape bg;
+	bg.setSize(sf::Vector2f(1050.0f, 720.0f));
+	bg.setOrigin(bg.getSize() / 2.0f);
+	bg.setPosition(sf::Vector2f(win_width / 2.0f, win_height / 2.0f));
+	sf::Texture startTexture;
+	if (!startTexture.loadFromFile("Image/HowToPlay-1.png")) {
+		abort();
+	}
+	//bg.setFillColor(sf::Color::Black);
+	bg.setTexture(&startTexture);
+
+	sf::Text pressedPlease;
+	pressedPlease.setString("Press any button.");
+	pressedPlease.setFont(font);
+	pressedPlease.setCharacterSize(30);
+	pressedPlease.setPosition(sf::Vector2f(win_width / 2.0f - 80.0f, 650.0f));
+
+	while (current_state == HOW_TO_PLAY)
+	{
+		win.setTitle("GAME START!");
+		sf::Event evnt;
+		while (win.pollEvent(evnt)) {
+			switch (evnt.type) {
+			case sf::Event::KeyReleased: {
+				sound.stop();
+				current_state = MENU;
+				break;
+			}
+			}
+			if (evnt.type == sf::Event::Closed) {
+				scoreboard.SaveScoreboardToFile();
+				current_state = PERM_END;
+				win.close();
+			}
+		}
+		win.draw(bg);
+		win.draw(pressedPlease);
+		win.display();
+	}
+}
+
 void Engine::reset() {
 	bullet_array.clear();
 	visited_room_map.clear();
@@ -355,7 +413,7 @@ void Engine::statePLAY() {
 				int maxMon = rand() % 7;
 				int i = 0;
 				while (i < maxMon) {
-					std::shared_ptr<Gaper> gaper = std::make_shared<Gaper>(sf::Vector2f(100 * i + 100, 100 * i + 100));
+					std::shared_ptr<Gaper> gaper = std::make_shared<Gaper>(sf::Vector2f(100 * i + 100, 100 * i + 100), sf::Vector2f(50.0f, 70.0f), 10.0f + ((level - 1) * 5), 0.5f, 2.0f);
 					enemy_array.push_back(gaper);
 					++i;
 				}
@@ -573,7 +631,10 @@ void Engine::stateBR() {
 		}
 
 		if (ba < level) {
-			std::shared_ptr<Boss> boss = std::make_shared<Boss>(sf::Vector2f((ba + 1) * 100.0f, (ba + 1) * 100.0f));
+			float x, y;
+			x = rand() % 5;
+			y = rand() % 5;
+			std::shared_ptr<Boss> boss = std::make_shared<Boss>(sf::Vector2f((x + 1) * 100.0f, (y + 1) * 100.0f));
 			enemy_array.push_back(boss);
 			//enemy_array[ba]->getShape().setPosition(sf::Vector2f((ba + 1) * 100.0f, (ba + 1) * 100.0f));
 			ba++;

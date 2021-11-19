@@ -126,6 +126,7 @@ class Engine {
 	void statePAUSE();
 	void stateCREDIT();
 	void stateGAME_START();
+	void stateHOW_TO_PLAY();
 
 	void reset();
 
@@ -143,7 +144,7 @@ class Engine {
 	bool isCollsionWithWall(sf::FloatRect objectPos, bool isBullet = false) const;
 	void ResizeView(sf::RenderWindow& window, sf::View& view, float width, float height);
 
-	enum states { MENU, PLAY, TREASURE_ROOM, BOSS_ROOM, SCOREBOARD, END, PERM_END, PAUSE, CREDIT, GAME_START };
+	enum states { MENU, PLAY, TREASURE_ROOM, BOSS_ROOM, SCOREBOARD, END, PERM_END, PAUSE, CREDIT, GAME_START, HOW_TO_PLAY };
 	states current_state;
 	states roomNow;
 public:
