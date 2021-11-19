@@ -5,7 +5,7 @@ Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAni
 	view.setSize(sf::Vector2f(win_width, win_height));
 	win.setFramerateLimit(60);
 	font.loadFromFile("IsaacScript2.ttf");
-	doorTexture.loadFromFile("Image/Door-1.png");
+	doorTexture.loadFromFile("Image/Door-3.png");
 	room_tile_map.resize(11, std::vector < Tile >(15));
 
 	if (!soundPlayerHurtBuffer.loadFromFile("Sound/Isaac_Hurt_Grunt1.wav") || !soundBulletBuffer.loadFromFile("Sound/plop.wav") || !soundUnlockDoorBuffer.loadFromFile("Sound/Unlock00.wav") || !soundTRBuffer.loadFromFile("Sound/weapon room.wav") || !soundChangePageBuffer.loadFromFile("Sound/Book Page Turn 12.wav") || !soundBulletHittedBuffer.loadFromFile("Sound/animal_squish1.wav") || !soundBossDiedBuffer.loadFromFile("Sound/boss1_explosions1.wav") || !soundItemSpawnBuffer.loadFromFile("Sound/bloodbank spawn1.wav") || !soundBOSSBuffer.loadFromFile("Sound/isaacunicorn.wav") || !soundPLAYBuffer.loadFromFile("Sound/levelbumper.wav")) {
@@ -287,7 +287,10 @@ void Engine::reset() {
 	isWin = false;
 	treasure_picked = false;
 	treasure_picked_play = false;
-	boss_defeated[level-1] = false;
+	for (int i = 0; i < 3; i++) {
+		boss_defeated[i] = false;
+	}
+	ba = 0;
 
 	if (level > 1) {
 		player.SetDamage(isaacdamage);
@@ -390,7 +393,7 @@ void Engine::statePLAY() {
 				if (enemy_array[i]->getHitbox().intersects(iter_bullet->getHitbox())) {
 					soundBulletHitted.play();
 					iter_bullet->setHitted();
-					score++;
+					score += player.GetDamage();
 					enemy_array[i]->hitted(iter_bullet->getDamage());
 				}
 			}
@@ -517,10 +520,10 @@ void Engine::stateBR() {
 	addVisitedRoom();
 
 	std::vector<std::shared_ptr<Enemy>> enemy_array;
-	if (boss_defeated[level - 1] == false) {
+	/*if (boss_defeated[level - 1] == false) {
 		std::shared_ptr<Boss> boss = std::make_shared<Boss>(sf::Vector2f(win_width / 2, win_height / 2));
 		enemy_array.push_back(boss);
-	}
+	}*/
 
 	sf::RectangleShape trophy;
 	sf::Texture trophyTexture;
@@ -567,6 +570,13 @@ void Engine::stateBR() {
 				statePAUSE();
 				break;
 			}
+		}
+
+		if (ba < level) {
+			std::shared_ptr<Boss> boss = std::make_shared<Boss>(sf::Vector2f((ba + 1) * 100.0f, (ba + 1) * 100.0f));
+			enemy_array.push_back(boss);
+			//enemy_array[ba]->getShape().setPosition(sf::Vector2f((ba + 1) * 100.0f, (ba + 1) * 100.0f));
+			ba++;
 		}
 
 		movePlayer(deltaTime);
@@ -620,7 +630,7 @@ void Engine::stateBR() {
 				if (enemy_array[i]->getHitbox().intersects(iter_bullet->getHitbox())) {
 					soundBulletHitted.play();
 					iter_bullet->setHitted();
-					score++;
+					score += player.GetDamage();
 					enemy_array[i]->hitted(iter_bullet->getDamage());
 				}
 			}

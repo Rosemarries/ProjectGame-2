@@ -99,6 +99,7 @@ class Engine {
 	int score;
 	int level = 1;
 	int la = 1;
+	int ba = 0;
 	bool new_room;
 	bool isWin;
 	bool treasure_picked;
