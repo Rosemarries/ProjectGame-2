@@ -451,6 +451,9 @@ void Engine::statePLAY() {
 			addVisitedRoom();
 			unlockDoors();
 			movePlayerNextRoom();
+			if (movePlayerNextRoom() == true) {
+				item_array.clear();
+			}
 		}
 
 		for (int i = 0; i < enemy_array.size(); ++i) {
