@@ -335,6 +335,7 @@ void Engine::stateHOW_TO_PLAY() {
 
 void Engine::reset() {
 	bullet_array.clear();
+	blood.clear();
 	visited_room_map.clear();
 
 	map.Generate();
@@ -738,6 +739,8 @@ void Engine::stateBR() {
 		for (int i = 0; i < enemy_array.size(); ++i) {
 			if (enemy_array[i]->getHp() <= 0) {
 				score += 100;
+				Blood bd(enemy_array[i]->getPos());
+				blood.push_back(bd);
 				soundBossDied.play();
 				enemy_array.erase(enemy_array.begin() + i);
 				--i;
@@ -747,6 +750,11 @@ void Engine::stateBR() {
 		win.clear();
 		win.draw(roomBg);
 		drawRoom();
+
+		for (int i = 0; i < blood.size(); i++) {
+			blood[i].Draw(win);
+		}
+
 		win.draw(player.GetShape());
 		win.draw(textScore);
 

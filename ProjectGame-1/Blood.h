@@ -17,5 +17,6 @@ public:
 
 private:
 	sf::RectangleShape blood;
+	sf::Sprite blood_sprite;
 	sf::Texture texture;
 };
