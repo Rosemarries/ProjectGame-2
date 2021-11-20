@@ -6,6 +6,7 @@ Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAni
 	win.setFramerateLimit(60);
 	font.loadFromFile("IsaacScript2.ttf");
 	doorTexture.loadFromFile("Image/Door-3.png");
+	bloodTexture.loadFromFile("Image/Blood-1.png");
 	room_tile_map.resize(11, std::vector < Tile >(15));
 
 	textScore.setFont(font);
@@ -519,6 +520,7 @@ void Engine::statePLAY() {
 			//Enemy Dead:
 			if (enemy_array[i]->getHp() <= 0) {
 				Blood bd(enemy_array[i]->getPos());
+				bd.SetTexture(&bloodTexture);
 				blood.push_back(bd);
 				soundEffect.play();
 				randomHeart = rand() % 10;
@@ -740,6 +742,7 @@ void Engine::stateBR() {
 			if (enemy_array[i]->getHp() <= 0) {
 				score += 100;
 				Blood bd(enemy_array[i]->getPos());
+				bd.SetTexture(&bloodTexture);
 				blood.push_back(bd);
 				soundBossDied.play();
 				enemy_array.erase(enemy_array.begin() + i);

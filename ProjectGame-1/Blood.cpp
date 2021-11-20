@@ -8,5 +8,7 @@ Blood::Blood(sf::Vector2f pos) {
 	blood.setTexture(&texture);
 	blood.setPosition(pos);
 	blood.setOrigin(sf::Vector2f(25.0f, 25.0f));
-	blood_sprite.setTexture(texture);
+
+	blood_sprite.setTexture(texture, true);
+	blood_sprite.setPosition(pos);
 }

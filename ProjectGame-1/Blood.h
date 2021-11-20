@@ -11,6 +11,9 @@ public:
 	sf::RectangleShape GetShape() const {
 		return blood;
 	}
+	void SetTexture(sf::Texture* tex) {
+		blood.setTexture(tex);
+	}
 	void Draw(sf::RenderWindow& win) {
 		win.draw(blood);
 	}

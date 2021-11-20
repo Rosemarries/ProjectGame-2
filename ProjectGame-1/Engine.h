@@ -82,6 +82,7 @@ class Engine {
 	Pause pause;
 	sf::Texture playerTexture;
 	sf::Texture bossTexture;
+	sf::Texture bloodTexture;
 	Player player;
 	Bullet bullet;
 	Heart heart;
