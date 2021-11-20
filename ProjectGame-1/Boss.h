@@ -7,7 +7,7 @@
 
 class Boss : public Enemy {
 public:
-	explicit Boss(sf::Vector2f pos, sf::Vector2f size = sf::Vector2f(150, 150), float hp = 70.f, float damage = 1.f, float movement_speed = 3.f);
+	explicit Boss(sf::Vector2f pos, sf::Vector2f size = sf::Vector2f(200, 150), float hp = 70.f, float damage = 1.f, float movement_speed = 3.f);
 	void update(sf::Vector2f player_pos, bool reverse = false, move m = BOTH) override;
 	void setAnime(sf::IntRect uvRect) {
 		hitbox.setTextureRect(uvRect);
