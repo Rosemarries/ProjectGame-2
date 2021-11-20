@@ -311,7 +311,7 @@ void Engine::stateHOW_TO_PLAY() {
 
 	while (current_state == HOW_TO_PLAY)
 	{
-		win.setTitle("GAME START!");
+		//win.setTitle("GAME START!");
 		sf::Event evnt;
 		while (win.pollEvent(evnt)) {
 			switch (evnt.type) {
@@ -957,7 +957,7 @@ void Engine::stateCREDIT() {
 
 	while (current_state == CREDIT)
 	{
-		win.setTitle("CREDIT");
+		//win.setTitle("CREDIT");
 		sf::Event evnt;
 		while (win.pollEvent(evnt)) {
 			switch (evnt.type) {
