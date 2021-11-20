@@ -12,7 +12,7 @@ int main(int argc,char const*argv[])
 	sf::Texture playerTexture;
 	sf::Texture bossTexture;
 	playerTexture.loadFromFile("Image/TheLost-4.png");
-	bossTexture.loadFromFile("Image/Boss1.png");
+	bossTexture.loadFromFile("Image/Boss2.png");
 	Engine game(&playerTexture, &bossTexture);
 	game.run();
 	return 0;

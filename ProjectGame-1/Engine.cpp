@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAnimation(playerTexture,sf::Vector2u(4,10),0.3f), bossAnimation(bossTexture, sf::Vector2u(1,9), 0.3f) {
+Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAnimation(playerTexture,sf::Vector2u(4,10),0.3f), bossAnimation(bossTexture, sf::Vector2u(1,6), 0.3f) {
     win.create(sf::VideoMode(win_width, win_height), "SPIRITOSO!");
 	view.setSize(sf::Vector2f(win_width, win_height));
 	win.setFramerateLimit(60);
