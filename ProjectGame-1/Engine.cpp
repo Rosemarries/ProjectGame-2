@@ -807,6 +807,7 @@ void Engine::stateTR() {
 		if (item.getHitbox().intersects(player.getHitbox()) and item.isPicked() == false/*treasure_picked == false*/) {
 			player.Upgrade(item.getId());
 			item.setPicked(true);
+			treasure_picked = true;
 			score += 10;
 			//win.setTitle("Score : " + std::to_string(score));
 		}
@@ -816,7 +817,7 @@ void Engine::stateTR() {
 		win.draw(roomBg);
 		drawRoom();
 
-		if (item.isPicked() == false) {
+		if (item.isPicked() == false && treasure_picked == false) {
 			win.draw(item.getShape());
 		}
 		win.draw(player.GetShape());
