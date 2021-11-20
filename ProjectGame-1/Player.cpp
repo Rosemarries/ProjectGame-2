@@ -1,17 +1,4 @@
 #include"Player.h"
-//#include"Room.h"
-
-struct room {
-	float width = 600;
-	float height = 500;
-	float wall = 35;
-	float originX = width / 2;
-	float originY = height / 2;
-	int number = 0;
-	int type = 0;
-	float startPosX = 110;
-	float startPosY = 110;
-};
 
 Player::Player(){
 	speed = 3.0f;
@@ -42,9 +29,6 @@ void Player::Update(float deltaTime, float speedX) {
 	speed = speedX;
 	//Animation animation(&texture,imageCount,switchTime);
 	sf::Vector2f movement(0.0f, 0.0f);
-	room room;
-	room.startPosX = 110;
-	room.startPosY = 110;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 		if(body.getPosition().x > 0.0f)
 			movement.x -= speed;// *deltaTime;
