@@ -1,7 +1,7 @@
 #include "Engine.h"
 
 Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAnimation(playerTexture,sf::Vector2u(4,10),0.3f), bossAnimation(bossTexture, sf::Vector2u(1,9), 0.3f) {
-    win.create(sf::VideoMode(win_width, win_height), "GAME START!");
+    win.create(sf::VideoMode(win_width, win_height), "SPIRITOSO!");
 	view.setSize(sf::Vector2f(win_width, win_height));
 	win.setFramerateLimit(60);
 	font.loadFromFile("IsaacScript2.ttf");
@@ -110,7 +110,7 @@ void Engine::stateGAME_START() {
 
 	while (current_state == GAME_START)
 	{
-		win.setTitle("GAME START!");
+		//win.setTitle("GAME START!");
 		sf::Event evnt;
 		while (win.pollEvent(evnt)) {
 			switch (evnt.type) {
@@ -140,7 +140,7 @@ void Engine::stateMENU() {
 	soundBg.setBuffer(soundBgBuffer);
 	soundBg.play();
     while (current_state == MENU) {
-		win.setTitle("MENU");
+		//win.setTitle("MENU");
         sf::Event evnt;
         while (win.pollEvent(evnt)) {
 			switch (evnt.type) {
@@ -221,7 +221,7 @@ void Engine::stateSCOREBOARD() {
 	soundBg.play();
 
 	while (current_state == SCOREBOARD) {
-		win.setTitle("SCOREBOARD");
+		//win.setTitle("SCOREBOARD");
 		sf::Event evnt;
 		while (win.pollEvent(evnt)) {
 			switch (evnt.type) {
@@ -241,7 +241,7 @@ void Engine::stateSCOREBOARD() {
 void Engine::statePAUSE() {
 	soundChangePage.play();
 	while (current_state == PAUSE) {
-		win.setTitle("PAUSE");
+		//win.setTitle("PAUSE");
 		sf::Event evnt;
 		while (win.pollEvent(evnt)) {
 			switch (evnt.type) {
@@ -389,13 +389,13 @@ void Engine::statePLAY() {
 		roomTexture.loadFromFile("Image/RoomLevel3-1.png");
 	}
 	roomBg.setTexture(&roomTexture);*/
-	Item item;
 	std::vector <Item> item_array;
 
 	soundPLAY.play();
 	//win.setTitle("Score : " + std::to_string(score));
 	std::vector < std::shared_ptr < Enemy >> enemy_array;
 	while (current_state == PLAY) {
+		Item item;
 		deltaTime = clock.restart().asSeconds();
 		//win.setTitle("Score : " + std::to_string(score));
 		textScore.setString("Score : " + std::to_string(score));
@@ -467,7 +467,7 @@ void Engine::statePLAY() {
 			//Player:
 			if (enemy_array[i]->getHitbox().intersects(player.getHitbox())) {
 				player.Hitted(enemy_array[i]->getDamage());
-				score--;
+				//score--;
 				soundPlayerHurt.play();
 			}
 		}
@@ -520,24 +520,25 @@ void Engine::statePLAY() {
 				soundEffect.play();
 				randomHeart = rand() % 10;
 				if (randomHeart >= 8) {
+					//Item item;
 					soundItemSpawn.play();
 					item.setPos(enemy_array[i]->getPos());
 					item_array.push_back(item);
 				}
 				enemy_array.erase(enemy_array.begin() + i);
 				score += 10;
-				win.setTitle("Score : " + std::to_string(score));
+				//win.setTitle("Score : " + std::to_string(score));
 				--i;
 			}
 		}
 
 		for (int i = 0; i < item_array.size(); i++) {
-			if (item_array[i].getHitbox().intersects(player.getHitbox()) and treasure_picked_play == false) {
-				player.Upgrade(item.getId());
-				treasure_picked_play = true;
+			if (item_array[i].getHitbox().intersects(player.getHitbox()) and item_array[i].isPicked() == false/*treasure_picked_play == false*/) {
+				player.Upgrade(item_array[i].getId());
+				item_array[i].setPicked(true);
 				item_array.erase(item_array.begin() + i);
 				score += 10;
-				win.setTitle("Score : " + std::to_string(score));
+				//win.setTitle("Score : " + std::to_string(score));
 			}
 		}
 
@@ -551,7 +552,7 @@ void Engine::statePLAY() {
 		drawRoom();
 
 		for (int i = 0; i < item_array.size(); i++) {
-			if (!treasure_picked_play) {
+			if (item_array[i].isPicked() == false) {
 				win.draw(item_array[i].getShape());
 			}
 		}
@@ -659,7 +660,7 @@ void Engine::stateBR() {
 			isaacfireTime = player.GetFireTime();
 			isaachp = player.GetHp();
 			isaacscore = score;
-			win.setTitle("Score : " + std::to_string(score));
+			//win.setTitle("Score : " + std::to_string(score));
 			if (level < 3) { level++; reset(); current_state = PLAY; }
 			else { isWin = true; current_state = END; }
 		}
@@ -672,7 +673,7 @@ void Engine::stateBR() {
 		playerShoot();
 
 		if (enemy_array.size() == 0) {
-			win.setTitle("Score : " + std::to_string(score));
+			//win.setTitle("Score : " + std::to_string(score));
 			addVisitedRoom();
 			unlockDoors();
 			movePlayerNextRoom();
@@ -803,11 +804,11 @@ void Engine::stateTR() {
 		}
 
 		movePlayer(deltaTime);
-		if (item.getHitbox().intersects(player.getHitbox()) and treasure_picked == false) {
+		if (item.getHitbox().intersects(player.getHitbox()) and item.isPicked() == false/*treasure_picked == false*/) {
 			player.Upgrade(item.getId());
-			treasure_picked = true;
+			item.setPicked(true);
 			score += 10;
-			win.setTitle("Score : " + std::to_string(score));
+			//win.setTitle("Score : " + std::to_string(score));
 		}
 
 		movePlayerNextRoom();
@@ -815,7 +816,7 @@ void Engine::stateTR() {
 		win.draw(roomBg);
 		drawRoom();
 
-		if (!treasure_picked) {
+		if (item.isPicked() == false) {
 			win.draw(item.getShape());
 		}
 		win.draw(player.GetShape());

@@ -17,6 +17,7 @@ Item::Item(sf::Vector2f pos) {
 	hitbox.setOrigin(hitbox.getLocalBounds().width / 2, hitbox.getLocalBounds().height / 2);
 	hitbox_sprite.setOrigin(hitbox.getLocalBounds().width / 2, hitbox.getLocalBounds().height / 2);
 	item_poll = 4;
+	picked = false;
 	randId();
 }
 
@@ -39,4 +40,5 @@ int Item::getId() const {
 void Item::randId() {
 	id = rand() % item_poll;
 	hitbox.setTexture(&hitbox_texture[id]);
+	hitbox_sprite.setTexture(hitbox_texture[id]);
 }
