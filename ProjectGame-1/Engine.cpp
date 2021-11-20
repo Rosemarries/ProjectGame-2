@@ -554,7 +554,7 @@ void Engine::statePLAY() {
 		drawRoom();
 
 		for (int i = 0; i < blood.size(); i++) {
-			win.draw(blood[i].GetShape());
+			blood[i].Draw(win);
 		}
 
 		for (int i = 0; i < item_array.size(); i++) {
@@ -1021,7 +1021,7 @@ void Engine::playerShoot() {
 		}
 		
 		bullet.setBulletVector(bulletVector);
-		bullet.setPos(sf::Vector2f(player.GetShape().getPosition().x + player.getHitbox().width / 2, player.GetShape().getPosition().y + player.getHitbox().height / 2), player.GetDamage(), player.GetFireSpeed(), bulletVector);
+		bullet.setPos(player.GetShape().getPosition(), player.GetDamage(), player.GetFireSpeed(), bulletVector);
 		bullet_array.push_back(bullet);
 		clock_to_delay_between_bullet.restart();
 	}

@@ -11,6 +11,9 @@ public:
 	sf::RectangleShape GetShape() const {
 		return blood;
 	}
+	void Draw(sf::RenderWindow& win) {
+		win.draw(blood);
+	}
 
 private:
 	sf::RectangleShape blood;

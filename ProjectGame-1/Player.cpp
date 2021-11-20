@@ -17,7 +17,7 @@ Player::Player(){
 	body.setSize(sf::Vector2f(60.0f, 75.0f));
 	body.setPosition(400.0f, 400.0f);
 	body.setTexture(&texture);
-	body.setOrigin(30.0f, 32.5f);
+	body.setOrigin(30.0f, 37.5f);
 	clock.restart();
 }
 
