@@ -79,8 +79,12 @@ void Player::Draw(sf::RenderWindow& window) {
 
 void Player::Hitted(float dmg) {
 	if (clock.getElapsedTime() >= sf::seconds(0.5f)) {
+		body.setFillColor(sf::Color::Red);
 		hp -= dmg;
 		clock.restart();
+	}
+	else {
+		body.setFillColor(sf::Color::White);
 	}
 }
 
