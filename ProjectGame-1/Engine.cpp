@@ -517,6 +517,8 @@ void Engine::statePLAY() {
 		for (int i = 0; i < enemy_array.size(); ++i) {
 			//Enemy Dead:
 			if (enemy_array[i]->getHp() <= 0) {
+				Blood bd(enemy_array[i]->getPos());
+				blood.push_back(bd);
 				soundEffect.play();
 				randomHeart = rand() % 10;
 				if (randomHeart >= 8) {
@@ -550,6 +552,10 @@ void Engine::statePLAY() {
 		win.clear();
 		win.draw(roomBg);
 		drawRoom();
+
+		for (int i = 0; i < blood.size(); i++) {
+			win.draw(blood[i].GetShape());
+		}
 
 		for (int i = 0; i < item_array.size(); i++) {
 			if (item_array[i].isPicked() == false) {
@@ -1073,6 +1079,7 @@ bool Engine::movePlayerNextRoom() {
 		}
 
 		bullet_array.clear();
+		blood.clear();
 
 		if (map.GetRoomId(room_map_pos_y, room_map_pos_x) == 3) {
 			current_state = TREASURE_ROOM;

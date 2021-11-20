@@ -17,6 +17,7 @@
 #include "Boss.h"
 #include "Pause.h"
 #include "Animation.h"
+#include "Blood.h"
 #define PI 3.14159265
 
 struct Room {
@@ -88,6 +89,7 @@ class Engine {
 
 	std::vector < Bullet > bullet_array;
 	std::vector < Bullet > ::iterator iter_bullet;
+	std::vector < Blood > blood;
 
 	float win_width = 1050;
 	float win_height = 720;
