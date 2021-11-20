@@ -1,11 +1,11 @@
 #include"PlayerHeart.h"
 Heart::Heart() {
-	size = sf::Vector2f(20.0f, 20.0f);
+	size = sf::Vector2f(30.0f, 30.0f);
 	if (!texture[0].loadFromFile("Image/PlayerHeart-0.png") || !texture[1].loadFromFile("Image/PlayerHeart-1.png") || !texture[2].loadFromFile("Image/PlayerHeart-2.png")) {
 		abort();
 	}
 	for (int i = 0; i < maxHeart; i++) {
-		heart[i].setPosition(sf::Vector2f(10 + 20 * i, 10));
+		heart[i].setPosition(sf::Vector2f(10 + 30 * i, 10));
 		heart[i].setSize(size);
 	}
 }

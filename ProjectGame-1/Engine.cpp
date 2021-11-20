@@ -8,6 +8,11 @@ Engine::Engine(sf::Texture* playerTexture, sf::Texture* bossTexture) : playerAni
 	doorTexture.loadFromFile("Image/Door-3.png");
 	room_tile_map.resize(11, std::vector < Tile >(15));
 
+	textScore.setFont(font);
+	textScore.setCharacterSize(30);
+	textScore.setFillColor(sf::Color::White);
+	textScore.setPosition(sf::Vector2f(20.0f, 35.0f));
+
 	if (!soundPlayerHurtBuffer.loadFromFile("Sound/Isaac_Hurt_Grunt1.wav") || !soundBulletBuffer.loadFromFile("Sound/plop.wav") || !soundUnlockDoorBuffer.loadFromFile("Sound/Unlock00.wav") || !soundTRBuffer.loadFromFile("Sound/weapon room.wav") || !soundChangePageBuffer.loadFromFile("Sound/Book Page Turn 12.wav") || !soundBulletHittedBuffer.loadFromFile("Sound/animal_squish1.wav") || !soundBossDiedBuffer.loadFromFile("Sound/boss1_explosions1.wav") || !soundItemSpawnBuffer.loadFromFile("Sound/bloodbank spawn1.wav") || !soundBOSSBuffer.loadFromFile("Sound/isaacunicorn.wav") || !soundPLAYBuffer.loadFromFile("Sound/levelbumper.wav")) {
 		abort();
 	}
@@ -388,11 +393,12 @@ void Engine::statePLAY() {
 	std::vector <Item> item_array;
 
 	soundPLAY.play();
-	win.setTitle("Score : " + std::to_string(score));
+	//win.setTitle("Score : " + std::to_string(score));
 	std::vector < std::shared_ptr < Enemy >> enemy_array;
 	while (current_state == PLAY) {
 		deltaTime = clock.restart().asSeconds();
-		win.setTitle("Score : " + std::to_string(score));
+		//win.setTitle("Score : " + std::to_string(score));
+		textScore.setString("Score : " + std::to_string(score));
 		if (la == level) {
 			if (level == 1) {
 				roomTexture.loadFromFile("Image/RoomLevel1.png");
@@ -461,6 +467,7 @@ void Engine::statePLAY() {
 			//Player:
 			if (enemy_array[i]->getHitbox().intersects(player.getHitbox())) {
 				player.Hitted(enemy_array[i]->getDamage());
+				score--;
 				soundPlayerHurt.play();
 			}
 		}
@@ -560,6 +567,7 @@ void Engine::statePLAY() {
 			win.draw(enemy_array[i]->getShape());
 		}
 
+		win.draw(textScore);
 		win.draw(player.GetShape());
 		heart.draw(win,player.GetHp());
 		win.display();
@@ -614,7 +622,8 @@ void Engine::stateBR() {
 	while (current_state == BOSS_ROOM) {
 		sf::Event evnt;
 		deltaTime = clock.restart().asSeconds();
-		win.setTitle("Score : " + std::to_string(score));
+		//win.setTitle("Score : " + std::to_string(score));
+		textScore.setString("Score : " + std::to_string(score));
 
 		while (win.pollEvent(evnt)) {
 			if (evnt.type == sf::Event::Closed) {
@@ -732,6 +741,7 @@ void Engine::stateBR() {
 		win.draw(roomBg);
 		drawRoom();
 		win.draw(player.GetShape());
+		win.draw(textScore);
 
 		for (iter_bullet = bullet_array.begin(); iter_bullet != bullet_array.end(); ++iter_bullet) {
 			sf::Vector2i mousePos = sf::Mouse::getPosition(win);
@@ -777,6 +787,7 @@ void Engine::stateTR() {
 	while (current_state == TREASURE_ROOM) {
 		sf::Event evnt;
 		deltaTime = clock.restart().asSeconds();
+		textScore.setString("Score : " + std::to_string(score));
 		while (win.pollEvent(evnt)) {
 			if (evnt.type == sf::Event::Closed) {
 				scoreboard.SaveScoreboardToFile();
@@ -808,6 +819,7 @@ void Engine::stateTR() {
 			win.draw(item.getShape());
 		}
 		win.draw(player.GetShape());
+		win.draw(textScore);
 		heart.draw(win, player.GetHp());
 		win.display();
 	}

@@ -41,6 +41,7 @@ class Engine {
 	Animation bossAnimation;
 
 	sf::RenderWindow win;
+	sf::Text textScore;
 	sf::View view;
 	sf::Font font;
 	sf::Clock clock_to_delay_between_bullet;
