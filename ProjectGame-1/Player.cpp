@@ -27,6 +27,7 @@ Player::~Player() {
 
 void Player::Update(float deltaTime, float speedX) {
 	speed = speedX;
+	body.setFillColor(sf::Color::White);
 	//Animation animation(&texture,imageCount,switchTime);
 	sf::Vector2f movement(0.0f, 0.0f);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
