@@ -1,3 +1,5 @@
+DiedThree
+1938
 HighScore
 1818
 I
@@ -6,5 +8,3 @@ dwwwd
 1226
 GG
 953
-Three
-904
