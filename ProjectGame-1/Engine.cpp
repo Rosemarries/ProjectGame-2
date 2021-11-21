@@ -447,7 +447,7 @@ void Engine::statePLAY() {
 		movePlayer(deltaTime);
 		playerShoot();
 
-		printf("%d\n", enemy_array.size());
+		//printf("%d\n", enemy_array.size());
 		if (enemy_array.size() == 0) {
 			addVisitedRoom();
 			unlockDoors();
