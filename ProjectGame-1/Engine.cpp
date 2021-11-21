@@ -418,7 +418,7 @@ void Engine::statePLAY() {
 		if (new_room) {
 			prepareRoomTileMap();
 			if (checkIsUniqueVisitedRoom(room_map_pos_y, room_map_pos_x)) {
-				int maxMon = rand() % 7;
+				int maxMon = rand() % 6;
 				int i = 0;
 				while (i < maxMon) {
 					std::shared_ptr<Gaper> gaper = std::make_shared<Gaper>(sf::Vector2f(100 * i + 100, 100 * i + 100), sf::Vector2f(50.0f, 70.0f), 10.0f + ((level - 1) * 5), 0.5f, 2.0f);
@@ -447,6 +447,7 @@ void Engine::statePLAY() {
 		movePlayer(deltaTime);
 		playerShoot();
 
+		printf("%d\n", enemy_array.size());
 		if (enemy_array.size() == 0) {
 			addVisitedRoom();
 			unlockDoors();
